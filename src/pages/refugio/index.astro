@@ -1,0 +1,201 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Elim Refugio Animal - Bienestar Felino en Medellín"
+  description="Elim Refugio Animal es un movimiento felino en Medellín. Rescate, hogares temporales, esterilización y comunidad para construir una ciudad más consciente con los gatos callejeros."
+  seoType="organization"
+  brand="elim"
+>
+
+  <!-- ── HERO ───────────────────────────────────────────── -->
+  <section class="bg-gradient-to-br from-elim-950 via-elim-900 to-gray-950 pt-24 pb-0 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-80 h-80 bg-elim-400 opacity-10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative pb-16">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-xs font-semibold px-4 py-2 rounded-full mb-6">
+          <span class="w-1.5 h-1.5 bg-elim-300 rounded-full animate-pulse"></span>
+          Medellín · Bienestar Felino · Rescate
+        </div>
+        <h1 class="text-5xl sm:text-6xl font-extrabold text-white leading-tight mb-5">
+          Elim<br/><span class="text-elim-400">Refugio Animal</span>
+        </h1>
+        <p class="text-elim-200 text-xl leading-relaxed mb-8">
+          Un movimiento felino construido por personas que creen que cada gato callejero merece una segunda oportunidad - y que juntos podemos lograrlo.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="#apoya" class="inline-flex items-center gap-2 bg-elim-600 hover:bg-elim-500 text-white font-bold px-7 py-3.5 rounded-xl transition-colors shadow-lg shadow-elim-900/60">
+            🐱 Quiero apoyar
+          </a>
+          <a href="/blog" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-7 py-3.5 rounded-xl transition-colors border border-white/20">
+            Leer Blog · Bienestar Animal
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="relative -mb-px">
+      <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+        <path d="M0 50L1440 50L1440 0Q720 50 0 0Z" fill="white"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ── MISIÓN ─────────────────────────────────────────── -->
+  <section class="bg-white py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div>
+          <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-3">Quiénes somos</p>
+          <h2 class="text-4xl font-extrabold text-gray-900 mb-6 leading-tight">
+            Más que un refugio:<br/>un proyecto social felino.
+          </h2>
+          <div class="space-y-5 text-gray-600 leading-relaxed">
+            <p>
+              Elim nació con una pregunta simple: ¿por qué hay tantos gatos callejeros en Medellín y nadie está haciendo algo sistemático al respecto?
+            </p>
+            <p>
+              Empezamos siendo un centro de rescate y adopción felino. Con el tiempo entendimos que el problema no se resuelve solo con rescatar más gatos - se resuelve cambiando la cultura. Educando, esterilizando, construyendo una red humana que sostenga el bienestar animal más allá de las urgencias.
+            </p>
+            <p>
+              Hoy somos parte del ecosistema <strong>Utopía Animal</strong>: un refugio que trabaja de la mano de la veterinaria, con propósito compartido y comunidad real.
+            </p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-5">
+          {[
+            { icon: '🏠', label: 'Red de hogares temporales', color: 'bg-elim-50 border-elim-100', textColor: 'text-elim-700' },
+            { icon: '💉', label: 'Jornadas de esterilización', color: 'bg-elim-50 border-elim-100', textColor: 'text-elim-700' },
+            { icon: '📚', label: 'Educación para tutores', color: 'bg-elim-50 border-elim-100', textColor: 'text-elim-700' },
+            { icon: '🤝', label: 'Comunidad de voluntarios', color: 'bg-elim-50 border-elim-100', textColor: 'text-elim-700' },
+          ].map(({ icon, label, color, textColor }) => (
+            <div class={`${color} border rounded-2xl p-6 text-center`}>
+              <div class={`text-3xl mb-2`}>{icon}</div>
+              <div class="text-xs text-gray-600 font-medium leading-snug">{label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CÓMO FUNCIONA ─────────────────────────────────── -->
+  <section class="bg-elim-50 py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-16">
+        <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-3">Nuestro modelo</p>
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Así funciona Elim</h2>
+        <p class="text-gray-500 max-w-xl mx-auto">No somos una jaula - somos una red humana que funciona con compromiso, educación y acción directa.</p>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-6">
+        {[
+          {
+            step: '01',
+            icon: '🔍',
+            title: 'Rescate',
+            desc: 'Respondemos a reportes de gatos en situación de calle, heridos o en riesgo. La red de voluntarios actúa rápido.',
+          },
+          {
+            step: '02',
+            icon: '🏠',
+            title: 'Hogar temporal',
+            desc: 'Los gatos pasan a hogares temporales de nuestra red: espacios seguros donde se recuperan, socializan y aprenden a confiar.',
+          },
+          {
+            step: '03',
+            icon: '💉',
+            title: 'Atención médica',
+            desc: 'Cada gato recibe atención veterinaria completa en Utopía Animal Vet: esterilización, vacunas y tratamientos necesarios.',
+          },
+          {
+            step: '04',
+            icon: '💚',
+            title: 'Adopción responsable',
+            desc: 'Cuando está listo, el gato encuentra un hogar definitivo. Hacemos seguimiento post-adopción para garantizar su bienestar.',
+          },
+        ].map(({ step, icon, title, desc }) => (
+          <div class="bg-white rounded-2xl p-7 border border-elim-100 shadow-sm">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="text-xs font-black text-elim-400 font-mono">{step}</span>
+              <span class="text-3xl">{icon}</span>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-2">{title}</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CÓMO APOYAR ───────────────────────────────────── -->
+  <section id="apoya" class="bg-elim-950 py-24 scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-16">
+        <p class="text-elim-400 text-xs font-bold uppercase tracking-widest mb-3">Únete al movimiento</p>
+        <h2 class="text-4xl font-extrabold text-white mb-4">¿Cómo puedo apoyar?</h2>
+        <p class="text-elim-300 max-w-xl mx-auto">No hace falta adoptar para hacer una diferencia. Hay muchas formas de ser parte.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[
+          {
+            emoji: '🏠',
+            title: 'Hogar temporal',
+            desc: 'Abre tu casa durante semanas o meses mientras un gato se recupera y encuentra su hogar definitivo. Te acompañamos en cada paso.',
+            cta: 'Quiero ser hogar temporal',
+            link: 'https://api.whatsapp.com/send?phone=573103603232&text=Hola,%20quiero%20ser%20hogar%20temporal%20de%20Elim',
+          },
+          {
+            emoji: '💰',
+            title: 'Donación',
+            desc: 'Contribuye con la atención veterinaria, alimentación y cuidado de los gatos en proceso de recuperación.',
+            cta: 'Donar',
+            link: '/apoya',
+          },
+          {
+            emoji: '📣',
+            title: 'Difusión',
+            desc: 'Comparte nuestras publicaciones, el blog de bienestar animal y el mensaje de Elim. La conciencia se construye también con alcance.',
+            cta: 'Seguir en Instagram',
+            link: 'https://www.instagram.com/refugioanimalelim/',
+          },
+          {
+            emoji: '💉',
+            title: 'Esterilización',
+            desc: 'Ayuda a costear jornadas de esterilización subsidiadas para gatos callejeros de tu cuadra o barrio.',
+            cta: 'Ver cómo apoyar',
+            link: '/apoya',
+          },
+        ].map(({ emoji, title, desc, cta, link }) => (
+          <div class="bg-elim-900 rounded-2xl p-7 border border-elim-800 flex flex-col">
+            <div class="text-4xl mb-5">{emoji}</div>
+            <h3 class="font-bold text-white mb-2">{title}</h3>
+            <p class="text-elim-300 text-sm leading-relaxed flex-1 mb-6">{desc}</p>
+            <a href={link} class="text-elim-300 hover:text-white text-xs font-semibold transition-colors">
+              {cta} →
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GATOPEDIA CTA ──────────────────────────────────── -->
+  <section class="bg-white py-20 text-center border-t border-elim-100">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6">
+      <div class="text-5xl mb-5">📚</div>
+      <p class="text-elim-600 text-xs font-bold uppercase tracking-widest mb-3">Blog · Bienestar Animal</p>
+      <h2 class="text-3xl font-extrabold text-gray-900 mb-4">
+        El bienestar empieza con conocimiento.
+      </h2>
+      <p class="text-gray-500 leading-relaxed mb-8">
+        Artículos escritos con rigor y cariño sobre nutrición, comportamiento, salud y bienestar felino. Porque cuidar bien a tu gato también es parte del cambio.
+      </p>
+      <a href="/blog" class="inline-flex items-center gap-2 bg-elim-700 hover:bg-elim-800 text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-sm">
+        Ir a el blog de bienestar animal →
+      </a>
+    </div>
+  </section>
+
+</Layout>

@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const categories = ['Todos', ...new Set(allPosts.map(p => p.data.category))];
+---
+
+<Layout
+  title="Blog de Bienestar Animal - Utopía Animal"
+  description="Artículos sobre salud, nutrición, comportamiento y bienestar para tutores de perros y gatos. Información veterinaria clara, basada en evidencia y sin tecnicismos innecesarios."
+  seoType="website"
+>
+
+  <!-- HERO -->
+  <section class="bg-gradient-to-br from-utopia-950 to-gray-950 pt-20 pb-0 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5">
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs><pattern id="dots" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="white"/></pattern></defs>
+        <rect width="100%" height="100%" fill="url(#dots)"/>
+      </svg>
+    </div>
+    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 pb-16 text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-xs font-semibold px-4 py-2 rounded-full mb-5">
+        📚 Fundación Utopía Animal · Blog
+      </div>
+      <h1 class="text-5xl sm:text-6xl font-extrabold text-white mb-4 leading-tight">
+        Blog de<br/><span class="text-utopia-400">Bienestar Animal</span>
+      </h1>
+      <p class="text-white/70 text-lg max-w-xl mx-auto leading-relaxed">
+        Información veterinaria sin tecnicismos: nutrición, comportamiento, salud preventiva y bienestar para tutores de perros y gatos.
+      </p>
+    </div>
+    <div class="relative -mb-px">
+      <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+        <path d="M0 50L1440 50L1440 0Q720 50 0 0Z" fill="white"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- FILTROS DE CATEGORÍA -->
+  <section class="bg-white pt-4 pb-2 sticky top-16 z-30 shadow-sm border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" id="category-filters">
+        {categories.map((cat) => (
+          <button
+            data-category={cat}
+            class={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors category-btn ${
+              cat === 'Todos'
+                ? 'bg-utopia-600 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-utopia-50 hover:text-utopia-700'
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTÍCULOS -->
+  <section class="bg-white py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="posts-grid">
+        {allPosts.map((post) => (
+          <div class="post-item" data-category={post.data.category}>
+            <BlogCard
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date}
+              category={post.data.category}
+              slug={post.slug}
+            />
+          </div>
+        ))}
+      </div>
+      <div id="empty-state" class="hidden text-center py-16">
+        <div class="text-4xl mb-3">🔍</div>
+        <p class="text-gray-500 text-sm">No hay artículos en esta categoría todavía.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-utopia-50 py-16 border-t border-utopia-100">
+    <div class="max-w-xl mx-auto px-4 sm:px-6 text-center">
+      <div class="text-4xl mb-4">🐾</div>
+      <h2 class="text-2xl font-extrabold text-gray-900 mb-2">¿Tienes una pregunta sobre tu compañero?</h2>
+      <p class="text-gray-500 text-sm mb-7 leading-relaxed">
+        Escríbenos y nuestro equipo te orienta. O agenda una consulta directamente en Utopía Animal Vet.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="https://api.whatsapp.com/send?phone=573103603232&text=Hola,%20tengo%20una%20consulta%20sobre%20mi%20animal%20de%20compa%C3%B1%C3%ADa"
+          target="_blank" rel="noopener"
+          class="inline-flex items-center justify-center gap-2 bg-utopia-500 hover:bg-utopia-600 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-colors">
+          💬 Preguntar por WhatsApp
+        </a>
+        <a href="/veterinaria"
+          class="inline-flex items-center justify-center gap-2 bg-white text-utopia-600 font-semibold px-6 py-3 rounded-xl text-sm border border-utopia-200 hover:bg-utopia-50 transition-colors">
+          🩺 Agendar en la veterinaria
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('.category-btn');
+  const items = document.querySelectorAll<HTMLElement>('.post-item');
+  const emptyState = document.getElementById('empty-state');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.category ?? 'Todos';
+      btns.forEach(b => {
+        b.classList.remove('bg-utopia-600', 'text-white');
+        b.classList.add('bg-gray-100', 'text-gray-600');
+      });
+      btn.classList.remove('bg-gray-100', 'text-gray-600');
+      btn.classList.add('bg-utopia-600', 'text-white');
+      let visible = 0;
+      items.forEach(item => {
+        const show = cat === 'Todos' || item.dataset.category === cat;
+        item.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      if (emptyState) emptyState.classList.toggle('hidden', visible > 0);
+    });
+  });
+</script>

@@ -1,0 +1,159 @@
+---
+/**
+ * SEO component - Schema markup + meta tags por página
+ * brand: 'utopia' | 'elim' | 'parent'
+ * type: 'website' | 'article' | 'veterinary' | 'organization'
+ */
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonicalURL?: string;
+  brand?: 'utopia' | 'elim' | 'parent';
+  type?: 'website' | 'article' | 'veterinary' | 'organization';
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    author?: string;
+    tags?: string[];
+  };
+}
+
+const {
+  title,
+  description,
+  image = '/og-default.png',
+  canonicalURL = Astro.url.href,
+  brand = 'parent',
+  type = 'website',
+  article,
+} = Astro.props;
+
+const siteName = 'Utopía Animal';
+const siteURL = 'https://utopianimalvet.org';
+
+// Schema markup según tipo
+const vetSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["VeterinaryCare", "LocalBusiness"],
+      "@id": `${siteURL}/veterinaria/#veterinary`,
+      "name": "Utopía Animal Veterinaria",
+      "description": "Clínica veterinaria en Medellín con medicina preventiva, urgencias, cirugías, vacunas, esterilización y peluquería. Atendemos perros y gatos en Av Guayabal.",
+      "url": `${siteURL}/veterinaria`,
+      "telephone": "+573103603232",
+      "image": `${siteURL}/logo-utopia.png`,
+      "logo": `${siteURL}/logo-utopia.png`,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Cra. 52 # 2 Sur 60",
+        "addressLocality": "Medellín",
+        "addressRegion": "Antioquia",
+        "addressCountry": "CO",
+        "postalCode": "050021"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "6.2219",
+        "longitude": "-75.5832"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+          "opens": "09:30",
+          "closes": "18:00"
+        }
+      ],
+      "priceRange": "$$",
+      "servesCuisine": null,
+      "hasMap": "https://maps.google.com/?q=Cra.+52+%23+2+Sur+60+Medell%C3%ADn",
+      "sameAs": [
+        "https://www.instagram.com/utopianimalvet"
+      ]
+    }
+  ]
+};
+
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${siteURL}/#organization`,
+      "name": "Utopía Animal",
+      "url": siteURL,
+      "logo": `${siteURL}/logo-utopia.png`,
+      "description": "Ecosistema de bienestar animal en Medellín: veterinaria humanizada y refugio felino.",
+      "sameAs": [
+        "https://www.instagram.com/utopianimalvet",
+        "https://www.instagram.com/refugioanimalelim"
+      ]
+    }
+  ]
+};
+
+const articleSchema = article ? {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": title,
+      "description": description,
+      "image": `${siteURL}${image}`,
+      "datePublished": article.publishedTime,
+      "dateModified": article.modifiedTime || article.publishedTime,
+      "author": {
+        "@type": "Organization",
+        "name": "Elim Refugio Animal",
+        "url": `${siteURL}/refugio`
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Utopía Animal",
+        "logo": { "@type": "ImageObject", "url": `${siteURL}/logo-utopia.png` }
+      },
+      "keywords": article.tags?.join(', ')
+    }
+  ]
+} : null;
+
+const schemaByType = {
+  veterinary: vetSchema,
+  organization: orgSchema,
+  article: articleSchema,
+  website: null,
+};
+
+const schema = schemaByType[type];
+---
+
+<!-- Canonical -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph -->
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={`${siteURL}${image}`} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:type" content={type === 'article' ? 'article' : 'website'} />
+<meta property="og:locale" content="es_CO" />
+<meta property="og:site_name" content={siteName} />
+{type === 'article' && article?.publishedTime && (
+  <meta property="article:published_time" content={article.publishedTime} />
+)}
+{type === 'article' && article?.modifiedTime && (
+  <meta property="article:modified_time" content={article.modifiedTime} />
+)}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={`${siteURL}${image}`} />
+
+<!-- Schema.org JSON-LD -->
+{schema && (
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+)}

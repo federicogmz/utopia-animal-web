@@ -1,0 +1,149 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SEO from '../components/SEO.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string;
+  brand?: 'utopia' | 'elim' | 'parent';
+  seoType?: 'website' | 'article' | 'veterinary' | 'organization';
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    author?: string;
+    tags?: string[];
+  };
+}
+
+const {
+  title,
+  description = 'Fundacion Utopia Animal - Veterinaria y bienestar animal en Medellin. Donde cuidar a los animales es un proyecto de todos.',
+  image = '/og-default.png',
+  canonicalURL = Astro.url.href,
+  brand = 'parent',
+  seoType = 'website',
+  article,
+} = Astro.props;
+
+const fullTitle = title === 'Utopia Animal'
+  ? title
+  : `${title} | Utopia Animal`;
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{fullTitle}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/logo-utopia.png" />
+    <link rel="apple-touch-icon" href="/logo-utopia.png" />
+
+    <SEO
+      title={fullTitle}
+      description={description}
+      image={image}
+      canonicalURL={canonicalURL}
+      brand={brand}
+      type={seoType}
+      article={article}
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Dark mode: apply before paint to avoid flash -->
+    <script is:inline>
+      (function() {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+
+    <style is:global>
+      html { font-family: 'Inter', system-ui, sans-serif; }
+      :target { scroll-margin-top: 80px; }
+
+      /* ── Global dark mode overrides ───────────────────── */
+
+      /* White / light gray sections */
+      .dark .bg-white {
+        background-color: #111827 !important;
+      }
+      .dark .bg-gray-50 {
+        background-color: #1f2937 !important;
+      }
+      .dark .bg-gray-100 {
+        background-color: #283548 !important;
+      }
+
+      /* Text */
+      .dark .text-gray-900 { color: #f9fafb !important; }
+      .dark .text-gray-800 { color: #f3f4f6 !important; }
+      .dark .text-gray-700 { color: #e5e7eb !important; }
+      .dark .text-gray-600 { color: #d1d5db !important; }
+      .dark .text-gray-500 { color: #9ca3af !important; }
+      .dark .text-gray-400 { color: #6b7280 !important; }
+
+      /* Borders */
+      .dark .border-gray-100 { border-color: #374151 !important; }
+      .dark .border-gray-200 { border-color: #374151 !important; }
+      .dark .border-gray-300 { border-color: #4b5563 !important; }
+      .dark .divide-gray-100 > * + * { border-color: #374151 !important; }
+
+      /* Inputs */
+      .dark input, .dark textarea, .dark select {
+        background-color: #1f2937;
+        border-color: #374151;
+        color: #f9fafb;
+      }
+
+      /* Placeholder */
+      .dark ::placeholder { color: #6b7280; }
+
+      /* Elim brand light variants */
+      .dark .bg-elim-50  { background-color: #052e16 !important; }
+      .dark .bg-elim-100 { background-color: #14532d !important; }
+      .dark .border-elim-100 { border-color: #166534 !important; }
+      .dark .border-elim-200 { border-color: #166534 !important; }
+      .dark .text-elim-700 { color: #4ade80 !important; }
+      .dark .text-elim-800 { color: #86efac !important; }
+      .dark .text-elim-900 { color: #bbf7d0 !important; }
+
+      /* Utopía brand light variants */
+      .dark .bg-utopia-50  { background-color: #1e0942 !important; }
+      .dark .bg-utopia-100 { background-color: #2d0f60 !important; }
+      .dark .border-utopia-100 { border-color: #481d8c !important; }
+      .dark .border-utopia-200 { border-color: #5720ae !important; }
+      .dark .text-utopia-700 { color: #a87dff !important; }
+      .dark .text-utopia-800 { color: #c4aeff !important; }
+      .dark .text-utopia-900 { color: #ddd0ff !important; }
+
+      /* Shadows */
+      .dark .shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.5) !important; }
+      .dark .shadow    { box-shadow: 0 2px 6px rgba(0,0,0,0.6) !important; }
+    </style>
+  </head>
+  <body class="bg-white dark:bg-gray-950 text-gray-800 dark:text-gray-200 antialiased transition-colors duration-200">
+    <Header brand={brand} />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

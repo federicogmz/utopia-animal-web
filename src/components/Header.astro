@@ -1,0 +1,190 @@
+---
+interface Props {
+  brand?: 'utopia' | 'elim' | 'parent';
+}
+const { brand = 'parent' } = Astro.props;
+
+const navLinks = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Veterinaria', href: '/veterinaria', brand: 'utopia' },
+  { label: 'Refugio Elim', href: '/refugio', brand: 'elim' },
+  { label: 'Blog', href: '/blog', brand: 'elim' },
+  { label: 'Comunidad', href: '/comunidad' },
+  { label: 'Apoya', href: '/apoya' },
+  { label: 'Nosotros', href: '/nosotros' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- Logo Utopía Animal -->
+      <a href="/" class="flex items-center gap-3 group shrink-0">
+        <img
+          src="/logo-utopia.png"
+          alt="Utopía Animal"
+          class="h-10 w-10 object-contain"
+          loading="eager"
+        />
+        <div class="leading-none">
+          <p class="text-gray-900 dark:text-white font-extrabold text-sm tracking-tight group-hover:text-utopia-600 transition-colors">Utopía Animal</p>
+          <p class="text-utopia-500 text-xs font-semibold">Bienestar · Veterinaria · Comunidad</p>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden lg:flex items-center gap-0.5">
+        {navLinks.map(({ label, href, brand: linkBrand }) => {
+          const isActive = href === '/'
+            ? currentPath === '/'
+            : currentPath.startsWith(href);
+          const isUtopia = linkBrand === 'utopia';
+          const isElim = linkBrand === 'elim';
+          return (
+            <a
+              href={href}
+              class={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isActive
+                  ? isUtopia
+                    ? 'text-utopia-600 bg-utopia-50'
+                    : isElim
+                    ? 'text-elim-700 bg-elim-50'
+                    : 'text-gray-900 bg-gray-100'
+                  : isUtopia
+                  ? 'text-gray-600 hover:text-utopia-600 hover:bg-utopia-50'
+                  : isElim
+                  ? 'text-gray-600 hover:text-elim-700 hover:bg-elim-50'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              {isUtopia && <span class="inline-block w-1.5 h-1.5 rounded-full bg-utopia-400 mr-1.5 align-middle"></span>}
+              {isElim && <span class="inline-block w-1.5 h-1.5 rounded-full bg-elim-500 mr-1.5 align-middle"></span>}
+              {label}
+            </a>
+          );
+        })}
+      </nav>
+
+      <!-- Dark mode toggle -->
+      <button
+        id="dark-toggle"
+        class="hidden lg:flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800 transition-colors"
+        aria-label="Cambiar modo oscuro"
+      >
+        <!-- Sun icon (visible in dark mode) -->
+        <svg id="icon-sun" class="hidden w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 6.343l-.707-.707m12.728 12.728l-.707-.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <!-- Moon icon (visible in light mode) -->
+        <svg id="icon-moon" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+      </button>
+
+      <!-- CTA -->
+      <div class="hidden lg:flex items-center gap-2">
+        <a
+          href="/veterinaria#contacto"
+          class="inline-flex items-center gap-1.5 bg-utopia-500 hover:bg-utopia-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Agendar cita
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="mobile-menu-btn"
+        class="lg:hidden text-gray-500 hover:text-gray-900 p-2 rounded-lg transition-colors"
+        aria-label="Abrir menú"
+      >
+        <svg id="icon-open" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <svg id="icon-close" class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden lg:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 shadow-md">
+    <nav class="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
+
+      <!-- Brand dividers -->
+      <p class="text-xs font-bold text-utopia-500 uppercase tracking-widest px-3 pt-2 pb-1">Veterinaria</p>
+      <a href="/veterinaria" class={`px-4 py-3 rounded-xl text-sm font-medium transition-colors ${currentPath.startsWith('/veterinaria') ? 'text-utopia-600 bg-utopia-50' : 'text-gray-700 hover:bg-utopia-50 hover:text-utopia-600'}`}>
+        🟣 Utopía Animal Vet
+      </a>
+
+      <p class="text-xs font-bold text-elim-600 uppercase tracking-widest px-3 pt-3 pb-1">Refugio & Comunidad</p>
+      <a href="/refugio" class={`px-4 py-3 rounded-xl text-sm font-medium transition-colors ${currentPath.startsWith('/refugio') ? 'text-elim-700 bg-elim-50' : 'text-gray-700 hover:bg-elim-50 hover:text-elim-700'}`}>
+        🟢 Elim Refugio Animal
+      </a>
+      <a href="/blog" class={`px-4 py-3 rounded-xl text-sm font-medium transition-colors ${currentPath.startsWith('/blog') ? 'text-elim-700 bg-elim-50' : 'text-gray-700 hover:bg-elim-50 hover:text-elim-700'}`}>
+        📖 Blog · Bienestar Animal
+      </a>
+
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 pt-3 pb-1">General</p>
+      {[
+        { label: 'Comunidad', href: '/comunidad' },
+        { label: 'Cómo apoyar', href: '/apoya' },
+        { label: 'Nuestra historia', href: '/nosotros' },
+      ].map(({ label, href }) => (
+        <a
+          href={href}
+          class={`px-4 py-3 rounded-xl text-sm font-medium transition-colors ${currentPath.startsWith(href) ? 'text-gray-900 bg-gray-100' : 'text-gray-700 hover:bg-gray-50'}`}
+        >
+          {label}
+        </a>
+      ))}
+
+      <a
+        href="/veterinaria#contacto"
+        class="mt-3 flex items-center justify-center gap-2 bg-utopia-500 text-white font-semibold py-3 rounded-xl text-sm transition-colors hover:bg-utopia-600"
+      >
+        💬 Agendar cita por WhatsApp
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Mobile menu
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+    iconOpen?.classList.toggle('hidden');
+    iconClose?.classList.toggle('hidden');
+  });
+
+  // Dark mode toggle
+  const darkBtn = document.getElementById('dark-toggle');
+  const iconSun = document.getElementById('icon-sun');
+  const iconMoon = document.getElementById('icon-moon');
+
+  function updateIcons() {
+    const isDark = document.documentElement.classList.contains('dark');
+    iconSun?.classList.toggle('hidden', !isDark);
+    iconMoon?.classList.toggle('hidden', isDark);
+  }
+
+  updateIcons();
+
+  darkBtn?.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    updateIcons();
+  });
+</script>
