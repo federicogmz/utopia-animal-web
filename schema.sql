@@ -71,7 +71,9 @@ CREATE TABLE IF NOT EXISTS solicitudes (
 
   estado TEXT DEFAULT 'pendiente',
   notas_humanas TEXT,
-  asignado_a TEXT
+  asignado_a TEXT,
+
+  whatsapp_confirmacion_enviada INTEGER DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_estado ON solicitudes(estado);

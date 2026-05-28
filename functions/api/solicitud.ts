@@ -1,8 +1,5 @@
 interface Env {
   DB: D1Database;
-  WHATSAPP_ACCESS_TOKEN?: string;
-  WHATSAPP_PHONE_ID?: string;
-  WHATSAPP_TEMPLATE_NAME?: string;
 }
 
 type Payload = Record<string, unknown>;
@@ -62,44 +59,6 @@ function jsonResponse(body: unknown, status = 200): Response {
   });
 }
 
-async function sendWhatsAppConfirmation(
-  accessToken: string,
-  phoneNumberId: string,
-  templateName: string,
-  telefono: string,
-  nombre: string,
-): Promise<void> {
-  const digits = telefono.replace(/\D/g, '');
-  const to = digits.startsWith('57') ? digits : `57${digits.slice(-10)}`;
-  const firstName = (nombre.trim().split(/\s+/)[0] || nombre).trim();
-
-  const res = await fetch(`https://graph.facebook.com/v21.0/${phoneNumberId}/messages`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      messaging_product: 'whatsapp',
-      to,
-      type: 'template',
-      template: {
-        name: templateName,
-        language: { code: 'es' },
-        components: [{
-          type: 'body',
-          parameters: [{ type: 'text', text: firstName }],
-        }],
-      },
-    }),
-  });
-
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`WhatsApp Cloud API error ${res.status}: ${body}`);
-  }
-}
-
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   let data: Payload;
   try {
@@ -146,25 +105,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     insertedId = (result as { meta?: { last_row_id?: number } }).meta?.last_row_id ?? null;
   } catch (err) {
     return jsonResponse({ ok: false, error: 'db_error', detail: String(err) }, 500);
-  }
-
-  const waToken = env.WHATSAPP_ACCESS_TOKEN;
-  const waPhoneId = env.WHATSAPP_PHONE_ID;
-  const waTemplate = env.WHATSAPP_TEMPLATE_NAME || 'confirmacion_solicitud';
-  if (waToken && waPhoneId) {
-    try {
-      await sendWhatsAppConfirmation(
-        waToken,
-        waPhoneId,
-        waTemplate,
-        telefono,
-        String(data.nombre_completo ?? '').trim(),
-      );
-    } catch (err) {
-      console.error('whatsapp_send_failed', err);
-    }
-  } else {
-    console.warn('WhatsApp Cloud API not configured — skipping confirmation message');
   }
 
   return jsonResponse({ ok: true, id: insertedId });

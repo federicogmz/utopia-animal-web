@@ -54,11 +54,14 @@ const compromisos = [
           <div class="text-6xl mb-5">💚</div>
           <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-3">Postulación recibida</p>
           <h2 class="text-3xl font-extrabold text-gray-900 mb-5">¡Gracias por dar el paso!</h2>
-          <p class="text-gray-600 leading-relaxed max-w-xl mx-auto mb-8">
-            Recibimos tu postulación y nuestro equipo la está evaluando. Te escribiremos por WhatsApp en los próximos días para confirmarte si continúa el proceso. Por ahora no necesitas hacer nada más.
+          <p class="text-gray-600 leading-relaxed max-w-xl mx-auto mb-3">
+            Recibimos tu postulación. <strong>Te abrimos WhatsApp</strong> para confirmar la recepción — solo presiona <strong>Enviar</strong> y recibirás un mensaje de nuestro equipo confirmando que estamos evaluando tu solicitud.
           </p>
-          <a href="https://wa.me/573103603232" class="inline-flex items-center gap-2 bg-elim-600 hover:bg-elim-500 text-white font-bold px-7 py-3.5 rounded-xl transition-colors shadow-lg shadow-elim-900/30">
-            Escribir por WhatsApp →
+          <p class="text-gray-500 text-sm mb-8">
+            Si WhatsApp no se abrió automáticamente, usa el botón:
+          </p>
+          <a id="waConfirmLink" href="https://wa.me/573103603232" class="inline-flex items-center gap-2 bg-elim-600 hover:bg-elim-500 text-white font-bold px-7 py-3.5 rounded-xl transition-colors shadow-lg shadow-elim-900/30">
+            Abrir WhatsApp y enviar confirmación →
           </a>
         </div>
       </div>
@@ -697,6 +700,13 @@ const compromisos = [
         form.classList.add('hidden');
         thankYou.classList.remove('hidden');
         window.scrollTo({ top: thankYou.offsetTop - 80, behavior: 'smooth' });
+
+        const idTag = json.id ? `#${json.id}` : '';
+        const waMsg = `Hola, envié mi solicitud de adopción ${idTag} y quiero confirmar la recepción.`.replace(/\s+/g, ' ').trim();
+        const waUrl = `https://wa.me/573103603232?text=${encodeURIComponent(waMsg)}`;
+        const waLink = document.getElementById('waConfirmLink');
+        if (waLink) waLink.setAttribute('href', waUrl);
+        setTimeout(() => { window.location.href = waUrl; }, 1500);
       } catch (err) {
         showError('No pudimos enviar tu postulación en este momento. Por favor intenta de nuevo o escríbenos por WhatsApp.');
         btnSubmit.disabled = false;

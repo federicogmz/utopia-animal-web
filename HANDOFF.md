@@ -82,82 +82,93 @@ Wrangler te pide pegarlo. Guarda el token también en tu gestor de contraseñas;
 lo vas a necesitar para el comando `/evaluar-solicitudes` y para llamar a
 `/api/pendientes` y `/api/evaluar/:id` manualmente.
 
-## 8. Configurar WhatsApp Cloud API (mensaje al postulante)
+## 8. Configurar WhatsApp Cloud API (flujo de webhook · gratuito)
 
-El form envía automáticamente un mensaje de WhatsApp al postulante confirmando
-que su solicitud está siendo evaluada. Usa WhatsApp Cloud API de Meta (gratis
-hasta 1.000 conversaciones de servicio/mes — más que suficiente para Elim).
+**Cómo funciona el flujo:**
 
-**Mientras configuras esto, el form sigue operando**: las solicitudes se
-guardan en D1, solo no se envía el mensaje (queda un log en Cloudflare).
-Cuando los secrets estén configurados, empieza a mandar sin necesidad de
-redeploy.
+1. El postulante envía el formulario en `utopianimal.org/refugio/adoptar`.
+2. La pantalla de gracias abre WhatsApp automáticamente con un mensaje pre-cargado
+   ("Hola, envié mi solicitud #N y quiero confirmar la recepción").
+3. El postulante presiona Enviar (1 tap). El mensaje llega al WhatsApp del refugio.
+4. Meta dispara un webhook a `/api/whatsapp-webhook` en este sitio.
+5. El webhook identifica la solicitud (por ID en el mensaje o por número de teléfono),
+   confirma que no se ha respondido aún y envía un mensaje de texto libre de vuelta.
+6. Como el postulante inició la conversación, el reply cae dentro de la **ventana
+   de servicio de 24h** y es **gratis**. Meta da 1.000 conversaciones de servicio
+   gratuitas por mes — más que suficiente.
+
+**Mientras este setup esté incompleto, el form sigue funcionando**: la solicitud
+se guarda en D1 y se abre WhatsApp para que el postulante envíe su mensaje. Lo
+único que no pasa hasta completar el setup es la respuesta automática del refugio.
 
 ### 8.1 Setup en Meta Business
 
-1. Crea cuenta en [business.facebook.com](https://business.facebook.com) si
-   no tienes una.
-2. **WhatsApp Business Account (WABA):**
-   Meta Business Suite → Settings → Business Assets → WhatsApp accounts → Add
-   → conecta el número del refugio (`+57 310 360 3232`). Meta lo verifica
-   con OTP.
-3. **App de desarrolladores:**
-   [developers.facebook.com/apps](https://developers.facebook.com/apps) →
-   Create App → tipo Business → asocia a la business account. En la app:
+1. Crea cuenta en [business.facebook.com](https://business.facebook.com) si no tienes una.
+2. **WhatsApp Business Account (WABA):** Meta Business Suite → Settings → Business
+   Assets → WhatsApp accounts → Add → conecta el número del refugio
+   (`+57 310 360 3232`). Verifica con OTP.
+3. **App de desarrolladores:** [developers.facebook.com/apps](https://developers.facebook.com/apps)
+   → Create App → tipo **Business** → asocia con la business account. En la app:
    Add product → WhatsApp → Set up.
-4. **Credenciales:**
-   - WhatsApp → API setup. Copia:
-     - **Phone number ID** → es tu `WHATSAPP_PHONE_ID`.
-     - **Temporary access token** (válido 24h). Sirve para probar.
-   - Para producción genera un **System User Access Token permanente**:
-     Meta Business → Settings → Users → System users → Add → asigna como
-     asset la WhatsApp Business Account con permiso `whatsapp_business_messaging`
-     → Generate token (no expira). Este es tu `WHATSAPP_ACCESS_TOKEN`.
+4. **Credenciales:** WhatsApp → API setup. Copia:
+   - **Phone number ID** → tu `WHATSAPP_PHONE_ID`.
+   - **Temporary access token** (24h, sirve para probar).
 
-### 8.2 Crear y aprobar el template
+   Para producción, genera un **System User Access Token permanente**:
+   Meta Business → Settings → Users → System users → Add (tipo Admin) → asigna
+   como asset la WhatsApp Business Account con permiso
+   `whatsapp_business_messaging` → Generate token → marca "no expira". Este es
+   tu `WHATSAPP_ACCESS_TOKEN`.
 
-WhatsApp Manager → Templates → Create template.
+### 8.2 Configurar el webhook
 
-- **Name:** `confirmacion_solicitud` (exactamente este nombre, minúsculas).
-- **Category:** **Utility** (no Marketing — Utility es para confirmaciones
-  transaccionales y se aprueba más rápido).
-- **Language:** Spanish.
-- **Header:** ninguno.
-- **Body:**
+1. **Genera un verify token aleatorio** (Meta lo usa para verificar tu endpoint):
 
-  ```
-  Hola {{1}}, recibimos tu solicitud de adopción a Refugio Animal Elim y la estamos evaluando con cuidado.
+   ```bash
+   openssl rand -hex 24
+   ```
 
-  En los próximos días te informaremos si tu postulación continúa el proceso o no. Por el momento no necesitas hacer nada más.
+   Copia el resultado.
 
-  Equipo Elim · Utopía Animal
-  ```
+2. **Guarda los 3 secrets en Cloudflare:**
 
-- **Sample value** para `{{1}}`: `María`.
-- **Footer:** opcional (ej. "Refugio Animal Elim").
-- Submit. Meta tarda entre minutos y 24h en aprobar.
+   ```bash
+   npx wrangler pages secret put WHATSAPP_ACCESS_TOKEN --project-name utopia-animal-web
+   npx wrangler pages secret put WHATSAPP_PHONE_ID --project-name utopia-animal-web
+   npx wrangler pages secret put WHATSAPP_WEBHOOK_VERIFY_TOKEN --project-name utopia-animal-web
+   ```
 
-Si quieres usar un nombre distinto para el template, configúralo en
-`WHATSAPP_TEMPLATE_NAME` (paso 8.3). El default es `confirmacion_solicitud`.
+3. **En el dashboard de Meta** (la app de developers que creaste) → WhatsApp →
+   Configuration → Webhooks → Edit:
 
-### 8.3 Guardar credenciales como secrets
+   - **Callback URL:** `https://utopianimal.org/api/whatsapp-webhook`
+   - **Verify token:** el hex que generaste con `openssl` en el paso 1.
+   - Click **Verify and Save**. Meta hace una llamada GET con un challenge — si
+     el verify token coincide, queda verificado.
+
+4. **Suscribir al evento `messages`:** en la misma página de Webhooks, sección
+   "Webhook fields", click **Manage** → activa el toggle de `messages`. Save.
+
+### 8.3 (Opcional) Aplicar migración de schema
+
+Si tu base ya tenía la tabla antes de este cambio, añade la columna que el
+webhook usa para no repetir respuestas:
 
 ```bash
-npx wrangler pages secret put WHATSAPP_ACCESS_TOKEN --project-name utopia-animal-web
-npx wrangler pages secret put WHATSAPP_PHONE_ID --project-name utopia-animal-web
+npx wrangler d1 execute elim-solicitudes --remote --file=./migrations/0001_whatsapp_confirmacion.sql
+npx wrangler d1 execute elim-solicitudes --local --file=./migrations/0001_whatsapp_confirmacion.sql
 ```
 
-Opcional, solo si usaste un nombre distinto al default:
+Si recreas la base con `schema.sql` desde cero, la columna ya viene incluida.
 
-```bash
-npx wrangler pages secret put WHATSAPP_TEMPLATE_NAME --project-name utopia-animal-web
-```
+### 8.4 Probar el flujo
 
-### 8.4 Probar
-
-Submite el form con tu propio número. Deberías recibir el mensaje en pocos
-segundos. Si no llega, revisa logs en Cloudflare → Workers & Pages →
-utopia-animal-web → Functions → Logs y busca `whatsapp_send_failed`.
+1. Abre `https://utopianimal.org/refugio/adoptar` en incógnito en tu celular.
+2. Llena el form con tu número real. Submite.
+3. Cuando la pantalla de gracias auto-abra WhatsApp, presiona **Enviar**.
+4. Deberías recibir un mensaje de respuesta del refugio en ~2-5 segundos.
+5. Revisa logs en Cloudflare → Workers & Pages → utopia-animal-web → Functions
+   si algo falla. Busca `whatsapp_inbound_*` o `whatsapp_send_error`.
 
 ## 9. Conectar el dominio custom
 
@@ -194,8 +205,14 @@ si todavía no hay datos importantes.
 ## Endpoints del backend
 
 - `POST /api/solicitud` — público. Recibe el JSON del formulario, valida, hashea
-  la IP, inserta en D1, dispara el mensaje de WhatsApp al postulante.
-  Honeypot: `_website`.
+  la IP, inserta en D1. Devuelve `{ ok, id }` para que la pantalla de gracias
+  pueda armar el link `wa.me` con el ID embebido. Honeypot: `_website`.
+- `GET /api/whatsapp-webhook` — handshake de Meta. Devuelve el `hub.challenge`
+  si el `hub.verify_token` coincide con `WHATSAPP_WEBHOOK_VERIFY_TOKEN`.
+- `POST /api/whatsapp-webhook` — recibe mensajes entrantes de WhatsApp. Si el
+  mensaje viene de un número con solicitud pendiente y no ha sido confirmada,
+  envía respuesta de texto libre (gratis, ventana de 24h) y marca
+  `whatsapp_confirmacion_enviada = 1`.
 - `GET /api/pendientes` — protegido con `Authorization: Bearer <ADMIN_TOKEN>`.
   Devuelve hasta 50 solicitudes con `evaluado_at IS NULL AND estado = 'pendiente'`.
 - `POST /api/evaluar/:id` — protegido con bearer token. Marca la solicitud
