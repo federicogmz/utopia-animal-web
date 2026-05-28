@@ -8,6 +8,9 @@ dist/
 # Astro cache
 .astro/
 
+# Wrangler local state (D1 local copy, cache)
+.wrangler/
+
 # Environment variables
 .env
 .env.*

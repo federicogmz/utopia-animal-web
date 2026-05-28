@@ -25,7 +25,10 @@ import Layout from '../../layouts/Layout.astro';
           Un movimiento felino construido por personas que creen que cada gato callejero merece una segunda oportunidad - y que juntos podemos lograrlo.
         </p>
         <div class="flex flex-wrap gap-4">
-          <a href="#apoya" class="inline-flex items-center gap-2 bg-elim-600 hover:bg-elim-500 text-white font-bold px-7 py-3.5 rounded-xl transition-colors shadow-lg shadow-elim-900/60">
+          <a href="/refugio/adoptar" class="inline-flex items-center gap-2 bg-elim-600 hover:bg-elim-500 text-white font-bold px-7 py-3.5 rounded-xl transition-colors shadow-lg shadow-elim-900/60">
+            💚 Quiero adoptar
+          </a>
+          <a href="#apoya" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-7 py-3.5 rounded-xl transition-colors border border-white/20">
             🐱 Quiero apoyar
           </a>
           <a href="/blog" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-7 py-3.5 rounded-xl transition-colors border border-white/20">
@@ -124,6 +127,17 @@ import Layout from '../../layouts/Layout.astro';
             <p class="text-gray-500 text-sm leading-relaxed">{desc}</p>
           </div>
         ))}
+      </div>
+
+      <div class="mt-12 bg-white rounded-2xl border border-elim-200 shadow-sm p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+        <div class="max-w-xl">
+          <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Adopción responsable</p>
+          <h3 class="text-2xl font-extrabold text-gray-900 mb-2">¿Listo para sumar un gato a tu hogar?</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Postúlate en nuestro formulario de adopción. Revisamos cada solicitud con cariño para encontrar el match perfecto entre tu hogar y un gato de la red Elim.</p>
+        </div>
+        <a href="/refugio/adoptar" class="inline-flex items-center gap-2 bg-elim-600 hover:bg-elim-500 text-white font-bold px-7 py-3.5 rounded-xl transition-colors shadow-lg shadow-elim-900/20 text-sm whitespace-nowrap">
+          Quiero adoptar →
+        </a>
       </div>
     </div>
   </section>
