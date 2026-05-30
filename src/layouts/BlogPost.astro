@@ -20,7 +20,10 @@ const categoryColors: Record<string, string> = {
   'Bienestar': 'bg-elim-100 text-elim-800',
   'Comportamiento': 'bg-purple-100 text-purple-800',
   'Cuidado Responsable': 'bg-amber-100 text-amber-800',
+  'Veterinaria': 'bg-utopia-100 text-utopia-800',
 };
+
+const isVetCategory = category === 'Veterinaria' || category === 'Salud y Nutrición';
 
 const badgeClass = categoryColors[category] ?? 'bg-gray-100 text-gray-700';
 ---
@@ -94,21 +97,40 @@ const badgeClass = categoryColors[category] ?? 'bg-gray-100 text-gray-700';
     )}
 
     <!-- CTA -->
-    <div class="mt-12 bg-elim-50 border border-elim-200 rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-4">
-      <div class="text-4xl">🐾</div>
-      <div class="text-center sm:text-left">
-        <p class="font-bold text-elim-900">¿Quieres apoyar a los gatos de Medellín?</p>
-        <p class="text-sm text-gray-600 mt-1">
-          Con tu apoyo financiamos jornadas de esterilización, atención médica y bienestar animal.
-        </p>
+    {isVetCategory ? (
+      <div class="mt-12 bg-utopia-50 border border-utopia-200 rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-4">
+        <div class="text-4xl">🏥</div>
+        <div class="text-center sm:text-left">
+          <p class="font-bold text-utopia-900">¿Listo para agendar?</p>
+          <p class="text-sm text-gray-600 mt-1">
+            Utopía Animal Vet en Guayabal. Consultas, vacunas, esterilización, urgencias y más.
+          </p>
+        </div>
+        <a
+          href="https://api.whatsapp.com/send?phone=573215308188&text=Hola,%20quiero%20agendar%20una%20cita%20en%20Utop%C3%ADa%20Animal%20Vet"
+          target="_blank" rel="noopener"
+          class="shrink-0 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm whitespace-nowrap"
+        >
+          💬 Agendar por WhatsApp
+        </a>
       </div>
-      <a
-        href="/apoya"
-        class="shrink-0 bg-elim-700 hover:bg-elim-800 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
-      >
-        Apoya la causa
-      </a>
-    </div>
+    ) : (
+      <div class="mt-12 bg-elim-50 border border-elim-200 rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-4">
+        <div class="text-4xl">🐾</div>
+        <div class="text-center sm:text-left">
+          <p class="font-bold text-elim-900">¿Quieres apoyar a los gatos de Medellín?</p>
+          <p class="text-sm text-gray-600 mt-1">
+            Con tu apoyo financiamos jornadas de esterilización, atención médica y bienestar animal.
+          </p>
+        </div>
+        <a
+          href="/apoya"
+          class="shrink-0 bg-elim-700 hover:bg-elim-800 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
+        >
+          Apoya la causa
+        </a>
+      </div>
+    )}
 
   </article>
 </Layout>
