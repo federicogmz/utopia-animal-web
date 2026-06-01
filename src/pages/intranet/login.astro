@@ -1,0 +1,78 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Login Intranet · Utopía Animal" brand="parent">
+  <section class="min-h-[80vh] flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-gray-100">
+      <div>
+        <div class="text-center">
+          <span class="text-4xl">🔐</span>
+        </div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Intranet Utopía Animal
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Ingresa tus credenciales para acceder al dashboard de adopciones.
+        </p>
+      </div>
+      <form id="loginForm" class="mt-8 space-y-6">
+        <div class="rounded-md shadow-sm -space-y-px">
+          <div>
+            <label for="user" class="sr-only">Usuario</label>
+            <input id="user" name="user" type="text" required class="appearance-none rounded-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-xl focus:outline-none focus:ring-utopia-500 focus:border-utopia-500 focus:z-10 sm:text-sm" placeholder="Usuario">
+          </div>
+          <div>
+            <label for="password" class="sr-only">Contraseña</label>
+            <input id="password" name="password" type="password" required class="appearance-none rounded-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-xl focus:outline-none focus:ring-utopia-500 focus:border-utopia-500 focus:z-10 sm:text-sm" placeholder="Contraseña">
+          </div>
+        </div>
+
+        <div id="errorMsg" class="hidden text-red-600 text-sm text-center font-medium">
+          Credenciales incorrectas.
+        </div>
+
+        <div>
+          <button type="submit" id="btnSubmit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-utopia-600 hover:bg-utopia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-utopia-500 transition-colors">
+            Entrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<script is:inline>
+  const form = document.getElementById('loginForm');
+  const errorMsg = document.getElementById('errorMsg');
+  const btnSubmit = document.getElementById('btnSubmit');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorMsg.classList.add('hidden');
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'Verificando...';
+
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData);
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        window.location.href = '/intranet';
+      } else {
+        errorMsg.classList.remove('hidden');
+      }
+    } catch (err) {
+      alert('Error de conexión');
+    } finally {
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'Entrar';
+    }
+  });
+</script>

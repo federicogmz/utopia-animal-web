@@ -28,6 +28,51 @@ npm run preview   # opcional, para revisar el build localmente
 
 El output estático se genera en `dist/`.
 
+## Google Ads API y auditoría de landings
+
+El proyecto incluye dos scripts de soporte para conectar Google Ads por API y contrastar campañas activas contra:
+
+- la landing puente actual del refugio: `https://refugioanimal.fundsumate.org/`
+- la web principal del ecosistema: `https://utopianimal.org/`
+
+### Setup
+
+```bash
+cp .env.example .env
+```
+
+Completa en `.env`:
+
+- `GOOGLE_ADS_CLIENT_ID`
+- `GOOGLE_ADS_CLIENT_SECRET`
+- `GOOGLE_ADS_DEVELOPER_TOKEN`
+- `GOOGLE_ADS_REFRESH_TOKEN`
+- `GOOGLE_ADS_CUSTOMER_ID`
+- `GOOGLE_ADS_LOGIN_CUSTOMER_ID` (solo si accedes por MCC)
+
+### Comandos
+
+```bash
+npm run ads:list-customers
+npm run ads:audit
+```
+
+Opciones útiles:
+
+```bash
+npm run ads:audit -- --days=30
+npm run ads:audit -- --json
+npm run ads:audit -- --out=./tmp/google-ads-audit.md
+```
+
+### Qué hace `ads:audit`
+
+1. Lee campañas activas, anuncios activos y keywords activas desde Google Ads API.
+2. Extrae las `final_urls` de los anuncios.
+3. Calcula un message match básico entre anuncio/keywords y la landing actual.
+4. Sugiere una ruta equivalente dentro de `utopianimal.org` para comparar si la nueva web alinea mejor la intención.
+5. Devuelve un reporte en Markdown o JSON para priorizar optimizaciones.
+
 ---
 
 ## Deploy — Cloudflare Pages

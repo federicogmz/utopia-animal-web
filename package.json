@@ -13,7 +13,9 @@
     "ads:list-customers": "node scripts/google-ads-list-customers.mjs",
     "ads:audit": "node scripts/google-ads-audit.mjs",
     "ads:optimize": "node scripts/google-ads-optimize.mjs",
-    "ads:jornada": "node scripts/google-ads-jornada-esterilizacion.mjs"
+    "ads:jornada": "node scripts/google-ads-jornada-esterilizacion.mjs",
+    "ads:fix-vet-url": "node scripts/google-ads/fix-vet-consulta-url.mjs",
+    "ads:add-negatives": "node scripts/google-ads/add-negative-keywords.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.1.6",

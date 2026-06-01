@@ -48,24 +48,6 @@ const compromisos = [
   <section class="bg-white py-16 sm:py-20">
     <div class="max-w-3xl mx-auto px-4 sm:px-6">
 
-      <!-- THANK YOU STATE -->
-      <div id="thankYou" class="hidden">
-        <div class="bg-elim-50 border border-elim-100 rounded-2xl p-10 sm:p-14 text-center">
-          <div class="text-6xl mb-5">💚</div>
-          <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-3">Postulación recibida</p>
-          <h2 class="text-3xl font-extrabold text-gray-900 mb-5">¡Gracias por dar el paso!</h2>
-          <p class="text-gray-600 leading-relaxed max-w-xl mx-auto mb-3">
-            Recibimos tu postulación. <strong>Te abrimos WhatsApp</strong> para confirmar la recepción — solo presiona <strong>Enviar</strong> y recibirás un mensaje de nuestro equipo confirmando que estamos evaluando tu solicitud.
-          </p>
-          <p class="text-gray-500 text-sm mb-8">
-            Si WhatsApp no se abrió automáticamente, usa el botón:
-          </p>
-          <a id="waConfirmLink" href="https://wa.me/573103603232" class="inline-flex items-center gap-2 bg-elim-600 hover:bg-elim-500 text-white font-bold px-7 py-3.5 rounded-xl transition-colors shadow-lg shadow-elim-900/30">
-            Abrir WhatsApp y enviar confirmación →
-          </a>
-        </div>
-      </div>
-
       <!-- ERROR BANNER -->
       <div id="errorBanner" class="hidden mb-6 bg-red-50 border border-red-200 text-red-800 rounded-xl px-5 py-4 text-sm">
         <strong>Algo salió mal.</strong> <span id="errorMsg">Por favor intenta de nuevo en unos minutos.</span>
@@ -697,16 +679,7 @@ const compromisos = [
           throw new Error(json.error || 'submit_failed');
         }
         localStorage.removeItem(STORAGE_KEY);
-        form.classList.add('hidden');
-        thankYou.classList.remove('hidden');
-        window.scrollTo({ top: thankYou.offsetTop - 80, behavior: 'smooth' });
-
-        const idTag = json.id ? `#${json.id}` : '';
-        const waMsg = `Hola, envié mi solicitud de adopción ${idTag} y quiero confirmar la recepción.`.replace(/\s+/g, ' ').trim();
-        const waUrl = `https://wa.me/573103603232?text=${encodeURIComponent(waMsg)}`;
-        const waLink = document.getElementById('waConfirmLink');
-        if (waLink) waLink.setAttribute('href', waUrl);
-        setTimeout(() => { window.location.href = waUrl; }, 1500);
+        window.location.href = '/refugio/solicitud-enviada';
       } catch (err) {
         showError('No pudimos enviar tu postulación en este momento. Por favor intenta de nuevo o escríbenos por WhatsApp.');
         btnSubmit.disabled = false;

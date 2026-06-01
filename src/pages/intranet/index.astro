@@ -1,0 +1,274 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Dashboard Adopciones · Intranet" brand="parent">
+  <section class="bg-gray-50 min-h-screen py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4">
+        <div>
+          <h1 class="text-3xl font-extrabold text-gray-900">Dashboard de Adopciones</h1>
+          <p class="text-gray-500 mt-1">Gestiona las solicitudes de adopción de Elim Refugio.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="btnRefresh" class="inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+            🔄 Actualizar
+          </button>
+          <button id="btnLogout" class="inline-flex items-center gap-2 bg-red-50 text-red-700 border border-red-100 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-red-100 transition-colors">
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {[
+          { label: 'Total', id: 'statTotal', color: 'text-gray-900' },
+          { label: 'Pendientes', id: 'statPendiente', color: 'text-yellow-600' },
+          { label: 'En Proceso', id: 'statProceso', color: 'text-blue-600' },
+          { label: 'Aprobadas', id: 'statAprobada', color: 'text-green-600' },
+        ].map(s => (
+          <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">{s.label}</p>
+            <p class={`text-2xl font-black ${s.color}`} id={s.id}>...</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- TABLE -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="px-6 py-4 font-bold text-gray-700">ID / Fecha</th>
+                <th class="px-6 py-4 font-bold text-gray-700">Solicitante</th>
+                <th class="px-6 py-4 font-bold text-gray-700">Contacto</th>
+                <th class="px-6 py-4 font-bold text-gray-700">Ciudad/Barrio</th>
+                <th class="px-6 py-4 font-bold text-gray-700">Estado</th>
+                <th class="px-6 py-4 font-bold text-gray-700 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-gray-50">
+              <tr>
+                <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                  <div class="animate-pulse">Cargando solicitudes...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL DETALLE -->
+  <div id="modalDetail" class="hidden fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-white sticky top-0">
+        <h2 class="text-xl font-bold text-gray-900" id="modalTitle">Detalle de Solicitud</h2>
+        <button id="btnCloseModal" class="text-gray-400 hover:text-gray-600 p-2">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-8 overflow-y-auto flex-1 bg-gray-50" id="modalContent">
+        <!-- Content will be injected here -->
+      </div>
+      <div class="px-8 py-6 border-t border-gray-100 bg-white sticky bottom-0 flex justify-end gap-3">
+        <button id="btnCancelModal" class="px-6 py-2.5 rounded-xl border border-gray-200 font-semibold text-gray-700 hover:bg-gray-50 transition-colors">Cerrar</button>
+        <button id="btnSaveModal" class="px-6 py-2.5 rounded-xl bg-utopia-600 text-white font-bold hover:bg-utopia-700 transition-colors shadow-lg shadow-utopia-900/20">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+
+</Layout>
+
+<script is:inline>
+  let solicitudes = [];
+  let currentId = null;
+
+  async function loadData() {
+    try {
+      const res = await fetch('/api/admin/solicitudes');
+      if (res.status === 401) {
+        window.location.href = '/intranet/login';
+        return;
+      }
+      const json = await res.json();
+      if (json.ok) {
+        solicitudes = json.solicitudes;
+        renderTable();
+        updateStats();
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error cargando datos');
+    }
+  }
+
+  function updateStats() {
+    document.getElementById('statTotal').textContent = solicitudes.length;
+    document.getElementById('statPendiente').textContent = solicitudes.filter(s => s.estado === 'pendiente').length;
+    document.getElementById('statProceso').textContent = solicitudes.filter(s => s.estado === 'proceso').length;
+    document.getElementById('statAprobada').textContent = solicitudes.filter(s => s.estado === 'aprobada').length;
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('tableBody');
+    if (solicitudes.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">No hay solicitudes registradas.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = solicitudes.map(s => `
+      <tr class="hover:bg-gray-50 transition-colors">
+        <td class="px-6 py-4">
+          <div class="font-bold text-gray-900">#${s.id}</div>
+          <div class="text-xs text-gray-500">${new Date(s.fecha_envio).toLocaleDateString()}</div>
+        </td>
+        <td class="px-6 py-4 font-medium text-gray-900">${s.nombre_completo}</td>
+        <td class="px-6 py-4">
+          <div class="text-gray-900">${s.telefono}</div>
+          <div class="text-xs text-gray-500">${s.correo || ''}</div>
+        </td>
+        <td class="px-6 py-4 text-gray-600">${s.ciudad || '-'}<br/><span class="text-xs">${s.barrio || '-'}</span></td>
+        <td class="px-6 py-4">
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getStatusClass(s.estado)}">
+            ${s.estado || 'pendiente'}
+          </span>
+        </td>
+        <td class="px-6 py-4 text-right">
+          <button onclick="openDetail(${s.id})" class="text-utopia-600 font-bold hover:text-utopia-800 transition-colors">Ver Detalle →</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function getStatusClass(status) {
+    switch (status) {
+      case 'aprobada': return 'bg-green-100 text-green-800';
+      case 'rechazada': return 'bg-red-100 text-red-800';
+      case 'proceso': return 'bg-blue-100 text-blue-800';
+      default: return 'bg-yellow-100 text-yellow-800';
+    }
+  }
+
+  window.openDetail = function(id) {
+    currentId = id;
+    const s = solicitudes.find(x => x.id === id);
+    if (!s) return;
+
+    document.getElementById('modalTitle').textContent = `Solicitud #${s.id} · ${s.nombre_completo}`;
+    
+    let html = `
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-sm font-bold text-gray-900 uppercase border-b border-gray-200 pb-2 mb-4">Información Personal</h3>
+          <dl class="grid grid-cols-2 gap-y-3 text-sm">
+            <dt class="text-gray-500">Nombre:</dt> <dd class="text-gray-900 font-medium">${s.nombre_completo}</dd>
+            <dt class="text-gray-500">Cédula:</dt> <dd class="text-gray-900">${s.cedula || '-'}</dd>
+            <dt class="text-gray-500">Edad:</dt> <dd class="text-gray-900">${s.edad || '-'}</dd>
+            <dt class="text-gray-500">Teléfono:</dt> <dd class="text-gray-900 font-bold">${s.telefono}</dd>
+            <dt class="text-gray-500">Correo:</dt> <dd class="text-gray-900">${s.correo || '-'}</dd>
+            <dt class="text-gray-500">Ciudad/Barrio:</dt> <dd class="text-gray-900">${s.ciudad || '-'} / ${s.barrio || '-'}</dd>
+            <dt class="text-gray-500">Instagram:</dt> <dd class="text-gray-900 font-medium">${s.instagram || '-'}</dd>
+          </dl>
+
+          <h3 class="text-sm font-bold text-gray-900 uppercase border-b border-gray-200 pb-2 mb-4 mt-8">Vivienda y Familia</h3>
+          <dl class="grid grid-cols-2 gap-y-3 text-sm">
+            <dt class="text-gray-500">Tipo Vivienda:</dt> <dd class="text-gray-900">${s.tipo_vivienda || '-'}</dd>
+            <dt class="text-gray-500">Habitacional:</dt> <dd class="text-gray-900">${s.situacion_habitacional || '-'}</dd>
+            <dt class="text-gray-500">Mallas Seg:</dt> <dd class="text-gray-900 font-bold">${s.mallas_seguridad ? '✅ Sí' : '❌ No'}</dd>
+            <dt class="text-gray-500">Otras Mascotas:</dt> <dd class="text-gray-900">${s.tiene_otras_mascotas ? '✅ Sí' : '❌ No'}</dd>
+            <dt class="text-gray-500">Adultos/Niños:</dt> <dd class="text-gray-900">${s.adultos_casa || 0} / ${s.ninos_edades || '-'}</dd>
+          </dl>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-bold text-gray-900 uppercase border-b border-gray-200 pb-2 mb-4">Motivación y Compromiso</h3>
+          <div class="space-y-4 text-sm">
+            <div>
+              <p class="text-gray-500 mb-1">¿Por qué adoptar?</p>
+              <p class="text-gray-900 p-3 bg-white rounded-lg border border-gray-200 italic">${s.por_que_adoptar || '-'}</p>
+            </div>
+            <div>
+              <p class="text-gray-500 mb-1">Planes de mudanza:</p>
+              <p class="text-gray-900">${s.planes_mudanza ? `Sí: ${s.cuando_mudanza}` : 'No'}</p>
+            </div>
+            <div>
+              <p class="text-gray-500 mb-1">Compromisos:</p>
+              <div class="text-xs text-gray-600 bg-white p-3 rounded-lg border border-gray-200">
+                ${JSON.parse(s.compromisos_aceptados || '[]').map(c => `• ${c}`).join('<br/>')}
+              </div>
+            </div>
+          </div>
+
+          <h3 class="text-sm font-bold text-gray-900 uppercase border-b border-gray-200 pb-2 mb-4 mt-8">Gestión Interna</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Estado</label>
+              <select id="editEstado" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500">
+                <option value="pendiente" ${s.estado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+                <option value="proceso" ${s.estado === 'proceso' ? 'selected' : ''}>En Proceso</option>
+                <option value="aprobada" ${s.estado === 'aprobada' ? 'selected' : ''}>Aprobada</option>
+                <option value="rechazada" ${s.estado === 'rechazada' ? 'selected' : ''}>Rechazada</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas Humanas</label>
+              <textarea id="editNotas" rows="4" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" placeholder="Escribe aquí el seguimiento...">${s.notas_humanas || ''}</textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('modalContent').innerHTML = html;
+    document.getElementById('modalDetail').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  };
+
+  function closeModal() {
+    document.getElementById('modalDetail').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+
+  document.getElementById('btnCloseModal').onclick = closeModal;
+  document.getElementById('btnCancelModal').onclick = closeModal;
+
+  document.getElementById('btnSaveModal').onclick = async () => {
+    const btn = document.getElementById('btnSaveModal');
+    const estado = document.getElementById('editEstado').value;
+    const notas_humanas = document.getElementById('editNotas').value;
+
+    btn.disabled = true;
+    btn.textContent = 'Guardando...';
+
+    try {
+      const res = await fetch('/api/admin/update-solicitud', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: currentId, estado, notas_humanas }),
+      });
+      if (res.ok) {
+        closeModal();
+        loadData();
+      } else {
+        alert('Error al guardar');
+      }
+    } catch (err) {
+      alert('Error de conexión');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Guardar cambios';
+    }
+  };
+
+  document.getElementById('btnRefresh').onclick = loadData;
+  document.getElementById('btnLogout').onclick = () => {
+    document.cookie = "session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    window.location.href = '/intranet/login';
+  };
+
+  loadData();
+</script>

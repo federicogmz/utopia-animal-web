@@ -1,0 +1,50 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Solicitud recibida · Elim Refugio Animal"
+  description="Tu solicitud de adopción ha sido recibida correctamente."
+  brand="elim"
+>
+  <section class="bg-white py-24 sm:py-32">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="bg-elim-50 border border-elim-100 rounded-2xl p-10 sm:p-14 text-center">
+        <div class="text-6xl mb-5">💚</div>
+        <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-3">Postulación recibida</p>
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-5">¡Gracias por tu interés en adoptar!</h2>
+        <p class="text-gray-600 leading-relaxed max-w-xl mx-auto mb-6">
+          Hemos recibido tu solicitud correctamente. Nuestro equipo revisará la información y evaluará si tu hogar es el match ideal para uno de nuestros gatos.
+        </p>
+        <div class="bg-white/50 rounded-xl p-6 mb-8 text-left border border-elim-100/50">
+          <h3 class="font-bold text-gray-900 mb-2 text-sm">¿Qué sigue ahora?</h3>
+          <ul class="text-sm text-gray-600 space-y-2">
+            <li class="flex gap-2">
+              <span class="text-elim-500">1.</span>
+              <span>Evaluamos tu perfil y referencias.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-elim-500">2.</span>
+              <span>Te contactaremos vía WhatsApp o correo para informarte si la solicitud continúa o no.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-elim-500">3.</span>
+              <span>Si continúas, agendaremos una entrevista y visita (virtual o presencial).</span>
+            </li>
+          </ul>
+        </div>
+        <p class="text-gray-500 text-sm mb-8">
+          Por el momento no necesitas realizar ninguna acción adicional. Estaremos en contacto pronto.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/" class="inline-flex items-center justify-center gap-2 bg-elim-600 hover:bg-elim-500 text-white font-bold px-7 py-3.5 rounded-xl transition-colors shadow-lg shadow-elim-900/20">
+            Volver al inicio
+          </a>
+          <a href="/refugio" class="inline-flex items-center justify-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-7 py-3.5 rounded-xl transition-colors">
+            Ver otros gatos
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
