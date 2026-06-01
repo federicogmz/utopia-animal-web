@@ -7,7 +7,9 @@ async function verifySession(request: Request, secret: string) {
   const cookie = request.headers.get('Cookie');
   if (!cookie) return false;
   
-  const session = cookie.split('; ').find(row => row.startsWith('session='))?.split('=')[1];
+  const sessionRow = cookie.split(';').map(c => c.trim()).find(row => row.startsWith('session='));
+  if (!sessionRow) return false;
+  const session = sessionRow.substring('session='.length);
   if (!session) return false;
 
   const [dataB64, signatureHex] = session.split('.');
