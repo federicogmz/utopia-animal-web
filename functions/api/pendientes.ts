@@ -1,20 +1,11 @@
-interface Env {
-  DB: D1Database;
-  ADMIN_TOKEN?: string;
-}
+import { isAuthorized, unauthorized, type AuthEnv } from './_lib/auth';
 
-function unauthorized(): Response {
-  return new Response(JSON.stringify({ ok: false, error: 'unauthorized' }), {
-    status: 401,
-    headers: { 'Content-Type': 'application/json' },
-  });
+interface Env extends AuthEnv {
+  DB: D1Database;
 }
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const auth = request.headers.get('Authorization') || '';
-  const expected = env.ADMIN_TOKEN;
-  if (!expected) return unauthorized();
-  if (auth !== `Bearer ${expected}`) return unauthorized();
+  if (!(await isAuthorized(request, env))) return unauthorized();
 
   const { results } = await env.DB.prepare(
     `SELECT * FROM solicitudes

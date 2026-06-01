@@ -7,9 +7,18 @@ interface Env {
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const { user, password } = await request.json() as any;
 
-  const adminUser = env.ADMIN_USER || 'utopianimal';
-  const adminPass = env.ADMIN_PASSWORD || 'Utopia2026Secure!'; // Default secure password if not set
-  const sessionSecret = env.SESSION_SECRET || 'utopia-animal-secret-2026';
+  const adminUser = env.ADMIN_USER;
+  const adminPass = env.ADMIN_PASSWORD;
+  const sessionSecret = env.SESSION_SECRET;
+
+  // Falla cerrado: sin estos secrets configurados no se puede iniciar sesión.
+  // Nunca usar credenciales o secret por defecto (estarían en el repo).
+  if (!adminUser || !adminPass || !sessionSecret) {
+    return new Response(JSON.stringify({ ok: false, error: 'auth_not_configured' }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
   if (user === adminUser && password === adminPass) {
     // In a real app, we'd use a JWT. For now, a simple signed session or just a token.

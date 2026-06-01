@@ -1,6 +1,7 @@
-interface Env {
+import { isAuthorized, unauthorized, type AuthEnv } from '../_lib/auth';
+
+interface Env extends AuthEnv {
   DB: D1Database;
-  ADMIN_TOKEN?: string;
 }
 
 interface EvalPayload {
@@ -27,10 +28,7 @@ function stringifyMaybeArray(v: unknown): string | null {
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env, params }) => {
-  const auth = request.headers.get('Authorization') || '';
-  if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) {
-    return jsonResponse({ ok: false, error: 'unauthorized' }, 401);
-  }
+  if (!(await isAuthorized(request, env))) return unauthorized();
 
   const rawId = Array.isArray(params.id) ? params.id[0] : params.id;
   const id = Number(rawId);
@@ -52,8 +50,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, params }
   const recomendacion = typeof body.recomendacion === 'string' ? body.recomendacion : null;
   const notas_ia = typeof body.notas_ia === 'string' ? body.notas_ia : null;
 
+  let changes = 0;
   try {
-    await env.DB.prepare(
+    const result = await env.DB.prepare(
       `UPDATE solicitudes
        SET evaluado_at = CURRENT_TIMESTAMP,
            score = ?,
@@ -64,9 +63,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, params }
            notas_ia = ?
        WHERE id = ?`
     ).bind(score, senales_buenas, senales_alerta, preguntas_followup, recomendacion, notas_ia, id).run();
+    changes = (result as { meta?: { changes?: number } }).meta?.changes ?? 0;
   } catch (err) {
     return jsonResponse({ ok: false, error: 'db_error', detail: String(err) }, 500);
   }
+
+  if (changes === 0) return jsonResponse({ ok: false, error: 'not_found' }, 404);
 
   return jsonResponse({ ok: true });
 };

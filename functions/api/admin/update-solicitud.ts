@@ -1,43 +1,24 @@
-interface Env {
+import { isAuthorized, unauthorized, type AuthEnv } from '../_lib/auth';
+
+interface Env extends AuthEnv {
   DB: D1Database;
-  SESSION_SECRET?: string;
 }
 
-async function verifySession(request: Request, secret: string) {
-  const cookie = request.headers.get('Cookie');
-  if (!cookie) return false;
-  const sessionRow = cookie.split(';').map(c => c.trim()).find(row => row.startsWith('session='));
-  if (!sessionRow) return false;
-  const session = sessionRow.substring('session='.length);
-  if (!session) return false;
-  const [dataB64, signatureHex] = session.split('.');
-  if (!dataB64 || !signatureHex) return false;
-  try {
-    const data = atob(dataB64);
-    const encoder = new TextEncoder();
-    const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
-    const sigBytes = new Uint8Array(signatureHex.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)));
-    const isValid = await crypto.subtle.verify('HMAC', key, sigBytes, encoder.encode(data));
-    if (!isValid) return false;
-    const [, timestamp] = data.split(':');
-    if (Date.now() - parseInt(timestamp) > 2592000000) return false;
-    return true;
-  } catch { return false; }
-}
+const ESTADOS_VALIDOS = new Set(['pendiente', 'proceso', 'aprobada', 'rechazada']);
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
-  const secret = env.SESSION_SECRET || 'utopia-animal-secret-2026';
-  if (!(await verifySession(request, secret))) {
-    return new Response(JSON.stringify({ ok: false, error: 'unauthorized' }), { status: 401 });
-  }
+  if (!(await isAuthorized(request, env))) return unauthorized();
 
-  const { id, estado, notas_humanas } = await request.json() as any;
+  const { id, estado, notas_humanas, asignado_a } = await request.json() as any;
   if (!id) return new Response(JSON.stringify({ ok: false, error: 'missing_id' }), { status: 400 });
+  if (estado !== undefined && estado !== null && !ESTADOS_VALIDOS.has(estado)) {
+    return new Response(JSON.stringify({ ok: false, error: 'invalid_estado' }), { status: 400 });
+  }
 
   try {
     await env.DB.prepare(
-      'UPDATE solicitudes SET estado = ?, notas_humanas = ? WHERE id = ?'
-    ).bind(estado, notas_humanas, id).run();
+      'UPDATE solicitudes SET estado = ?, notas_humanas = ?, asignado_a = ? WHERE id = ?'
+    ).bind(estado, notas_humanas ?? null, asignado_a ?? null, id).run();
     return new Response(JSON.stringify({ ok: true }), {
       headers: { 'Content-Type': 'application/json' },
     });

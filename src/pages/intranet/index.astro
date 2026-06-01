@@ -2,13 +2,13 @@
 import Layout from '../../layouts/Layout.astro';
 ---
 
-<Layout title="Dashboard Adopciones · Intranet" brand="parent">
+<Layout title="Centro de Control · Adopciones Elim" brand="parent">
   <section class="bg-gray-50 min-h-screen py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <div>
-          <h1 class="text-3xl font-extrabold text-gray-900">Dashboard de Adopciones</h1>
-          <p class="text-gray-500 mt-1">Gestiona las solicitudes de adopción de Elim Refugio.</p>
+          <h1 class="text-3xl font-extrabold text-gray-900">Centro de Control · Adopciones</h1>
+          <p class="text-gray-500 mt-1">Solicitudes de adopción de Elim Refugio, con evaluación asistida por IA.</p>
         </div>
         <div class="flex items-center gap-3">
           <button id="btnRefresh" class="inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
@@ -21,12 +21,14 @@ import Layout from '../../layouts/Layout.astro';
       </div>
 
       <!-- STATS -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
         {[
           { label: 'Total', id: 'statTotal', color: 'text-gray-900' },
+          { label: 'Sin evaluar', id: 'statSinEval', color: 'text-purple-600' },
           { label: 'Pendientes', id: 'statPendiente', color: 'text-yellow-600' },
           { label: 'En Proceso', id: 'statProceso', color: 'text-blue-600' },
           { label: 'Aprobadas', id: 'statAprobada', color: 'text-green-600' },
+          { label: 'Rechazadas', id: 'statRechazada', color: 'text-red-600' },
         ].map(s => (
           <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
             <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">{s.label}</p>
@@ -35,23 +37,44 @@ import Layout from '../../layouts/Layout.astro';
         ))}
       </div>
 
+      <!-- FILTERS -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-6 flex flex-col md:flex-row gap-3 md:items-center">
+        <input id="searchInput" type="text" placeholder="Buscar por nombre, correo, teléfono o ciudad..."
+          class="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
+        <select id="filterEstado" class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:ring-utopia-500 focus:border-utopia-500">
+          <option value="">Todos los estados</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="proceso">En Proceso</option>
+          <option value="aprobada">Aprobada</option>
+          <option value="rechazada">Rechazada</option>
+        </select>
+        <select id="filterReco" class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:ring-utopia-500 focus:border-utopia-500">
+          <option value="">Toda recomendación IA</option>
+          <option value="avanzar">✅ Avanzar</option>
+          <option value="revisar">🟡 Revisar</option>
+          <option value="descartar">⛔ Descartar</option>
+          <option value="__none__">Sin evaluar</option>
+        </select>
+      </div>
+
       <!-- TABLE -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
             <thead class="bg-gray-50 border-b border-gray-100">
               <tr>
-                <th class="px-6 py-4 font-bold text-gray-700">ID / Fecha</th>
-                <th class="px-6 py-4 font-bold text-gray-700">Solicitante</th>
-                <th class="px-6 py-4 font-bold text-gray-700">Contacto</th>
-                <th class="px-6 py-4 font-bold text-gray-700">Ciudad/Barrio</th>
-                <th class="px-6 py-4 font-bold text-gray-700">Estado</th>
-                <th class="px-6 py-4 font-bold text-gray-700 text-right">Acciones</th>
+                <th class="px-5 py-4 font-bold text-gray-700">ID / Fecha</th>
+                <th class="px-5 py-4 font-bold text-gray-700">Solicitante</th>
+                <th class="px-5 py-4 font-bold text-gray-700">Contacto</th>
+                <th class="px-5 py-4 font-bold text-gray-700">Ciudad/Barrio</th>
+                <th class="px-5 py-4 font-bold text-gray-700">IA</th>
+                <th class="px-5 py-4 font-bold text-gray-700">Estado</th>
+                <th class="px-5 py-4 font-bold text-gray-700 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-50">
               <tr>
-                <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                <td colspan="7" class="px-6 py-12 text-center text-gray-500">
                   <div class="animate-pulse">Cargando solicitudes...</div>
                 </td>
               </tr>
@@ -64,19 +87,20 @@ import Layout from '../../layouts/Layout.astro';
 
   <!-- MODAL DETALLE -->
   <div id="modalDetail" class="hidden fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col">
-      <div class="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-white sticky top-0">
+    <div class="bg-white w-full max-w-5xl max-h-[92vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="px-8 py-5 border-b border-gray-100 flex items-center justify-between bg-white">
         <h2 class="text-xl font-bold text-gray-900" id="modalTitle">Detalle de Solicitud</h2>
         <button id="btnCloseModal" class="text-gray-400 hover:text-gray-600 p-2">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
-      <div class="p-8 overflow-y-auto flex-1 bg-gray-50" id="modalContent">
-        <!-- Content will be injected here -->
-      </div>
-      <div class="px-8 py-6 border-t border-gray-100 bg-white sticky bottom-0 flex justify-end gap-3">
-        <button id="btnCancelModal" class="px-6 py-2.5 rounded-xl border border-gray-200 font-semibold text-gray-700 hover:bg-gray-50 transition-colors">Cerrar</button>
-        <button id="btnSaveModal" class="px-6 py-2.5 rounded-xl bg-utopia-600 text-white font-bold hover:bg-utopia-700 transition-colors shadow-lg shadow-utopia-900/20">Guardar cambios</button>
+      <div class="p-8 overflow-y-auto flex-1 bg-gray-50" id="modalContent"></div>
+      <div class="px-8 py-5 border-t border-gray-100 bg-white flex justify-between items-center gap-3">
+        <span id="modalSaveStatus" class="text-sm text-gray-400"></span>
+        <div class="flex gap-3">
+          <button id="btnCancelModal" class="px-6 py-2.5 rounded-xl border border-gray-200 font-semibold text-gray-700 hover:bg-gray-50 transition-colors">Cerrar</button>
+          <button id="btnSaveModal" class="px-6 py-2.5 rounded-xl bg-utopia-600 text-white font-bold hover:bg-utopia-700 transition-colors shadow-lg shadow-utopia-900/20">Guardar gestión</button>
+        </div>
       </div>
     </div>
   </div>
@@ -87,18 +111,71 @@ import Layout from '../../layouts/Layout.astro';
   let solicitudes = [];
   let currentId = null;
 
+  // Escapa datos del solicitante (vienen de un formulario público) antes de
+  // inyectarlos con innerHTML. Previene XSS almacenado en el navegador del admin.
+  function esc(v) {
+    if (v === null || v === undefined) return '';
+    return String(v)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function parseArr(v) {
+    if (Array.isArray(v)) return v;
+    if (!v) return [];
+    try { const p = JSON.parse(v); return Array.isArray(p) ? p : [p]; } catch (e) { return [String(v)]; }
+  }
+
+  function fmtBool(v) {
+    if (v === 1 || v === '1' || v === true) return '✅ Sí';
+    if (v === 0 || v === '0' || v === false) return '❌ No';
+    return '—';
+  }
+
+  function fmtDate(v) {
+    if (!v) return '—';
+    try { return new Date(v.replace(' ', 'T') + 'Z').toLocaleString('es-CO'); } catch (e) { return esc(v); }
+  }
+
+  function estadoBadge(estado) {
+    const e = estado || 'pendiente';
+    const cls = {
+      aprobada: 'bg-green-100 text-green-800',
+      rechazada: 'bg-red-100 text-red-800',
+      proceso: 'bg-blue-100 text-blue-800',
+      pendiente: 'bg-yellow-100 text-yellow-800',
+    }[e] || 'bg-yellow-100 text-yellow-800';
+    return `<span class="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${cls}">${esc(e)}</span>`;
+  }
+
+  function recoMeta(reco) {
+    return {
+      avanzar:   { label: 'Avanzar', icon: '✅', badge: 'bg-green-100 text-green-800', bar: 'bg-green-500' },
+      revisar:   { label: 'Revisar', icon: '🟡', badge: 'bg-amber-100 text-amber-800', bar: 'bg-amber-500' },
+      descartar: { label: 'Descartar', icon: '⛔', badge: 'bg-red-100 text-red-800', bar: 'bg-red-500' },
+    }[reco] || { label: 'Sin evaluar', icon: '⏳', badge: 'bg-gray-100 text-gray-600', bar: 'bg-gray-300' };
+  }
+
+  function scoreColor(score) {
+    if (score === null || score === undefined || score === '') return 'text-gray-400';
+    const n = Number(score);
+    if (n >= 80) return 'text-green-600';
+    if (n >= 60) return 'text-amber-600';
+    return 'text-red-600';
+  }
+
   async function loadData() {
     try {
       const res = await fetch('/api/admin/solicitudes');
-      if (res.status === 401) {
-        window.location.href = '/intranet/login';
-        return;
-      }
+      if (res.status === 401) { window.location.href = '/intranet/login'; return; }
       const json = await res.json();
       if (json.ok) {
-        solicitudes = json.solicitudes;
-        renderTable();
+        solicitudes = json.solicitudes || [];
         updateStats();
+        renderTable();
       }
     } catch (err) {
       console.error(err);
@@ -107,50 +184,86 @@ import Layout from '../../layouts/Layout.astro';
   }
 
   function updateStats() {
+    const by = (fn) => solicitudes.filter(fn).length;
     document.getElementById('statTotal').textContent = solicitudes.length;
-    document.getElementById('statPendiente').textContent = solicitudes.filter(s => s.estado === 'pendiente').length;
-    document.getElementById('statProceso').textContent = solicitudes.filter(s => s.estado === 'proceso').length;
-    document.getElementById('statAprobada').textContent = solicitudes.filter(s => s.estado === 'aprobada').length;
+    document.getElementById('statSinEval').textContent = by(s => !s.evaluado_at);
+    document.getElementById('statPendiente').textContent = by(s => (s.estado || 'pendiente') === 'pendiente');
+    document.getElementById('statProceso').textContent = by(s => s.estado === 'proceso');
+    document.getElementById('statAprobada').textContent = by(s => s.estado === 'aprobada');
+    document.getElementById('statRechazada').textContent = by(s => s.estado === 'rechazada');
+  }
+
+  function getFiltered() {
+    const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+    const fe = document.getElementById('filterEstado').value;
+    const fr = document.getElementById('filterReco').value;
+    return solicitudes.filter(s => {
+      if (fe && (s.estado || 'pendiente') !== fe) return false;
+      if (fr === '__none__' && s.evaluado_at) return false;
+      else if (fr && fr !== '__none__' && s.recomendacion !== fr) return false;
+      if (q) {
+        const hay = `${s.nombre_completo || ''} ${s.correo || ''} ${s.telefono || ''} ${s.ciudad || ''} ${s.barrio || ''}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
   }
 
   function renderTable() {
     const tbody = document.getElementById('tableBody');
-    if (solicitudes.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">No hay solicitudes registradas.</td></tr>';
+    const rows = getFiltered();
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-gray-500">No hay solicitudes que coincidan.</td></tr>';
       return;
     }
 
-    tbody.innerHTML = solicitudes.map(s => `
+    tbody.innerHTML = rows.map(s => {
+      const rm = recoMeta(s.recomendacion);
+      const scoreTxt = (s.score === null || s.score === undefined || s.score === '') ? '—' : Math.round(Number(s.score));
+      return `
       <tr class="hover:bg-gray-50 transition-colors">
-        <td class="px-6 py-4">
-          <div class="font-bold text-gray-900">#${s.id}</div>
-          <div class="text-xs text-gray-500">${new Date(s.fecha_envio).toLocaleDateString()}</div>
+        <td class="px-5 py-4 align-top">
+          <div class="font-bold text-gray-900">#${esc(s.id)}</div>
+          <div class="text-xs text-gray-500">${esc(new Date(s.fecha_envio).toLocaleDateString())}</div>
         </td>
-        <td class="px-6 py-4 font-medium text-gray-900">${s.nombre_completo}</td>
-        <td class="px-6 py-4">
-          <div class="text-gray-900">${s.telefono}</div>
-          <div class="text-xs text-gray-500">${s.correo || ''}</div>
+        <td class="px-5 py-4 align-top font-medium text-gray-900">${esc(s.nombre_completo)}<div class="text-xs font-normal text-gray-400">${esc(s.edad || '')}${s.edad ? ' años' : ''} · ${esc(s.ocupacion || '—')}</div></td>
+        <td class="px-5 py-4 align-top">
+          <div class="text-gray-900">${esc(s.telefono)}</div>
+          <div class="text-xs text-gray-500">${esc(s.correo || '')}</div>
         </td>
-        <td class="px-6 py-4 text-gray-600">${s.ciudad || '-'}<br/><span class="text-xs">${s.barrio || '-'}</span></td>
-        <td class="px-6 py-4">
-          <span class="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getStatusClass(s.estado)}">
-            ${s.estado || 'pendiente'}
-          </span>
+        <td class="px-5 py-4 align-top text-gray-600">${esc(s.ciudad || '-')}<br/><span class="text-xs">${esc(s.barrio || '-')}</span></td>
+        <td class="px-5 py-4 align-top">
+          <div class="flex items-center gap-2">
+            <span class="font-black ${scoreColor(s.score)}">${scoreTxt}</span>
+            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${rm.badge}">${rm.icon} ${rm.label}</span>
+          </div>
         </td>
-        <td class="px-6 py-4 text-right">
-          <button onclick="openDetail(${s.id})" class="text-utopia-600 font-bold hover:text-utopia-800 transition-colors">Ver Detalle →</button>
+        <td class="px-5 py-4 align-top">${estadoBadge(s.estado)}</td>
+        <td class="px-5 py-4 align-top text-right">
+          <button onclick="openDetail(${Number(s.id)})" class="text-utopia-600 font-bold hover:text-utopia-800 transition-colors whitespace-nowrap">Ver Detalle →</button>
         </td>
-      </tr>
-    `).join('');
+      </tr>`;
+    }).join('');
   }
 
-  function getStatusClass(status) {
-    switch (status) {
-      case 'aprobada': return 'bg-green-100 text-green-800';
-      case 'rechazada': return 'bg-red-100 text-red-800';
-      case 'proceso': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-yellow-100 text-yellow-800';
-    }
+  function row(label, value) {
+    return `<dt class="text-gray-500">${esc(label)}:</dt> <dd class="text-gray-900 break-words">${esc(value === null || value === undefined || value === '' ? '—' : value)}</dd>`;
+  }
+  function boolRow(label, value) {
+    return `<dt class="text-gray-500">${esc(label)}:</dt> <dd class="text-gray-900 font-medium">${fmtBool(value)}</dd>`;
+  }
+  function longField(label, value) {
+    return `<div><p class="text-gray-500 mb-1">${esc(label)}</p><p class="text-gray-900 p-3 bg-white rounded-lg border border-gray-200 whitespace-pre-wrap">${esc(value || '—')}</p></div>`;
+  }
+  function section(title, inner) {
+    return `<div class="bg-white rounded-xl border border-gray-200 p-5 mb-5"><h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-100 pb-2 mb-4">${esc(title)}</h3>${inner}</div>`;
+  }
+  function dl(inner) {
+    return `<dl class="grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm">${inner}</dl>`;
+  }
+  function chips(arr, cls) {
+    if (!arr.length) return '<span class="text-gray-400 text-sm">—</span>';
+    return arr.map(x => `<li class="flex gap-2"><span>${cls.icon}</span><span>${esc(x)}</span></li>`).join('');
   }
 
   window.openDetail = function(id) {
@@ -159,71 +272,138 @@ import Layout from '../../layouts/Layout.astro';
     if (!s) return;
 
     document.getElementById('modalTitle').textContent = `Solicitud #${s.id} · ${s.nombre_completo}`;
-    
-    let html = `
-      <div class="grid md:grid-cols-2 gap-8">
-        <div>
-          <h3 class="text-sm font-bold text-gray-900 uppercase border-b border-gray-200 pb-2 mb-4">Información Personal</h3>
-          <dl class="grid grid-cols-2 gap-y-3 text-sm">
-            <dt class="text-gray-500">Nombre:</dt> <dd class="text-gray-900 font-medium">${s.nombre_completo}</dd>
-            <dt class="text-gray-500">Cédula:</dt> <dd class="text-gray-900">${s.cedula || '-'}</dd>
-            <dt class="text-gray-500">Edad:</dt> <dd class="text-gray-900">${s.edad || '-'}</dd>
-            <dt class="text-gray-500">Teléfono:</dt> <dd class="text-gray-900 font-bold">${s.telefono}</dd>
-            <dt class="text-gray-500">Correo:</dt> <dd class="text-gray-900">${s.correo || '-'}</dd>
-            <dt class="text-gray-500">Ciudad/Barrio:</dt> <dd class="text-gray-900">${s.ciudad || '-'} / ${s.barrio || '-'}</dd>
-            <dt class="text-gray-500">Instagram:</dt> <dd class="text-gray-900 font-medium">${s.instagram || '-'}</dd>
-          </dl>
 
-          <h3 class="text-sm font-bold text-gray-900 uppercase border-b border-gray-200 pb-2 mb-4 mt-8">Vivienda y Familia</h3>
-          <dl class="grid grid-cols-2 gap-y-3 text-sm">
-            <dt class="text-gray-500">Tipo Vivienda:</dt> <dd class="text-gray-900">${s.tipo_vivienda || '-'}</dd>
-            <dt class="text-gray-500">Habitacional:</dt> <dd class="text-gray-900">${s.situacion_habitacional || '-'}</dd>
-            <dt class="text-gray-500">Mallas Seg:</dt> <dd class="text-gray-900 font-bold">${s.mallas_seguridad ? '✅ Sí' : '❌ No'}</dd>
-            <dt class="text-gray-500">Otras Mascotas:</dt> <dd class="text-gray-900">${s.tiene_otras_mascotas ? '✅ Sí' : '❌ No'}</dd>
-            <dt class="text-gray-500">Adultos/Niños:</dt> <dd class="text-gray-900">${s.adultos_casa || 0} / ${s.ninos_edades || '-'}</dd>
-          </dl>
-        </div>
+    const compromisos = parseArr(s.compromisos_aceptados);
+    const buenas = parseArr(s.senales_buenas);
+    const alertas = parseArr(s.senales_alerta);
+    const followups = parseArr(s.preguntas_followup);
+    const rm = recoMeta(s.recomendacion);
+    const scoreTxt = (s.score === null || s.score === undefined || s.score === '') ? '—' : Math.round(Number(s.score));
 
-        <div>
-          <h3 class="text-sm font-bold text-gray-900 uppercase border-b border-gray-200 pb-2 mb-4">Motivación y Compromiso</h3>
-          <div class="space-y-4 text-sm">
-            <div>
-              <p class="text-gray-500 mb-1">¿Por qué adoptar?</p>
-              <p class="text-gray-900 p-3 bg-white rounded-lg border border-gray-200 italic">${s.por_que_adoptar || '-'}</p>
-            </div>
-            <div>
-              <p class="text-gray-500 mb-1">Planes de mudanza:</p>
-              <p class="text-gray-900">${s.planes_mudanza ? `Sí: ${s.cuando_mudanza}` : 'No'}</p>
-            </div>
-            <div>
-              <p class="text-gray-500 mb-1">Compromisos:</p>
-              <div class="text-xs text-gray-600 bg-white p-3 rounded-lg border border-gray-200">
-                ${JSON.parse(s.compromisos_aceptados || '[]').map(c => `• ${c}`).join('<br/>')}
-              </div>
-            </div>
+    // ── Panel IA ──
+    const iaPanel = `
+      <div class="bg-gradient-to-br from-utopia-50 to-white rounded-2xl border border-utopia-100 p-6 mb-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold text-utopia-700 uppercase tracking-widest">Evaluación IA</span>
+            <span class="px-3 py-1 rounded-full text-xs font-bold ${rm.badge}">${rm.icon} ${rm.label}</span>
           </div>
-
-          <h3 class="text-sm font-bold text-gray-900 uppercase border-b border-gray-200 pb-2 mb-4 mt-8">Gestión Interna</h3>
-          <div class="space-y-4">
-            <div>
-              <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Estado</label>
-              <select id="editEstado" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500">
-                <option value="pendiente" ${s.estado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
-                <option value="proceso" ${s.estado === 'proceso' ? 'selected' : ''}>En Proceso</option>
-                <option value="aprobada" ${s.estado === 'aprobada' ? 'selected' : ''}>Aprobada</option>
-                <option value="rechazada" ${s.estado === 'rechazada' ? 'selected' : ''}>Rechazada</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas Humanas</label>
-              <textarea id="editNotas" rows="4" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" placeholder="Escribe aquí el seguimiento...">${s.notas_humanas || ''}</textarea>
-            </div>
+          <div class="text-right">
+            <span class="text-3xl font-black ${scoreColor(s.score)}">${scoreTxt}</span>
+            <span class="text-gray-400 text-sm font-semibold">/100</span>
           </div>
         </div>
-      </div>
-    `;
+        ${s.evaluado_at ? `
+        <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-5">
+          <div class="h-full ${rm.bar}" style="width:${Math.max(0, Math.min(100, Number(s.score) || 0))}%"></div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <p class="text-xs font-bold text-green-700 uppercase mb-2">Señales buenas</p>
+            <ul class="space-y-1.5 text-sm text-gray-700">${chips(buenas, { icon: '✅' })}</ul>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-red-700 uppercase mb-2">Señales de alerta</p>
+            <ul class="space-y-1.5 text-sm text-gray-700">${chips(alertas, { icon: '⚠️' })}</ul>
+          </div>
+        </div>
+        <div class="mt-5">
+          <p class="text-xs font-bold text-blue-700 uppercase mb-2">Preguntas de seguimiento</p>
+          <ul class="space-y-1.5 text-sm text-gray-700">${chips(followups, { icon: '❓' })}</ul>
+        </div>
+        ${s.notas_ia ? `<div class="mt-5 bg-white rounded-lg border border-gray-200 p-4"><p class="text-xs font-bold text-gray-500 uppercase mb-1">Notas IA</p><p class="text-sm text-gray-700 whitespace-pre-wrap">${esc(s.notas_ia)}</p></div>` : ''}
+        <p class="text-xs text-gray-400 mt-4">Evaluado: ${fmtDate(s.evaluado_at)}</p>
+        ` : `<p class="text-sm text-gray-500">Esta solicitud aún no ha sido evaluada por IA.</p>`}
+      </div>`;
 
-    document.getElementById('modalContent').innerHTML = html;
+    // ── Datos del solicitante ──
+    const personal = section('Datos personales', dl(
+      row('Nombre', s.nombre_completo) + row('Cédula', s.cedula) + row('Edad', s.edad) +
+      row('Ocupación', s.ocupacion) + row('Teléfono', s.telefono) + row('Correo', s.correo) +
+      row('Dirección', s.direccion) + row('Ciudad', s.ciudad) + row('Barrio', s.barrio) + row('Estrato', s.estrato)
+    ));
+
+    const vivienda = section('Vivienda', dl(
+      row('Tipo de vivienda', s.tipo_vivienda) + row('Situación habitacional', s.situacion_habitacional) +
+      boolRow('Mallas de seguridad', s.mallas_seguridad)
+    ));
+
+    const redes = section('Redes y referencias', dl(
+      row('Instagram', s.instagram) + row('Facebook', s.facebook) + row('Cómo nos conoció', s.como_nos_conociste) +
+      row('Familiar', s.familiar_nombre) + row('Tel. familiar', s.familiar_telefono) +
+      row('Referencia', s.referencia_nombre) + row('Tel. referencia', s.referencia_telefono)
+    ));
+
+    const motivacion = section('Motivación', `
+      ${longField('¿Por qué quiere adoptar?', s.por_que_adoptar)}
+      <div class="mt-4">${dl(
+        row('Género preferido', s.genero_preferido) + row('Edad del gato', s.edad_estimada_gatito) +
+        row('Responsable de gastos', s.responsable_gastos) + row('Cuidador principal', s.cuidador_principal)
+      )}</div>`);
+
+    const planes = section('Planes ante escenarios', `
+      ${longField('Dificultad económica', s.plan_dificultad_economica)}
+      <div class="mt-3">${longField('Problemas de comportamiento', s.plan_comportamiento)}</div>
+      <div class="mt-3">${longField('Enfermedad / tratamiento costoso', s.plan_enfermedad)}</div>
+      <div class="mt-3">${longField('Viajes / vacaciones', s.plan_vacaciones)}</div>`);
+
+    const mascotas = section('Otras mascotas', dl(
+      boolRow('Tiene otras mascotas', s.tiene_otras_mascotas) + row('Tipo y cantidad', s.otras_mascotas_tipo) +
+      boolRow('Esterilizadas', s.otras_esterilizadas) + row('Alimento', s.otras_alimento)
+    ) + (s.otras_anteriores ? `<div class="mt-3">${longField('Mascotas anteriores', s.otras_anteriores)}</div>` : ''));
+
+    const hogar = section('Hogar y familia', dl(
+      row('Adultos en casa', s.adultos_casa) + row('Edades de niños', s.ninos_edades) +
+      boolRow('Todos de acuerdo', s.todos_de_acuerdo) + row('Quién no está de acuerdo', s.quien_no_de_acuerdo) +
+      boolRow('Planes de mudanza', s.planes_mudanza) + row('Cuándo / a dónde', s.cuando_mudanza) +
+      boolRow('Alguien alérgico', s.alguien_alergico) + row('Quién / severidad', s.quien_alergico)
+    ));
+
+    const compromiso = section('Compromiso y donación', dl(
+      row('Tipo de donación', s.donacion_tipo) + row('Monto (COP)', s.donacion_monto) +
+      boolRow('Declaración final aceptada', s.declaracion_final)
+    ) + `<div class="mt-4"><p class="text-gray-500 text-sm mb-2">Compromisos aceptados:</p><ul class="text-sm text-gray-700 space-y-1">${chips(compromisos, { icon: '✔️' })}</ul></div>`);
+
+    const meta = section('Metadatos', dl(
+      row('ID', s.id) + row('Fecha de envío', fmtDate(s.fecha_envio)) +
+      boolRow('Confirmó por WhatsApp', s.whatsapp_confirmacion_enviada) + row('IP (hash)', s.ip_hash)
+    ));
+
+    // ── Gestión interna (editable) ──
+    const gestion = `
+      <div class="bg-white rounded-2xl border-2 border-utopia-200 p-6 mb-2">
+        <h3 class="text-sm font-bold text-utopia-800 uppercase tracking-wide mb-4">Gestión interna</h3>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Estado</label>
+            <select id="editEstado" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500">
+              <option value="pendiente" ${s.estado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+              <option value="proceso" ${s.estado === 'proceso' ? 'selected' : ''}>En Proceso</option>
+              <option value="aprobada" ${s.estado === 'aprobada' ? 'selected' : ''}>Aprobada</option>
+              <option value="rechazada" ${s.estado === 'rechazada' ? 'selected' : ''}>Rechazada</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Asignado a</label>
+            <input id="editAsignado" type="text" value="${esc(s.asignado_a || '')}" placeholder="Nombre del responsable"
+              class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
+          </div>
+        </div>
+        <div class="mt-5">
+          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas humanas</label>
+          <textarea id="editNotas" rows="4" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" placeholder="Seguimiento del equipo...">${esc(s.notas_humanas || '')}</textarea>
+        </div>
+      </div>`;
+
+    document.getElementById('modalContent').innerHTML =
+      iaPanel +
+      gestion +
+      `<div class="grid md:grid-cols-2 gap-x-5">
+        <div>${personal}${vivienda}${redes}${mascotas}</div>
+        <div>${motivacion}${planes}${hogar}${compromiso}${meta}</div>
+      </div>`;
+
+    document.getElementById('modalSaveStatus').textContent = '';
     document.getElementById('modalDetail').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
   };
@@ -238,33 +418,43 @@ import Layout from '../../layouts/Layout.astro';
 
   document.getElementById('btnSaveModal').onclick = async () => {
     const btn = document.getElementById('btnSaveModal');
+    const status = document.getElementById('modalSaveStatus');
     const estado = document.getElementById('editEstado').value;
     const notas_humanas = document.getElementById('editNotas').value;
+    const asignado_a = document.getElementById('editAsignado').value;
 
     btn.disabled = true;
     btn.textContent = 'Guardando...';
+    status.textContent = '';
 
     try {
       const res = await fetch('/api/admin/update-solicitud', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: currentId, estado, notas_humanas }),
+        body: JSON.stringify({ id: currentId, estado, notas_humanas, asignado_a }),
       });
       if (res.ok) {
-        closeModal();
-        loadData();
+        // Refresca datos locales y la tabla sin cerrar abruptamente.
+        const cur = solicitudes.find(x => x.id === currentId);
+        if (cur) { cur.estado = estado; cur.notas_humanas = notas_humanas; cur.asignado_a = asignado_a; }
+        updateStats();
+        renderTable();
+        status.textContent = '✅ Guardado';
       } else {
-        alert('Error al guardar');
+        status.textContent = '❌ Error al guardar';
       }
     } catch (err) {
-      alert('Error de conexión');
+      status.textContent = '❌ Error de conexión';
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Guardar cambios';
+      btn.textContent = 'Guardar gestión';
     }
   };
 
   document.getElementById('btnRefresh').onclick = loadData;
+  document.getElementById('searchInput').oninput = renderTable;
+  document.getElementById('filterEstado').onchange = renderTable;
+  document.getElementById('filterReco').onchange = renderTable;
   document.getElementById('btnLogout').onclick = () => {
     document.cookie = "session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     window.location.href = '/intranet/login';
