@@ -70,4 +70,22 @@ import Layout from '../../layouts/Layout.astro';
       </div>
     </div>
   </section>
+
+  <!-- Conversión GA4: dispara el evento solo si se llegó tras enviar el formulario -->
+  <script is:inline>
+    (function () {
+      try {
+        if (sessionStorage.getItem('adopcion_enviada') === '1') {
+          sessionStorage.removeItem('adopcion_enviada');
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', 'generate_lead', {
+              event_category: 'adopcion',
+              event_label: 'solicitud_adopcion_enviada',
+              value: 1,
+            });
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
 </Layout>

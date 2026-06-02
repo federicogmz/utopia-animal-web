@@ -679,6 +679,7 @@ const compromisos = [
           throw new Error(json.error || 'submit_failed');
         }
         localStorage.removeItem(STORAGE_KEY);
+        try { sessionStorage.setItem('adopcion_enviada', '1'); } catch (e) {}
         window.location.href = '/refugio/solicitud-enviada';
       } catch (err) {
         showError('No pudimos enviar tu postulación en este momento. Por favor intenta de nuevo o escríbenos por WhatsApp.');
