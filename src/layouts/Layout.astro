@@ -43,9 +43,7 @@ const fullTitle = title === 'Utopia Animal'
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VQZ2NJDZQK"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag(...args) {
-        dataLayer.push(args);
-      }
+      function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-VQZ2NJDZQK');
     </script>
