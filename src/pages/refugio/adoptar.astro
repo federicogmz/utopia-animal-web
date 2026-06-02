@@ -110,8 +110,9 @@ const compromisos = [
           </div>
 
           <div>
-            <label class={labelClass} for="direccion">Dirección</label>
-            <input class={inputClass} type="text" id="direccion" name="direccion" />
+            <label class={labelClass} for="direccion">Dirección *</label>
+            <input class={inputClass} type="text" id="direccion" name="direccion" required />
+            <span class={helpClass}>Nos ayuda a ubicar tu hogar para el proceso. Es confidencial.</span>
           </div>
 
           <div class="grid sm:grid-cols-3 gap-5">
@@ -401,17 +402,45 @@ const compromisos = [
           </div>
 
           <div class="border-t border-gray-100 pt-6">
-            <label class={labelClass} for="donacion_tipo">¿Te gustaría apoyar a Elim con una donación al momento de adoptar?</label>
-            <select class={inputClass} id="donacion_tipo" name="donacion_tipo">
-              <option value="">Selecciona...</option>
-              <option>Monetaria</option>
-              <option>En especie (alimento, arena, etc)</option>
-              <option>No por ahora</option>
-            </select>
-            <span class={helpClass}>Las donaciones no son obligatorias y no afectan la decisión de adopción. Sostienen el trabajo del refugio.</span>
-            <div id="donacion_monto_wrap" class="hidden mt-4">
-              <label class={labelClass} for="donacion_monto">Monto sugerido (COP)</label>
-              <input class={inputClass} type="number" id="donacion_monto" name="donacion_monto" min="0" />
+            <span class={labelClass}>Apoya a los gatos de Elim 💛</span>
+            <p class="text-xs text-gray-500 mb-4">Adoptar no exige donar, pero cada aporte sostiene el refugio —alimento, arena y esterilizaciones para los gatos que aún esperan hogar. Elige cómo quieres ayudar.</p>
+            <div class="space-y-3">
+              <label class="flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 bg-white cursor-pointer hover:bg-elim-50 hover:border-elim-200 transition">
+                <input type="radio" name="donacion_tipo" value="Arenero al día" data-monto="20000" class="accent-elim-600" />
+                <span class="text-2xl">🪣</span>
+                <span class="flex-1 text-sm"><span class="font-semibold text-gray-900">Arenero al día</span><br/><span class="text-gray-500 text-xs">Arena para los gatos del refugio</span></span>
+                <span class="font-bold text-elim-700 text-sm whitespace-nowrap">$20.000</span>
+              </label>
+              <label class="flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 bg-white cursor-pointer hover:bg-elim-50 hover:border-elim-200 transition">
+                <input type="radio" name="donacion_tipo" value="Barriga llena" data-monto="50000" class="accent-elim-600" />
+                <span class="text-2xl">🍽️</span>
+                <span class="flex-1 text-sm"><span class="font-semibold text-gray-900">Barriga llena</span><br/><span class="text-gray-500 text-xs">Alimento para un gato</span></span>
+                <span class="font-bold text-elim-700 text-sm whitespace-nowrap">$50.000</span>
+              </label>
+              <label class="flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 bg-white cursor-pointer hover:bg-elim-50 hover:border-elim-200 transition">
+                <input type="radio" name="donacion_tipo" value="Una vida protegida" data-monto="100000" class="accent-elim-600" />
+                <span class="text-2xl">✂️</span>
+                <span class="flex-1 text-sm"><span class="font-semibold text-gray-900">Una vida protegida</span><br/><span class="text-gray-500 text-xs">Aporta a una esterilización</span></span>
+                <span class="font-bold text-elim-700 text-sm whitespace-nowrap">$100.000</span>
+              </label>
+              <label class="flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 bg-white cursor-pointer hover:bg-elim-50 hover:border-elim-200 transition">
+                <input type="radio" name="donacion_tipo" value="Otro monto" data-otro="1" class="accent-elim-600" />
+                <span class="text-2xl">✍️</span>
+                <span class="flex-1 text-sm"><span class="font-semibold text-gray-900">Otro monto</span><br/><span class="text-gray-500 text-xs">Aporta lo que quieras</span></span>
+              </label>
+              <div id="donacion_otro_wrap" class="hidden pl-4">
+                <input class={inputClass} type="number" id="donacion_monto" name="donacion_monto" min="0" placeholder="¿Cuánto quieres aportar? (COP)" />
+              </div>
+              <label class="flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 bg-white cursor-pointer hover:bg-elim-50 hover:border-elim-200 transition">
+                <input type="radio" name="donacion_tipo" value="Aporte en especie" class="accent-elim-600" />
+                <span class="text-2xl">🎁</span>
+                <span class="flex-1 text-sm"><span class="font-semibold text-gray-900">Aporte en especie</span><br/><span class="text-gray-500 text-xs">Alimento, arena, insumos…</span></span>
+              </label>
+              <label class="flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 bg-white cursor-pointer hover:bg-elim-50 hover:border-elim-200 transition">
+                <input type="radio" name="donacion_tipo" value="Por ahora no puedo aportar" class="accent-elim-600" />
+                <span class="text-2xl">🙏</span>
+                <span class="flex-1 text-sm"><span class="font-semibold text-gray-900">Por ahora no puedo aportar</span></span>
+              </label>
             </div>
           </div>
 
@@ -474,7 +503,7 @@ const compromisos = [
       6: 'Compromiso',
     };
     const REQUIRED_BY_STEP = {
-      1: ['nombre_completo', 'telefono', 'correo'],
+      1: ['nombre_completo', 'telefono', 'correo', 'direccion'],
       2: [],
       3: [],
       4: [],
@@ -585,13 +614,19 @@ const compromisos = [
       });
     });
 
-    const donacionTipo = form.querySelector('[name="donacion_tipo"]');
-    const donacionMontoWrap = document.getElementById('donacion_monto_wrap');
-    if (donacionTipo && donacionMontoWrap) {
-      donacionTipo.addEventListener('change', () => {
-        donacionMontoWrap.classList.toggle('hidden', donacionTipo.value !== 'Monetaria');
+    const donacionRadios = form.querySelectorAll('input[name="donacion_tipo"]');
+    const donacionOtroWrap = document.getElementById('donacion_otro_wrap');
+    const donacionMonto = document.getElementById('donacion_monto');
+    donacionRadios.forEach(r => {
+      r.addEventListener('change', () => {
+        if (!r.checked) return;
+        const isOtro = r.dataset.otro === '1';
+        donacionOtroWrap.classList.toggle('hidden', !isOtro);
+        if (isOtro) { donacionMonto.value = ''; donacionMonto.focus(); }
+        else if (r.dataset.monto) { donacionMonto.value = r.dataset.monto; }
+        else { donacionMonto.value = ''; }
       });
-    }
+    });
 
     function collectFormData() {
       const data = {};

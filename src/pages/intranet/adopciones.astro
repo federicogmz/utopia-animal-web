@@ -1,0 +1,208 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Adopciones · Intranet" brand="parent">
+  <section class="bg-gray-50 min-h-screen py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+        <div>
+          <h1 class="text-3xl font-extrabold text-gray-900">Adopciones concretadas</h1>
+          <p class="text-gray-500 mt-1">Registro de gatos adoptados y seguimiento de esterilización.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="/intranet" class="inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">← Solicitudes</a>
+          <button id="btnNueva" class="inline-flex items-center gap-2 bg-elim-600 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-elim-500 transition-colors">+ Nueva adopción</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {[
+          { label: 'Total', id: 'statTotal', color: 'text-gray-900' },
+          { label: 'Adoptados', id: 'statAdoptado', color: 'text-green-600' },
+          { label: 'Esteriliz. pendiente', id: 'statEster', color: 'text-red-600' },
+          { label: 'En refugio', id: 'statRefugio', color: 'text-blue-600' },
+        ].map(s => (
+          <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">{s.label}</p>
+            <p class={`text-2xl font-black ${s.color}`} id={s.id}>...</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="px-5 py-4 font-bold text-gray-700">Gato</th>
+                <th class="px-5 py-4 font-bold text-gray-700">Adoptante</th>
+                <th class="px-5 py-4 font-bold text-gray-700">Rescatista</th>
+                <th class="px-5 py-4 font-bold text-gray-700">Adopción</th>
+                <th class="px-5 py-4 font-bold text-gray-700">Esterilización</th>
+                <th class="px-5 py-4 font-bold text-gray-700">Estado</th>
+                <th class="px-5 py-4 font-bold text-gray-700 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-gray-50">
+              <tr><td colspan="7" class="px-6 py-12 text-center text-gray-500"><div class="animate-pulse">Cargando...</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL FORM -->
+  <div id="modal" class="hidden fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-3xl max-h-[92vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="px-8 py-5 border-b border-gray-100 flex items-center justify-between">
+        <h2 class="text-xl font-bold text-gray-900" id="modalTitle">Nueva adopción</h2>
+        <button id="btnClose" class="text-gray-400 hover:text-gray-600 p-2">✕</button>
+      </div>
+      <div class="p-8 overflow-y-auto flex-1 bg-gray-50" id="modalBody"></div>
+      <div class="px-8 py-5 border-t border-gray-100 flex justify-between items-center">
+        <span id="saveStatus" class="text-sm text-gray-400"></span>
+        <div class="flex gap-3">
+          <button id="btnCancel" class="px-6 py-2.5 rounded-xl border border-gray-200 font-semibold text-gray-700 hover:bg-gray-50">Cerrar</button>
+          <button id="btnSave" class="px-6 py-2.5 rounded-xl bg-elim-600 text-white font-bold hover:bg-elim-500 shadow-lg shadow-elim-900/20">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script is:inline>
+  let adopciones = [];
+  let editId = null;
+
+  function esc(v){ if(v==null) return ''; return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function today(){ return new Date().toISOString().slice(0,10); }
+  function esterPendiente(a){
+    if(a.estado==='fallecido') return false;
+    if(a.fecha_esterilizacion_real) return false;
+    if(!a.fecha_esterilizacion_estimada) return false;
+    return a.fecha_esterilizacion_estimada <= today();
+  }
+
+  async function loadData(){
+    try{
+      const res = await fetch('/api/admin/adopciones');
+      if(res.status===401){ window.location.href='/intranet/login'; return; }
+      const j = await res.json();
+      if(j.ok){ adopciones = j.adopciones||[]; updateStats(); renderTable(); }
+    }catch(e){ console.error(e); alert('Error cargando adopciones'); }
+  }
+
+  function updateStats(){
+    document.getElementById('statTotal').textContent = adopciones.length;
+    document.getElementById('statAdoptado').textContent = adopciones.filter(a=>a.estado==='adoptado').length;
+    document.getElementById('statEster').textContent = adopciones.filter(esterPendiente).length;
+    document.getElementById('statRefugio').textContent = adopciones.filter(a=>a.estado==='en_refugio').length;
+  }
+
+  function estadoBadge(e){
+    const cls = {adoptado:'bg-green-100 text-green-800',en_proceso:'bg-yellow-100 text-yellow-800',en_refugio:'bg-blue-100 text-blue-800',fallecido:'bg-gray-200 text-gray-600'}[e]||'bg-gray-100 text-gray-600';
+    return `<span class="px-2.5 py-1 rounded-full text-xs font-bold uppercase ${cls}">${esc(e||'-')}</span>`;
+  }
+
+  function renderTable(){
+    const tb = document.getElementById('tableBody');
+    if(!adopciones.length){ tb.innerHTML='<tr><td colspan="7" class="px-6 py-12 text-center text-gray-500">Aún no hay adopciones registradas.</td></tr>'; return; }
+    tb.innerHTML = adopciones.map(a=>{
+      const ester = a.fecha_esterilizacion_real
+        ? `<span class="text-green-700">✅ ${esc(a.fecha_esterilizacion_real)}</span>`
+        : (a.fecha_esterilizacion_estimada
+            ? `<span class="${esterPendiente(a)?'text-red-600 font-bold':'text-gray-600'}">${esterPendiente(a)?'⚠️ ':'📅 '}${esc(a.fecha_esterilizacion_estimada)}</span>`
+            : '<span class="text-gray-400">—</span>');
+      return `<tr class="hover:bg-gray-50">
+        <td class="px-5 py-4 font-medium text-gray-900">${esc(a.nombre_gato||'—')}<div class="text-xs text-gray-400">${esc(a.sexo||'')}</div></td>
+        <td class="px-5 py-4">${esc(a.adoptante||'—')}<div class="text-xs text-gray-500">${esc(a.adoptante_telefono||'')}</div></td>
+        <td class="px-5 py-4 text-gray-600">${esc(a.rescatista||'—')}</td>
+        <td class="px-5 py-4 text-gray-600">${esc(a.fecha_adopcion||'—')}</td>
+        <td class="px-5 py-4">${ester}</td>
+        <td class="px-5 py-4">${estadoBadge(a.estado)}</td>
+        <td class="px-5 py-4 text-right"><button onclick="editar(${Number(a.id)})" class="text-elim-700 font-bold hover:text-elim-900">Editar →</button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  function field(label,id,val,type='text'){
+    return `<div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">${esc(label)}</label>
+      <input id="${id}" type="${type}" value="${esc(val||'')}" class="w-full rounded-xl border-gray-200 text-sm focus:ring-elim-500 focus:border-elim-500"/></div>`;
+  }
+  function sel(label,id,val,opts){
+    return `<div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">${esc(label)}</label>
+      <select id="${id}" class="w-full rounded-xl border-gray-200 text-sm focus:ring-elim-500 focus:border-elim-500">
+      ${opts.map(([v,l])=>`<option value="${v}" ${String(val||'')===v?'selected':''}>${esc(l)}</option>`).join('')}</select></div>`;
+  }
+
+  function openForm(a){
+    a = a || {};
+    editId = a.id || null;
+    document.getElementById('modalTitle').textContent = editId ? `Editar adopción · ${a.nombre_gato||''}` : 'Nueva adopción';
+    document.getElementById('saveStatus').textContent = '';
+    document.getElementById('modalBody').innerHTML = `
+      <input type="hidden" id="f_solicitud_id" value="${esc(a.solicitud_id||'')}"/>
+      <div class="grid md:grid-cols-2 gap-5">
+        ${field('Nombre del gato','f_nombre_gato',a.nombre_gato)}
+        ${sel('Sexo','f_sexo',a.sexo,[['','—'],['Macho','Macho'],['Hembra','Hembra'],['Desconocido','Desconocido']])}
+        ${field('Fecha de adopción','f_fecha_adopcion',a.fecha_adopcion||today(),'date')}
+        ${field('Adoptante','f_adoptante',a.adoptante)}
+        ${field('Teléfono adoptante','f_adoptante_telefono',a.adoptante_telefono)}
+        ${field('Rescatista (quien dio en adopción)','f_rescatista',a.rescatista)}
+        ${field('Fecha estimada de nacimiento','f_fecha_nacimiento_estimada',a.fecha_nacimiento_estimada,'date')}
+        ${field('Fecha de ingreso al refugio','f_fecha_ingreso',a.fecha_ingreso,'date')}
+        ${field('Fecha de desparasitación','f_fecha_desparasitacion',a.fecha_desparasitacion,'date')}
+        ${sel('Test Sida/Leucemia','f_test_sida_leucemia',a.test_sida_leucemia,[['','—'],['Pendiente','Pendiente'],['Negativo','Negativo'],['Positivo','Positivo']])}
+        ${field('Esterilización estimada','f_fecha_esterilizacion_estimada',a.fecha_esterilizacion_estimada,'date')}
+        ${field('Esterilización real','f_fecha_esterilizacion_real',a.fecha_esterilizacion_real,'date')}
+        ${field('Donación (COP)','f_donacion_monto',a.donacion_monto,'number')}
+        ${sel('Estado','f_estado',a.estado||'adoptado',[['adoptado','Adoptado'],['en_proceso','En proceso'],['en_refugio','En refugio'],['fallecido','Fallecido']])}
+      </div>
+      <div class="mt-5"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Descripción</label>
+        <input id="f_descripcion" type="text" value="${esc(a.descripcion||'')}" class="w-full rounded-xl border-gray-200 text-sm focus:ring-elim-500 focus:border-elim-500"/></div>
+      <div class="mt-5"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas de seguimiento</label>
+        <textarea id="f_notas_seguimiento" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-elim-500 focus:border-elim-500">${esc(a.notas_seguimiento||'')}</textarea></div>`;
+    document.getElementById('modal').classList.remove('hidden');
+    document.body.style.overflow='hidden';
+  }
+  window.editar = function(id){ const a = adopciones.find(x=>x.id===id); if(a) openForm(a); };
+
+  function closeModal(){ document.getElementById('modal').classList.add('hidden'); document.body.style.overflow='auto'; }
+  document.getElementById('btnClose').onclick = closeModal;
+  document.getElementById('btnCancel').onclick = closeModal;
+  document.getElementById('btnNueva').onclick = ()=>openForm(null);
+
+  document.getElementById('btnSave').onclick = async ()=>{
+    const g = id => { const el=document.getElementById(id); return el?el.value:''; };
+    const payload = {
+      id: editId,
+      solicitud_id: g('f_solicitud_id') || null,
+      nombre_gato: g('f_nombre_gato'), sexo: g('f_sexo'), descripcion: g('f_descripcion'),
+      fecha_ingreso: g('f_fecha_ingreso'), fecha_nacimiento_estimada: g('f_fecha_nacimiento_estimada'),
+      fecha_desparasitacion: g('f_fecha_desparasitacion'), test_sida_leucemia: g('f_test_sida_leucemia'),
+      fecha_esterilizacion_estimada: g('f_fecha_esterilizacion_estimada'), fecha_esterilizacion_real: g('f_fecha_esterilizacion_real'),
+      fecha_adopcion: g('f_fecha_adopcion'), adoptante: g('f_adoptante'), adoptante_telefono: g('f_adoptante_telefono'),
+      rescatista: g('f_rescatista'), donacion_monto: g('f_donacion_monto'), estado: g('f_estado'), notas_seguimiento: g('f_notas_seguimiento'),
+    };
+    const btn = document.getElementById('btnSave'); const st = document.getElementById('saveStatus');
+    btn.disabled = true; btn.textContent='Guardando...'; st.textContent='';
+    try{
+      const res = await fetch('/api/admin/adopciones',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      if(res.ok){ closeModal(); loadData(); }
+      else { st.textContent='❌ Error al guardar'; }
+    }catch(e){ st.textContent='❌ Error de conexión'; }
+    finally{ btn.disabled=false; btn.textContent='Guardar'; }
+  };
+
+  // Si llega desde "Concretar adopción", abre el formulario prellenado.
+  (function(){
+    const q = new URLSearchParams(location.search);
+    if(q.get('from')){
+      openForm({ solicitud_id: q.get('from'), adoptante: q.get('adoptante')||'', adoptante_telefono: q.get('tel')||'', fecha_adopcion: today(), estado:'adoptado' });
+    }
+  })();
+
+  loadData();
+</script>

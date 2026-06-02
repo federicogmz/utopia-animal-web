@@ -11,6 +11,9 @@ import Layout from '../../layouts/Layout.astro';
           <p class="text-gray-500 mt-1">Solicitudes de adopción de Elim Refugio, con evaluación asistida por IA.</p>
         </div>
         <div class="flex items-center gap-3">
+          <a href="/intranet/adopciones" class="inline-flex items-center gap-2 bg-elim-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-elim-500 transition-colors">
+            🐱 Adopciones
+          </a>
           <button id="btnRefresh" class="inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
             🔄 Actualizar
           </button>
@@ -203,6 +206,45 @@ import Layout from '../../layouts/Layout.astro';
     if (!phone || phone.length < 10) { alert('Esta solicitud no tiene un teléfono válido.'); return; }
     const text = document.getElementById('waMessage').value;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+  };
+
+  window.concretarAdopcion = function() {
+    const s = solicitudes.find(x => x.id === currentId);
+    if (!s) return;
+    const p = new URLSearchParams({ from: String(s.id), adoptante: s.nombre_completo || '', tel: s.telefono || '' });
+    window.location.href = '/intranet/adopciones?' + p.toString();
+  };
+
+  window.exportarPdf = function() {
+    const s = solicitudes.find(x => x.id === currentId);
+    if (!s) return;
+    const buenas = parseArr(s.senales_buenas), alertas = parseArr(s.senales_alerta), fu = parseArr(s.preguntas_followup), comp = parseArr(s.compromisos_aceptados);
+    const rm = recoMeta(s.recomendacion);
+    const li = a => a.length ? '<ul>' + a.map(x => `<li>${esc(x)}</li>`).join('') + '</ul>' : '<p>—</p>';
+    const f = (l, v) => `<tr><td class="k">${esc(l)}</td><td>${esc(v == null || v === '' ? '—' : v)}</td></tr>`;
+    const fb = (l, v) => `<tr><td class="k">${esc(l)}</td><td>${fmtBool(v)}</td></tr>`;
+    const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Solicitud #${s.id} · ${esc(s.nombre_completo)}</title>
+      <style>
+        body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#1f2937;margin:32px;font-size:12px;line-height:1.5}
+        h1{font-size:20px;margin:0 0 2px} h2{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:#6d28d9;border-bottom:1px solid #eee;padding-bottom:4px;margin:18px 0 8px}
+        table{width:100%;border-collapse:collapse;margin-bottom:6px} td{padding:3px 6px;vertical-align:top;border-bottom:1px solid #f3f4f6}
+        td.k{color:#6b7280;width:38%} ul{margin:4px 0;padding-left:18px} .badge{display:inline-block;padding:2px 10px;border-radius:99px;background:#ede9fe;color:#5b21b6;font-weight:700;font-size:11px}
+        .muted{color:#9ca3af;font-size:11px} .score{font-size:22px;font-weight:800}
+      </style></head><body>
+      <h1>Solicitud #${esc(s.id)} · ${esc(s.nombre_completo)}</h1>
+      <p class="muted">Enviada: ${esc(fmtDate(s.fecha_envio))} · Estado: ${esc(s.estado || 'pendiente')}</p>
+      <h2>Evaluación IA</h2>
+      <p><span class="score">${(s.score==null||s.score==='')?'—':Math.round(Number(s.score))}</span>/100 &nbsp; <span class="badge">${rm.icon} ${rm.label}</span></p>
+      <b>Señales buenas</b>${li(buenas)}<b>Señales de alerta</b>${li(alertas)}<b>Preguntas de seguimiento</b>${li(fu)}
+      ${s.notas_ia ? `<p><b>Notas IA:</b> ${esc(s.notas_ia)}</p>` : ''}
+      <h2>Datos personales</h2><table>${f('Cédula',s.cedula)}${f('Edad',s.edad)}${f('Ocupación',s.ocupacion)}${f('Teléfono',s.telefono)}${f('Correo',s.correo)}${f('Dirección',s.direccion)}${f('Ciudad/Barrio',(s.ciudad||'—')+' / '+(s.barrio||'—'))}${f('Estrato',s.estrato)}</table>
+      <h2>Vivienda y hogar</h2><table>${f('Tipo de vivienda',s.tipo_vivienda)}${f('Situación',s.situacion_habitacional)}${fb('Mallas de seguridad',s.mallas_seguridad)}${f('Adultos en casa',s.adultos_casa)}${f('Niños',s.ninos_edades)}${fb('Todos de acuerdo',s.todos_de_acuerdo)}${fb('Otras mascotas',s.tiene_otras_mascotas)}${f('Detalle mascotas',s.otras_mascotas_tipo)}</table>
+      <h2>Motivación y planes</h2><table>${f('¿Por qué adoptar?',s.por_que_adoptar)}${f('Género preferido',s.genero_preferido)}${f('Edad del gato',s.edad_estimada_gatito)}${f('Responsable gastos',s.responsable_gastos)}${f('Plan dificultad económica',s.plan_dificultad_economica)}${f('Plan comportamiento',s.plan_comportamiento)}${f('Plan enfermedad',s.plan_enfermedad)}${f('Plan vacaciones',s.plan_vacaciones)}</table>
+      <h2>Donación y compromiso</h2><table>${f('Donación',s.donacion_tipo)}${f('Monto (COP)',s.donacion_monto)}</table>${li(comp)}
+      <h2>Seguimiento</h2><table>${f('Mallas (gestión)',s.mallas_estado)}${fb('Video recibido',s.video_recibido)}${f('Video viable',s.video_viable)}${f('Notas video',s.video_notas)}${f('Asignado a',s.asignado_a)}${f('Notas humanas',s.notas_humanas)}</table>
+      <script>window.onload=function(){window.print()}<\/script></body></html>`;
+    const w = window.open('', '_blank');
+    if (w) { w.document.write(html); w.document.close(); }
   };
 
   async function loadData() {
@@ -424,18 +466,24 @@ import Layout from '../../layouts/Layout.astro';
       boolRow('Confirmó por WhatsApp', s.whatsapp_confirmacion_enviada) + row('IP (hash)', s.ip_hash)
     ));
 
+    // ── Mapa de ubicación (Google Maps sin API key) ──
+    const mapQuery = [s.direccion, s.barrio, s.ciudad, 'Colombia'].filter(Boolean).join(', ');
+    const mapa = mapQuery ? section('Ubicación', `
+      <p class="text-sm text-gray-700 mb-2">${esc([s.direccion, s.barrio, s.ciudad].filter(Boolean).join(' · ') || '—')}</p>
+      <iframe width="100%" height="260" style="border:0;border-radius:12px" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&z=14&output=embed"></iframe>`) : '';
+
+    const selOpt = (val, label, cur) => `<option value="${val}" ${cur === val ? 'selected' : ''}>${label}</option>`;
+
     // ── Gestión interna (editable) ──
     const gestion = `
-      <div class="bg-white rounded-2xl border-2 border-utopia-200 p-6 mb-2">
+      <div class="bg-white rounded-2xl border-2 border-utopia-200 p-6 mb-6">
         <h3 class="text-sm font-bold text-utopia-800 uppercase tracking-wide mb-4">Gestión interna</h3>
         <div class="grid md:grid-cols-2 gap-5">
           <div>
             <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Estado</label>
             <select id="editEstado" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500">
-              <option value="pendiente" ${s.estado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
-              <option value="proceso" ${s.estado === 'proceso' ? 'selected' : ''}>En Proceso</option>
-              <option value="aprobada" ${s.estado === 'aprobada' ? 'selected' : ''}>Aprobada</option>
-              <option value="rechazada" ${s.estado === 'rechazada' ? 'selected' : ''}>Rechazada</option>
+              ${selOpt('pendiente','Pendiente',s.estado)}${selOpt('proceso','En Proceso',s.estado)}${selOpt('aprobada','Aprobada',s.estado)}${selOpt('rechazada','Rechazada',s.estado)}
             </select>
           </div>
           <div>
@@ -443,10 +491,39 @@ import Layout from '../../layouts/Layout.astro';
             <input id="editAsignado" type="text" value="${esc(s.asignado_a || '')}" placeholder="Nombre del responsable"
               class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
           </div>
+          <div>
+            <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mallas de seguridad</label>
+            <select id="editMallas" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500">
+              ${selOpt('sin_definir','Sin definir',s.mallas_estado)}${selOpt('acepta_instalar','Aceptó instalar',s.mallas_estado)}${selOpt('ya_instaladas','Ya instaladas',s.mallas_estado)}${selOpt('no_acepta','No acepta',s.mallas_estado)}
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Envió video?</label>
+              <select id="editVideoRec" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500">
+                ${selOpt('0','No', String(s.video_recibido||0))}${selOpt('1','Sí', String(s.video_recibido||0))}
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Video viable?</label>
+              <select id="editVideoViable" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500">
+                ${selOpt('sin_revisar','Sin revisar',s.video_viable)}${selOpt('si','Sí, viable',s.video_viable)}${selOpt('no','No viable',s.video_viable)}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="mt-5">
+          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas del video</label>
+          <input id="editVideoNotas" type="text" value="${esc(s.video_notas || '')}" placeholder="Observaciones del video del hogar..."
+            class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
         </div>
         <div class="mt-5">
           <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas humanas</label>
           <textarea id="editNotas" rows="4" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" placeholder="Seguimiento del equipo...">${esc(s.notas_humanas || '')}</textarea>
+        </div>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <button onclick="exportarPdf()" class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-5 py-2.5 rounded-xl text-sm">📄 Exportar PDF</button>
+          <button onclick="concretarAdopcion()" class="inline-flex items-center gap-2 bg-elim-600 hover:bg-elim-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-lg shadow-elim-900/20">🐱 Concretar adopción</button>
         </div>
       </div>`;
 
@@ -455,7 +532,7 @@ import Layout from '../../layouts/Layout.astro';
       whatsapp +
       gestion +
       `<div class="grid md:grid-cols-2 gap-x-5">
-        <div>${personal}${vivienda}${redes}${mascotas}</div>
+        <div>${personal}${vivienda}${mapa}${redes}${mascotas}</div>
         <div>${motivacion}${planes}${hogar}${compromiso}${meta}</div>
       </div>`;
 
@@ -475,9 +552,16 @@ import Layout from '../../layouts/Layout.astro';
   document.getElementById('btnSaveModal').onclick = async () => {
     const btn = document.getElementById('btnSaveModal');
     const status = document.getElementById('modalSaveStatus');
-    const estado = document.getElementById('editEstado').value;
-    const notas_humanas = document.getElementById('editNotas').value;
-    const asignado_a = document.getElementById('editAsignado').value;
+    const payload = {
+      id: currentId,
+      estado: document.getElementById('editEstado').value,
+      notas_humanas: document.getElementById('editNotas').value,
+      asignado_a: document.getElementById('editAsignado').value,
+      mallas_estado: document.getElementById('editMallas').value,
+      video_recibido: Number(document.getElementById('editVideoRec').value),
+      video_viable: document.getElementById('editVideoViable').value,
+      video_notas: document.getElementById('editVideoNotas').value,
+    };
 
     btn.disabled = true;
     btn.textContent = 'Guardando...';
@@ -487,12 +571,12 @@ import Layout from '../../layouts/Layout.astro';
       const res = await fetch('/api/admin/update-solicitud', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: currentId, estado, notas_humanas, asignado_a }),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         // Refresca datos locales y la tabla sin cerrar abruptamente.
         const cur = solicitudes.find(x => x.id === currentId);
-        if (cur) { cur.estado = estado; cur.notas_humanas = notas_humanas; cur.asignado_a = asignado_a; }
+        if (cur) Object.assign(cur, payload);
         updateStats();
         renderTable();
         status.textContent = '✅ Guardado';

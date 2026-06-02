@@ -4,7 +4,7 @@ interface Env {
 
 type Payload = Record<string, unknown>;
 
-const REQUIRED_FIELDS = ['nombre_completo', 'telefono', 'correo', 'declaracion_final'] as const;
+const REQUIRED_FIELDS = ['nombre_completo', 'telefono', 'correo', 'direccion', 'declaracion_final'] as const;
 
 const FIELD_KEYS = [
   'nombre_completo', 'cedula', 'edad', 'ocupacion', 'telefono', 'direccion',

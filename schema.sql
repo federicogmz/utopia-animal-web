@@ -73,9 +73,42 @@ CREATE TABLE IF NOT EXISTS solicitudes (
   notas_humanas TEXT,
   asignado_a TEXT,
 
-  whatsapp_confirmacion_enviada INTEGER DEFAULT 0
+  whatsapp_confirmacion_enviada INTEGER DEFAULT 0,
+
+  mallas_estado TEXT DEFAULT 'sin_definir',
+  video_recibido INTEGER DEFAULT 0,
+  video_viable TEXT DEFAULT 'sin_revisar',
+  video_notas TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_estado ON solicitudes(estado);
 CREATE INDEX IF NOT EXISTS idx_evaluado ON solicitudes(evaluado_at);
 CREATE INDEX IF NOT EXISTS idx_fecha ON solicitudes(fecha_envio);
+
+CREATE TABLE IF NOT EXISTS adopciones (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  solicitud_id INTEGER,
+  nombre_gato TEXT,
+  sexo TEXT,
+  descripcion TEXT,
+  fecha_ingreso TEXT,
+  fecha_nacimiento_estimada TEXT,
+  fecha_desparasitacion TEXT,
+  test_sida_leucemia TEXT,
+  fecha_esterilizacion_estimada TEXT,
+  fecha_esterilizacion_real TEXT,
+  fecha_adopcion TEXT,
+  adoptante TEXT,
+  adoptante_telefono TEXT,
+  rescatista TEXT,
+  donacion_monto INTEGER,
+  estado TEXT DEFAULT 'adoptado',
+  notas_seguimiento TEXT,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT,
+  FOREIGN KEY (solicitud_id) REFERENCES solicitudes(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_adop_solicitud ON adopciones(solicitud_id);
+CREATE INDEX IF NOT EXISTS idx_adop_esterilizacion ON adopciones(fecha_esterilizacion_estimada);
+CREATE INDEX IF NOT EXISTS idx_adop_estado ON adopciones(estado);
