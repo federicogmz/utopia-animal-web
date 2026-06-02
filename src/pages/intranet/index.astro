@@ -167,6 +167,44 @@ import Layout from '../../layouts/Layout.astro';
     return 'text-red-600';
   }
 
+  // Normaliza un teléfono a formato internacional para wa.me (Colombia por defecto).
+  function waPhone(t) {
+    let d = String(t || '').replace(/\D/g, '');
+    if (d.length === 10 && d.startsWith('3')) d = '57' + d; // móvil Colombia
+    return d;
+  }
+
+  // Arma la plantilla de seguimiento a partir de las preguntas IA + pedido de video.
+  function buildWaMessage(s) {
+    const first = (s.nombre_completo || '').trim().split(/\s+/)[0] || '';
+    const preguntas = parseArr(s.preguntas_followup);
+    const lines = [];
+    lines.push(`Hola ${first} 👋, te escribimos del equipo de Elim Refugio Animal.`);
+    lines.push('');
+    lines.push('¡Gracias por tu solicitud de adopción! Nos gustó mucho tu perfil y queremos avanzar al siguiente paso. Para completar el proceso nos ayudarías con lo siguiente:');
+    lines.push('');
+    if (preguntas.length) {
+      preguntas.forEach((q, i) => lines.push(`${i + 1}. ${q}`));
+    } else {
+      lines.push('1. Cuéntanos un poco más sobre tu hogar y tu rutina diaria con el gato.');
+    }
+    lines.push('');
+    lines.push('Además, ¿podrías enviarnos un video corto de tu hogar? Idealmente mostrando ventanas y balcones (y si tienen mallas o protección) y el espacio donde estaría el gato. Nos ayuda a confirmar que es un entorno seguro 🐱');
+    lines.push('');
+    lines.push('Quedamos atentos. ¡Gracias por querer adoptar de forma responsable! 💛');
+    lines.push('Equipo Elim · Utopía Animal');
+    return lines.join('\n');
+  }
+
+  window.sendWhatsApp = function() {
+    const s = solicitudes.find(x => x.id === currentId);
+    if (!s) return;
+    const phone = waPhone(s.telefono);
+    if (!phone || phone.length < 10) { alert('Esta solicitud no tiene un teléfono válido.'); return; }
+    const text = document.getElementById('waMessage').value;
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+  };
+
   async function loadData() {
     try {
       const res = await fetch('/api/admin/solicitudes');
@@ -316,6 +354,23 @@ import Layout from '../../layouts/Layout.astro';
         ` : `<p class="text-sm text-gray-500">Esta solicitud aún no ha sido evaluada por IA.</p>`}
       </div>`;
 
+    // ── WhatsApp: plantilla editable + envío ──
+    const phoneFmt = waPhone(s.telefono);
+    const whatsapp = `
+      <div class="bg-white rounded-2xl border-2 border-green-200 p-6 mb-6">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-sm font-bold text-green-800 uppercase tracking-wide">📲 Enviar seguimiento por WhatsApp</h3>
+          <span class="text-xs text-gray-400">${phoneFmt ? '+' + esc(phoneFmt) : 'sin teléfono válido'}</span>
+        </div>
+        <p class="text-xs text-gray-500 mb-3">Revisa y ajusta el mensaje como prefieras. Al enviar se abrirá WhatsApp con el texto ya cargado para que tú confirmes el envío.</p>
+        <textarea id="waMessage" rows="13" class="w-full rounded-xl border-gray-200 text-sm focus:ring-green-500 focus:border-green-500">${esc(buildWaMessage(s))}</textarea>
+        <div class="flex justify-end mt-3">
+          <button onclick="sendWhatsApp()" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-green-900/20">
+            Abrir WhatsApp con el mensaje →
+          </button>
+        </div>
+      </div>`;
+
     // ── Datos del solicitante ──
     const personal = section('Datos personales', dl(
       row('Nombre', s.nombre_completo) + row('Cédula', s.cedula) + row('Edad', s.edad) +
@@ -397,6 +452,7 @@ import Layout from '../../layouts/Layout.astro';
 
     document.getElementById('modalContent').innerHTML =
       iaPanel +
+      whatsapp +
       gestion +
       `<div class="grid md:grid-cols-2 gap-x-5">
         <div>${personal}${vivienda}${redes}${mascotas}</div>
