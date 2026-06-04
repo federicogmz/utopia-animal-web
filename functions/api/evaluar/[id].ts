@@ -52,9 +52,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, params }
 
   let changes = 0;
   try {
-    // Al calificar, la solicitud pasa de inmediato a 'contacto' (queda pendiente
-    // de primer contacto en la gestión de Federico). Solo se mueve si seguía en
-    // 'recepcion', para no retroceder etapas humanas ya avanzadas.
+    // Al calificar, la solicitud pasa de inmediato a 'filtro' (filtro inicial:
+    // queda pendiente de que Federico la revise y decida rechazar o contactar).
+    // Solo se mueve si seguía en 'recepcion', para no retroceder etapas humanas.
     const result = await env.DB.prepare(
       `UPDATE solicitudes
        SET evaluado_at = CURRENT_TIMESTAMP,
@@ -64,7 +64,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, params }
            preguntas_followup = ?,
            recomendacion = ?,
            notas_ia = ?,
-           etapa = CASE WHEN etapa = 'recepcion' THEN 'contacto' ELSE etapa END,
+           etapa = CASE WHEN etapa = 'recepcion' THEN 'filtro' ELSE etapa END,
            estado = CASE WHEN etapa = 'recepcion' THEN 'proceso' ELSE estado END
        WHERE id = ?`
     ).bind(score, senales_buenas, senales_alerta, preguntas_followup, recomendacion, notas_ia, id).run();

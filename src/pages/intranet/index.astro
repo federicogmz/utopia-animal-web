@@ -17,7 +17,7 @@ import Layout from '../../layouts/Layout.astro';
         </div>
       </div>
 
-      <div class="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6" id="pipelineStats"></div>
+      <div class="grid grid-cols-3 md:grid-cols-7 gap-3 mb-6" id="pipelineStats"></div>
 
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-6 flex flex-col lg:flex-row gap-3 lg:items-center">
         <label id="misPendientesWrap" class="hidden items-center gap-2 cursor-pointer select-none bg-utopia-50 border border-utopia-200 rounded-xl px-4 py-2.5">
@@ -28,9 +28,10 @@ import Layout from '../../layouts/Layout.astro';
           class="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
         <select id="filterEtapa" class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:ring-utopia-500 focus:border-utopia-500">
           <option value="">Todas las etapas</option>
-          <option value="recepcion">📥 Pendiente evaluación IA</option>
-          <option value="contacto">📞 Pendiente contacto inicial</option>
-          <option value="entrevista">🎙️ Entrevista final</option>
+          <option value="recepcion">📥 Pendiente IA</option>
+          <option value="filtro">🔎 Filtro inicial</option>
+          <option value="concepto">📝 Pendiente mi concepto</option>
+          <option value="entrevista">🎙️ Concepto de Laura</option>
           <option value="entrega">🤝 Entrega (rescatista)</option>
           <option value="completada">✅ Completada</option>
           <option value="rechazada">⛔ Rechazada</option>
@@ -88,23 +89,24 @@ import Layout from '../../layouts/Layout.astro';
   let currentId = null;
   let me = { user: '', nombre: '', rol: 'admin', etapa_responsable: null };
 
-  // ── Etapas del flujo (simplificado) ──
+  // ── Etapas del flujo ──
   const ETAPAS = {
     recepcion:  { label: 'Pendiente evaluación IA', short: 'Pend. IA',     icon: '📥', badge: 'bg-gray-100 text-gray-700',   bar: 'bg-gray-400',   owner: 'IA' },
-    contacto:   { label: 'Pendiente contacto inicial', short: 'Contacto',  icon: '📞', badge: 'bg-blue-100 text-blue-700',   bar: 'bg-blue-500',   owner: 'Federico Gómez' },
-    entrevista: { label: 'Entrevista final',        short: 'Entrevista',   icon: '🎙️', badge: 'bg-amber-100 text-amber-800', bar: 'bg-amber-500',  owner: 'Laura López' },
-    entrega:    { label: 'Entrega (rescatista)',    short: 'Entrega',      icon: '🤝', badge: 'bg-teal-100 text-teal-700',   bar: 'bg-teal-500',   owner: 'Rescatista' },
-    completada: { label: 'Completada',              short: 'Completada',   icon: '✅', badge: 'bg-green-100 text-green-700', bar: 'bg-green-500',  owner: '—' },
-    rechazada:  { label: 'Rechazada',               short: 'Rechazada',    icon: '⛔', badge: 'bg-red-100 text-red-700',     bar: 'bg-red-500',    owner: '—' },
+    filtro:     { label: 'Filtro inicial',          short: 'Filtro',       icon: '🔎', badge: 'bg-indigo-100 text-indigo-700', bar: 'bg-indigo-500', owner: 'Federico Gómez' },
+    concepto:   { label: 'Pendiente de mi concepto', short: 'Mi concepto', icon: '📝', badge: 'bg-blue-100 text-blue-700',   bar: 'bg-blue-500',   owner: 'Federico Gómez' },
+    entrevista: { label: 'Concepto de Laura',        short: 'Entrevista',  icon: '🎙️', badge: 'bg-amber-100 text-amber-800', bar: 'bg-amber-500',  owner: 'Laura López' },
+    entrega:    { label: 'Entrega (rescatista)',     short: 'Entrega',     icon: '🤝', badge: 'bg-teal-100 text-teal-700',   bar: 'bg-teal-500',   owner: 'Rescatista' },
+    completada: { label: 'Completada',               short: 'Completada',  icon: '✅', badge: 'bg-green-100 text-green-700', bar: 'bg-green-500',  owner: '—' },
+    rechazada:  { label: 'Rechazada',                short: 'Rechazada',   icon: '⛔', badge: 'bg-red-100 text-red-700',     bar: 'bg-red-500',    owner: '—' },
   };
-  const PIPELINE = ['recepcion', 'contacto', 'entrevista', 'entrega', 'completada'];
-  const ORDER = { recepcion: 0, contacto: 1, entrevista: 2, entrega: 3, completada: 4 };
+  const PIPELINE = ['recepcion', 'filtro', 'concepto', 'entrevista', 'entrega', 'completada'];
+  const ORDER = { recepcion: 0, filtro: 1, concepto: 2, entrevista: 3, entrega: 4, completada: 5 };
   function etapaOf(s) { return ETAPAS[s.etapa] ? s.etapa : 'recepcion'; }
   function etapaMeta(e) { return ETAPAS[e] || ETAPAS.recepcion; }
+  const esFederico = () => ['filtro', 'concepto', 'contacto'].includes(me.etapa_responsable);
+  const esLaura = () => me.etapa_responsable === 'entrevista';
 
   // ── Cruce con zonas de alto abandono del Valle de Aburrá (red flag de entrada) ──
-  // Comunas de Medellín con mayor índice de abandono/maltrato animal según reportes
-  // de la Alcaldía de Medellín y la Personería (2022–2025). Lista ajustable.
   const ZONAS_RIESGO = [
     { comuna: 'Comuna 4 · Aranjuez',     kw: ['aranjuez','aranjues','moravia','berlin','san isidro','bermejal','palermo','miranda','la piñuela','la pinuela'] },
     { comuna: 'Comuna 7 · Robledo',      kw: ['robledo','aures','pajarito','cucaracho','bello horizonte','san german','pilarica','el diamante','villa flora','la pola'] },
@@ -115,7 +117,7 @@ import Layout from '../../layouts/Layout.astro';
   ];
   function norm(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   function zonaRiesgo(barrio, ciudad) {
-    if (!norm(ciudad).includes('medellin')) return null; // las comunas son de Medellín
+    if (!norm(ciudad).includes('medellin')) return null;
     const b = norm(barrio);
     for (const z of ZONAS_RIESGO) for (const k of z.kw) if (b.includes(k)) return z.comuna;
     return null;
@@ -123,8 +125,8 @@ import Layout from '../../layouts/Layout.astro';
 
   function esMiPendiente(s) {
     const e = etapaOf(s);
-    if (me.etapa_responsable === 'contacto') return e === 'contacto';
-    if (me.etapa_responsable === 'entrevista') return e === 'entrevista';
+    if (esFederico()) return e === 'filtro' || e === 'concepto';
+    if (esLaura()) return e === 'entrevista';
     return e !== 'completada' && e !== 'rechazada';
   }
 
@@ -166,36 +168,26 @@ import Layout from '../../layouts/Layout.astro';
     return d;
   }
 
-  // Mensaje de WhatsApp: variante de seguimiento o de rechazo según la recomendación IA.
   function buildWaMessage(s) {
     const first = (s.nombre_completo || '').trim().split(/\s+/)[0] || '';
     if (s.recomendacion === 'descartar') {
       return [
-        `Hola ${first} 👋, te escribimos del equipo de Elim Refugio Animal.`,
-        '',
-        'Antes que todo, gracias de corazón por tu interés en adoptar y por el tiempo que dedicaste a la solicitud. 💛',
-        '',
-        'Revisamos tu caso con mucho cuidado y, en esta ocasión, no podremos continuar con el proceso de adopción. Esta decisión busca siempre el bienestar y la seguridad del gato a largo plazo, y no es un juicio sobre ti como persona.',
-        '',
-        'Si quieres, podemos contarte qué aspectos tener en cuenta para una futura adopción, y también puedes apoyarnos de otras formas: difundiendo, esterilizando o como hogar temporal.',
-        '',
-        'Gracias por tu comprensión y por querer darle un hogar a un gatito. 🐱',
-        'Equipo Elim · Utopía Animal',
+        `Hola ${first} 👋, te escribimos del equipo de Elim Refugio Animal.`, '',
+        'Antes que todo, gracias de corazón por tu interés en adoptar y por el tiempo que dedicaste a la solicitud. 💛', '',
+        'Revisamos tu caso con mucho cuidado y, en esta ocasión, no podremos continuar con el proceso de adopción. Esta decisión busca siempre el bienestar y la seguridad del gato a largo plazo, y no es un juicio sobre ti como persona.', '',
+        'Si quieres, podemos contarte qué aspectos tener en cuenta para una futura adopción, y también puedes apoyarnos de otras formas: difundiendo, esterilizando o como hogar temporal.', '',
+        'Gracias por tu comprensión y por querer darle un hogar a un gatito. 🐱', 'Equipo Elim · Utopía Animal',
       ].join('\n');
     }
     const preguntas = parseArr(s.preguntas_followup);
     const lines = [];
-    lines.push(`Hola ${first} 👋, te escribimos del equipo de Elim Refugio Animal.`);
-    lines.push('');
-    lines.push('¡Gracias por tu solicitud de adopción! Nos gustó tu perfil y queremos avanzar al siguiente paso. Para continuar nos ayudarías con lo siguiente:');
-    lines.push('');
+    lines.push(`Hola ${first} 👋, te escribimos del equipo de Elim Refugio Animal.`); lines.push('');
+    lines.push('¡Gracias por tu solicitud de adopción! Nos gustó tu perfil y queremos avanzar al siguiente paso. Para continuar nos ayudarías con lo siguiente:'); lines.push('');
     if (preguntas.length) preguntas.forEach((q, i) => lines.push(`${i + 1}. ${q}`));
     else lines.push('1. Cuéntanos un poco más sobre tu hogar y tu rutina diaria con el gato.');
     lines.push('');
-    lines.push('Además, ¿podrías enviarnos un video corto de tu hogar? Idealmente mostrando ventanas y balcones (y si tienen mallas o protección) y el espacio donde estaría el gato 🐱');
-    lines.push('');
-    lines.push('Quedamos atentos. ¡Gracias por querer adoptar de forma responsable! 💛');
-    lines.push('Equipo Elim · Utopía Animal');
+    lines.push('Sobre todo, ¿podrías enviarnos un *video corto de tu hogar*? Idealmente mostrando ventanas y balcones (y si tienen mallas o protección) y el espacio donde estaría el gato 🐱'); lines.push('');
+    lines.push('Quedamos atentos. ¡Gracias por querer adoptar de forma responsable! 💛'); lines.push('Equipo Elim · Utopía Animal');
     return lines.join('\n');
   }
 
@@ -216,10 +208,34 @@ import Layout from '../../layouts/Layout.astro';
     window.location.href = '/intranet/adopciones?' + p.toString();
   };
 
-  // Cambia la etapa y guarda (lo que cierra el modal).
   window.avanzarEtapa = function(nuevaEtapa) {
     const sel = document.getElementById('editEtapa');
     if (sel) sel.value = nuevaEtapa; else window.__overrideEtapa = nuevaEtapa;
+    document.getElementById('btnSaveModal').click();
+  };
+
+  // Rechazo con motivo obligatorio.
+  window.pedirMotivo = function() {
+    const box = document.getElementById('accionesBox');
+    if (!box) return;
+    box.innerHTML = `
+      <div class="w-full bg-red-50 border border-red-200 rounded-xl p-4">
+        <label class="text-xs font-bold text-red-700 uppercase mb-1 block">Motivo del rechazo (obligatorio)</label>
+        <textarea id="motivoRechazoInput" rows="2" class="w-full rounded-xl border-red-200 text-sm focus:ring-red-500 focus:border-red-500" placeholder="Explica brevemente por qué se rechaza esta solicitud..."></textarea>
+        <div class="flex gap-3 mt-3">
+          <button onclick="confirmarRechazo()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm">Confirmar rechazo</button>
+          <button onclick="openDetail(currentId)" class="border border-gray-200 text-gray-700 font-semibold px-5 py-2.5 rounded-xl text-sm">Cancelar</button>
+        </div>
+      </div>`;
+    const t = document.getElementById('motivoRechazoInput'); if (t) t.focus();
+  };
+  window.confirmarRechazo = function() {
+    const el = document.getElementById('motivoRechazoInput');
+    const m = el ? el.value.trim() : '';
+    if (!m) { alert('Escribe el motivo del rechazo.'); return; }
+    window.__motivoRechazo = m;
+    window.__overrideEtapa = 'rechazada';
+    const sel = document.getElementById('editEtapa'); if (sel) sel.value = 'rechazada';
     document.getElementById('btnSaveModal').click();
   };
 
@@ -238,7 +254,7 @@ import Layout from '../../layouts/Layout.astro';
       td.k{color:#6b7280;width:38%} ul{margin:4px 0;padding-left:18px} .badge{display:inline-block;padding:2px 10px;border-radius:99px;background:#ede9fe;color:#5b21b6;font-weight:700;font-size:11px}
       .muted{color:#9ca3af;font-size:11px} .score{font-size:22px;font-weight:800}</style></head><body>
       <h1>Solicitud #${esc(s.id)} · ${esc(s.nombre_completo)}</h1>
-      <p class="muted">Enviada: ${esc(fmtDate(s.fecha_envio))} · Etapa: ${esc(em.label)}</p>
+      <p class="muted">Enviada: ${esc(fmtDate(s.fecha_envio))} · Etapa: ${esc(em.label)}${s.etapa==='rechazada'&&s.motivo_rechazo?` · Motivo: ${esc(s.motivo_rechazo)}`:''}</p>
       <h2>Evaluación IA</h2>
       <p><span class="score">${(s.score==null||s.score==='')?'—':Math.round(Number(s.score))}</span>/100 &nbsp; <span class="badge">${rm.icon} ${rm.label}</span></p>
       <b>Señales buenas</b>${li(buenas)}<b>Señales de alerta</b>${li(alertas)}<b>Preguntas de seguimiento</b>${li(fu)}
@@ -246,11 +262,17 @@ import Layout from '../../layouts/Layout.astro';
       <h2>Datos personales</h2><table>${f('Cédula',s.cedula)}${f('Edad',s.edad)}${f('Ocupación',s.ocupacion)}${f('Teléfono',s.telefono)}${f('Correo',s.correo)}${f('Dirección',s.direccion)}${f('Ciudad/Barrio',(s.ciudad||'—')+' / '+(s.barrio||'—'))}${f('Estrato',s.estrato)}</table>
       <h2>Vivienda y hogar</h2><table>${f('Tipo de vivienda',s.tipo_vivienda)}${f('Situación',s.situacion_habitacional)}${fb('Mallas de seguridad',s.mallas_seguridad)}${f('Adultos en casa',s.adultos_casa)}${f('Niños',s.ninos_edades)}${fb('Todos de acuerdo',s.todos_de_acuerdo)}${fb('Otras mascotas',s.tiene_otras_mascotas)}${f('Detalle mascotas',s.otras_mascotas_tipo)}</table>
       <h2>Motivación y planes</h2><table>${f('¿Por qué adoptar?',s.por_que_adoptar)}${f('Género preferido',s.genero_preferido)}${f('Edad del gato',s.edad_estimada_gatito)}${f('Responsable gastos',s.responsable_gastos)}${f('Plan dificultad económica',s.plan_dificultad_economica)}${f('Plan comportamiento',s.plan_comportamiento)}${f('Plan enfermedad',s.plan_enfermedad)}${f('Plan vacaciones',s.plan_vacaciones)}</table>
-      <h2>Gestión por etapas</h2><table>${f('Etapa actual',em.label)}${f('Mallas (gestión)',s.mallas_estado)}${fb('Video recibido',s.video_recibido)}${f('Video viable',s.video_viable)}${f('Notas video',s.video_notas)}${f('Observaciones contacto (Federico)',s.observaciones_contacto)}${f('Notas entrevista (Laura)',s.entrevista_notas)}${f('Rescatista asignado',s.rescatista_asignado)}${f('Notas humanas',s.notas_humanas)}</table>
+      <h2>Gestión por etapas</h2><table>${f('Etapa actual',em.label)}${f('Mallas (gestión)',s.mallas_estado)}${fb('Video recibido',s.video_recibido)}${f('Video viable',s.video_viable)}${f('Notas video',s.video_notas)}${f('Mi concepto (Federico)',s.observaciones_contacto)}${f('Concepto entrevista (Laura)',s.entrevista_notas)}${f('Rescatista asignado',s.rescatista_asignado)}${f('Motivo de rechazo',s.motivo_rechazo)}${f('Notas humanas',s.notas_humanas)}</table>
       <script>window.onload=function(){window.print()}<\/script></body></html>`;
     const w = window.open('', '_blank');
     if (w) { w.document.write(html); w.document.close(); }
   };
+
+  function roleLabel() {
+    if (esFederico()) return 'Filtro y concepto inicial';
+    if (esLaura()) return 'Entrevista final';
+    return me.rol === 'admin' ? 'Administrador' : me.rol;
+  }
 
   async function loadMe() {
     try {
@@ -259,14 +281,12 @@ import Layout from '../../layouts/Layout.astro';
       const j = await res.json();
       if (j.ok) {
         me = j;
-        const rolLabel = me.etapa_responsable ? etapaMeta(me.etapa_responsable).label : (me.rol === 'admin' ? 'Administrador' : me.rol);
-        document.getElementById('userBanner').innerHTML = `Hola <b class="text-gray-900">${esc(me.nombre)}</b> · <span class="text-utopia-700 font-semibold">${esc(rolLabel)}</span>`;
-        if (me.etapa_responsable) {
+        document.getElementById('userBanner').innerHTML = `Hola <b class="text-gray-900">${esc(me.nombre)}</b> · <span class="text-utopia-700 font-semibold">${esc(roleLabel())}</span>`;
+        if (esFederico() || esLaura()) {
           const wrap = document.getElementById('misPendientesWrap');
           wrap.classList.remove('hidden'); wrap.classList.add('flex');
           document.getElementById('filterMine').checked = true;
-          document.getElementById('filterMineLabel').textContent =
-            me.etapa_responsable === 'contacto' ? 'Solo mis pendientes (contacto)' : 'Solo mis pendientes (entrevista)';
+          document.getElementById('filterMineLabel').textContent = esFederico() ? 'Solo mis pendientes (filtro / concepto)' : 'Solo mis pendientes (entrevista)';
         }
       }
     } catch (e) { console.error(e); }
@@ -284,11 +304,12 @@ import Layout from '../../layouts/Layout.astro';
   function renderStats() {
     const counts = {}; PIPELINE.concat(['rechazada']).forEach(e => counts[e] = 0);
     solicitudes.forEach(s => { const e = etapaOf(s); counts[e] = (counts[e] || 0) + 1; });
-    const order = ['recepcion','contacto','entrevista','entrega','completada','rechazada'];
+    const order = ['recepcion','filtro','concepto','entrevista','entrega','completada','rechazada'];
+    const mineStages = esFederico() ? ['filtro','concepto'] : esLaura() ? ['entrevista'] : [];
     const cards = order.map(e => {
       const m = ETAPAS[e];
-      const isMineStage = me.etapa_responsable === e;
-      return `<button data-etapa="${e}" class="statCard text-left bg-white p-4 rounded-2xl shadow-sm border ${isMineStage ? 'border-utopia-300 ring-1 ring-utopia-200' : 'border-gray-100'} hover:shadow-md transition-shadow">
+      const mine = mineStages.includes(e);
+      return `<button data-etapa="${e}" class="statCard text-left bg-white p-4 rounded-2xl shadow-sm border ${mine ? 'border-utopia-300 ring-1 ring-utopia-200' : 'border-gray-100'} hover:shadow-md transition-shadow">
         <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">${m.icon} ${m.short}</p>
         <p class="text-2xl font-black text-gray-900">${counts[e] || 0}</p></button>`;
     }).join('');
@@ -330,11 +351,7 @@ import Layout from '../../layouts/Layout.astro';
       const scoreTxt = (s.score === null || s.score === undefined || s.score === '') ? '—' : Math.round(Number(s.score));
       return `
       <tr class="hover:bg-gray-50 transition-colors ${mine ? 'bg-utopia-50/40' : ''}">
-        <td class="px-5 py-4 align-top">
-          ${mine ? '<span class="inline-block w-1.5 h-1.5 rounded-full bg-utopia-500 mr-1 align-middle" title="Te corresponde"></span>' : ''}
-          <span class="font-bold text-gray-900">#${esc(s.id)}</span>
-          <div class="text-xs text-gray-500">${esc(new Date(s.fecha_envio).toLocaleDateString())}</div>
-        </td>
+        <td class="px-5 py-4 align-top">${mine ? '<span class="inline-block w-1.5 h-1.5 rounded-full bg-utopia-500 mr-1 align-middle" title="Te corresponde"></span>' : ''}<span class="font-bold text-gray-900">#${esc(s.id)}</span><div class="text-xs text-gray-500">${esc(new Date(s.fecha_envio).toLocaleDateString())}</div></td>
         <td class="px-5 py-4 align-top font-medium text-gray-900">${esc(s.nombre_completo)}<div class="text-xs font-normal text-gray-400">${esc(s.telefono)}</div></td>
         <td class="px-5 py-4 align-top text-gray-600">${esc(s.ciudad || '-')}<br/><span class="text-xs">${esc(s.barrio || '-')}</span>${zona ? `<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700" title="${esc(zona)}">🚩 Zona alto abandono</span></div>` : ''}</td>
         <td class="px-5 py-4 align-top"><div class="flex items-center gap-2"><span class="font-black ${scoreColor(s.score)}">${scoreTxt}</span><span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${rm.badge}">${rm.icon} ${rm.label}</span></div></td>
@@ -352,16 +369,14 @@ import Layout from '../../layouts/Layout.astro';
   function chips(arr, cls) { if (!arr.length) return '<span class="text-gray-400 text-sm">—</span>'; return arr.map(x => `<li class="flex gap-2"><span>${cls.icon}</span><span>${esc(x)}</span></li>`).join(''); }
   function roRow(label, value) { return `<div class="flex justify-between gap-3 py-1.5 border-b border-gray-50 last:border-0"><span class="text-gray-500 text-sm">${esc(label)}</span><span class="text-gray-900 text-sm font-medium text-right">${esc(value === null || value === undefined || value === '' ? '—' : value)}</span></div>`; }
 
-  function buildStepper(cur) {
-    if (cur === 'rechazada') return `<div class="flex items-center gap-2 mb-6 p-4 bg-red-50 border border-red-200 rounded-2xl"><span class="text-lg">⛔</span><span class="font-bold text-red-700">Solicitud rechazada</span></div>`;
+  function buildStepper(cur, motivo) {
+    if (cur === 'rechazada') return `<div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">⛔</span><span class="font-bold text-red-700">Solicitud rechazada</span></div>${motivo ? `<p class="text-sm text-red-700 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
     const curStep = ORDER[cur];
     const items = PIPELINE.map((e, i) => {
       const m = ETAPAS[e];
       const done = i < curStep, active = i === curStep;
       const dot = active ? `${m.bar} text-white ring-4 ring-offset-1 ring-gray-100` : done ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-400';
-      return `<div class="flex-1 flex flex-col items-center text-center">
-        <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${dot}">${done ? '✓' : i + 1}</div>
-        <span class="text-[10px] mt-1 font-semibold ${active ? 'text-gray-900' : done ? 'text-green-600' : 'text-gray-400'}">${m.icon} ${m.short}</span></div>`;
+      return `<div class="flex-1 flex flex-col items-center text-center"><div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${dot}">${done ? '✓' : i + 1}</div><span class="text-[10px] mt-1 font-semibold ${active ? 'text-gray-900' : done ? 'text-green-600' : 'text-gray-400'}">${m.icon} ${m.short}</span></div>`;
     }).join('<div class="flex-1 h-0.5 bg-gray-200 mt-4"></div>');
     return `<div class="flex items-start mb-6 px-2">${items}</div>`;
   }
@@ -369,22 +384,23 @@ import Layout from '../../layouts/Layout.astro';
   function buildAcciones(s) {
     const e = etapaOf(s);
     const btn = (label, fn, cls) => `<button onclick="${fn}" class="inline-flex items-center gap-2 ${cls} font-bold px-5 py-2.5 rounded-xl text-sm transition-colors">${label}</button>`;
-    const reject = btn('⛔ Rechazar', `avanzarEtapa('rechazada')`, 'bg-red-50 text-red-700 border border-red-200 hover:bg-red-100');
-    if (e === 'recepcion') return `<span class="text-sm text-gray-500">Esperando evaluación de la IA. Al calificar, pasará a tu cola de contacto.</span>`;
+    const reject = btn('⛔ Rechazar', `pedirMotivo()`, 'bg-red-50 text-red-700 border border-red-200 hover:bg-red-100');
+    if (e === 'recepcion') return `<span class="text-sm text-gray-500">Esperando evaluación de la IA. Al calificar, entrará al filtro inicial.</span>`;
     if (e === 'completada') return `<div class="flex items-center gap-2 text-green-700 font-bold"><span>✅</span> Adopción completada</div>`;
     let primary = '';
-    if (e === 'contacto') primary = btn('🎙️ Aprobar y pasar a entrevista', `avanzarEtapa('entrevista')`, 'bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-900/20');
+    if (e === 'filtro') primary = btn('📲 Contacté y pedí el video', `avanzarEtapa('concepto')`, 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-900/20');
+    else if (e === 'concepto') primary = btn('🎙️ Dar mi concepto y pasar a entrevista', `avanzarEtapa('entrevista')`, 'bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-900/20');
     else if (e === 'entrevista') primary = btn('🤝 Aprobar y escalar a rescatista', `avanzarEtapa('entrega')`, 'bg-teal-600 hover:bg-teal-700 text-white shadow-lg shadow-teal-900/20');
-    else if (e === 'entrega') primary = btn('🐱 Concretar adopción', `concretarAdopcion()`, 'bg-elim-600 hover:bg-elim-500 text-white shadow-lg shadow-elim-900/20');
+    else if (e === 'entrega') return `<div class="flex flex-wrap items-center gap-3">${btn('🐱 Concretar adopción', `concretarAdopcion()`, 'bg-elim-600 hover:bg-elim-500 text-white shadow-lg shadow-elim-900/20')}</div>`;
     return `<div class="flex flex-wrap items-center gap-3">${primary}${reject}</div>`;
   }
 
   window.openDetail = function(id) {
     currentId = id;
-    window.__overrideEtapa = null;
+    window.__overrideEtapa = null; window.__motivoRechazo = null;
     const s = solicitudes.find(x => x.id === id);
     if (!s) return;
-    const cur = etapaOf(s); const em = etapaMeta(cur); const curOrder = ORDER[cur];
+    const cur = etapaOf(s); const em = etapaMeta(cur); const curOrder = ORDER[cur] ?? 0;
     const evaluada = !!s.evaluado_at;
     const zona = zonaRiesgo(s.barrio, s.ciudad);
 
@@ -397,102 +413,79 @@ import Layout from '../../layouts/Layout.astro';
     const rm = recoMeta(s.recomendacion);
     const scoreTxt = (s.score === null || s.score === undefined || s.score === '') ? '—' : Math.round(Number(s.score));
 
-    const stepper = buildStepper(cur);
+    const stepper = buildStepper(cur, s.motivo_rechazo);
 
-    // Banner de zona de riesgo (red flag de entrada)
-    const zonaBanner = zona ? `<div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
-      <span class="text-xl">🚩</span><div><p class="font-bold text-red-800 text-sm">Zona de alto abandono — ${esc(zona)}</p>
-      <p class="text-xs text-red-700 mt-0.5">El barrio declarado está en una de las zonas con mayor índice de abandono/maltrato del Valle de Aburrá. Red flag de entrada: exige verificación domiciliaria estricta antes de cualquier entrega.</p></div></div>` : '';
+    const zonaBanner = zona ? `<div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 mb-6 flex items-start gap-3"><span class="text-xl">🚩</span><div><p class="font-bold text-red-800 text-sm">Zona de alto abandono — ${esc(zona)}</p><p class="text-xs text-red-700 mt-0.5">Barrio en una de las zonas con mayor índice de abandono/maltrato del Valle de Aburrá. Red flag de entrada: exige verificación domiciliaria estricta antes de cualquier entrega.</p></div></div>` : '';
 
-    const iaPanel = !evaluada ? `<div class="bg-gray-50 rounded-2xl border border-gray-200 p-6 mb-6 text-sm text-gray-500">⏳ Esta solicitud aún no ha sido evaluada por la IA. Al calificarse, pasará a la cola de contacto.</div>` : `
+    const iaPanel = !evaluada ? `<div class="bg-gray-50 rounded-2xl border border-gray-200 p-6 mb-6 text-sm text-gray-500">⏳ Esta solicitud aún no ha sido evaluada por la IA. Al calificarse, entrará al filtro inicial.</div>` : `
       <div class="bg-gradient-to-br from-utopia-50 to-white rounded-2xl border border-utopia-100 p-6 mb-6">
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
-          <div class="flex items-center gap-3"><span class="text-xs font-bold text-utopia-700 uppercase tracking-widest">Evaluación IA</span><span class="px-3 py-1 rounded-full text-xs font-bold ${rm.badge}">${rm.icon} ${rm.label}</span></div>
-          <div class="text-right"><span class="text-3xl font-black ${scoreColor(s.score)}">${scoreTxt}</span><span class="text-gray-400 text-sm font-semibold">/100</span></div>
-        </div>
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-5"><div class="flex items-center gap-3"><span class="text-xs font-bold text-utopia-700 uppercase tracking-widest">Evaluación IA</span><span class="px-3 py-1 rounded-full text-xs font-bold ${rm.badge}">${rm.icon} ${rm.label}</span></div><div class="text-right"><span class="text-3xl font-black ${scoreColor(s.score)}">${scoreTxt}</span><span class="text-gray-400 text-sm font-semibold">/100</span></div></div>
         <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-5"><div class="h-full ${rm.bar}" style="width:${Math.max(0, Math.min(100, Number(s.score) || 0))}%"></div></div>
-        <div class="grid md:grid-cols-2 gap-5">
-          <div><p class="text-xs font-bold text-green-700 uppercase mb-2">Señales buenas</p><ul class="space-y-1.5 text-sm text-gray-700">${chips(buenas, { icon: '✅' })}</ul></div>
-          <div><p class="text-xs font-bold text-red-700 uppercase mb-2">Señales de alerta</p><ul class="space-y-1.5 text-sm text-gray-700">${chips(alertas, { icon: '⚠️' })}</ul></div>
-        </div>
+        <div class="grid md:grid-cols-2 gap-5"><div><p class="text-xs font-bold text-green-700 uppercase mb-2">Señales buenas</p><ul class="space-y-1.5 text-sm text-gray-700">${chips(buenas, { icon: '✅' })}</ul></div><div><p class="text-xs font-bold text-red-700 uppercase mb-2">Señales de alerta</p><ul class="space-y-1.5 text-sm text-gray-700">${chips(alertas, { icon: '⚠️' })}</ul></div></div>
         <div class="mt-5"><p class="text-xs font-bold text-blue-700 uppercase mb-2">Preguntas de seguimiento</p><ul class="space-y-1.5 text-sm text-gray-700">${chips(followups, { icon: '❓' })}</ul></div>
         ${s.notas_ia ? `<div class="mt-5 bg-white rounded-lg border border-gray-200 p-4"><p class="text-xs font-bold text-gray-500 uppercase mb-1">Notas IA</p><p class="text-sm text-gray-700 whitespace-pre-wrap">${esc(s.notas_ia)}</p></div>` : ''}
         <p class="text-xs text-gray-400 mt-4">Evaluado: ${fmtDate(s.evaluado_at)}</p>
       </div>`;
 
-    // WhatsApp: solo en la etapa de contacto (tras IA, antes de avanzar a entrevista).
+    // WhatsApp: solo en el FILTRO inicial (para pedir el video o cerrar amablemente). Desaparece al avanzar.
     const phoneFmt = waPhone(s.telefono);
     const esRechazo = s.recomendacion === 'descartar';
-    const whatsapp = (cur === 'contacto') ? `
+    const whatsapp = (cur === 'filtro') ? `
       <div class="bg-white rounded-2xl border-2 ${esRechazo ? 'border-red-200' : 'border-green-200'} p-6 mb-6">
-        <div class="flex items-center justify-between mb-2"><h3 class="text-sm font-bold ${esRechazo ? 'text-red-800' : 'text-green-800'} uppercase tracking-wide">📲 ${esRechazo ? 'Mensaje de cierre (rechazo)' : 'Mensaje inicial de contacto'}</h3><span class="text-xs text-gray-400">${phoneFmt ? '+' + esc(phoneFmt) : 'sin teléfono válido'}</span></div>
-        <p class="text-xs text-gray-500 mb-3">${esRechazo ? 'La IA recomienda no continuar. Este mensaje está orientado a un cierre amable.' : 'Borrador de la IA. Al enviar se abre WhatsApp con el texto cargado.'} Desaparece de aquí cuando avances la etapa.</p>
-        <textarea id="waMessage" rows="11" class="w-full rounded-xl border-gray-200 text-sm focus:ring-green-500 focus:border-green-500">${esc(buildWaMessage(s))}</textarea>
+        <div class="flex items-center justify-between mb-2"><h3 class="text-sm font-bold ${esRechazo ? 'text-red-800' : 'text-green-800'} uppercase tracking-wide">📲 ${esRechazo ? 'Mensaje de cierre (rechazo)' : 'Mensaje para pedir el video'}</h3><span class="text-xs text-gray-400">${phoneFmt ? '+' + esc(phoneFmt) : 'sin teléfono válido'}</span></div>
+        <p class="text-xs text-gray-500 mb-3">${esRechazo ? 'La IA recomienda no continuar; este mensaje es para un cierre amable.' : 'La IA recomienda continuar: este mensaje pide el video del hogar.'} Tras enviarlo, marca abajo «Contacté y pedí el video». Este mensaje desaparece al avanzar.</p>
+        <textarea id="waMessage" rows="10" class="w-full rounded-xl border-gray-200 text-sm focus:ring-green-500 focus:border-green-500">${esc(buildWaMessage(s))}</textarea>
         <div class="flex justify-end mt-3"><button onclick="sendWhatsApp()" class="inline-flex items-center gap-2 ${esRechazo ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white font-bold px-6 py-2.5 rounded-xl transition-colors shadow-lg">Abrir WhatsApp →</button></div>
       </div>` : '';
 
     const selOpt = (val, label, cur2) => `<option value="${val}" ${cur2 === val ? 'selected' : ''}>${label}</option>`;
 
-    // ── Bloque Contacto (Federico) · estado según etapa ──
-    let contactoBlock;
-    if (curOrder < ORDER.contacto) {
-      contactoBlock = `<div class="bg-gray-50 rounded-2xl border border-dashed border-gray-200 p-5 mb-6 text-sm text-gray-400">🔒 Etapa 1 · Primer contacto — se habilita cuando la IA califique.</div>`;
-    } else if (cur === 'contacto') {
-      contactoBlock = `
+    // ── Acciones + gestión general ──
+    const gestion = `
+      <div class="bg-white rounded-2xl border-2 border-utopia-200 p-6 mb-6">
+        <div id="accionesBox" class="mb-5">${buildAcciones(s)}</div>
+        <div class="border-t border-gray-100 pt-5"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Asignado a</label><input id="editAsignado" type="text" value="${esc(s.asignado_a || '')}" placeholder="Responsable" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" /></div>
+        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas generales del equipo</label><textarea id="editNotas" rows="2" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" placeholder="Seguimiento general...">${esc(s.notas_humanas || '')}</textarea></div>
+        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Agregar nota al historial (opcional)</label><input id="editNotaHist" type="text" placeholder="Quedará registrada con tu nombre y la fecha" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" /></div>
+        <input type="hidden" id="editEtapa" value="${esc(cur)}" />
+        <div class="mt-5"><button onclick="exportarPdf()" class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-5 py-2.5 rounded-xl text-sm">📄 Exportar PDF</button></div>
+      </div>`;
+
+    // ── Bloque «Mi concepto» (Federico): video / mallas / observaciones ──
+    let conceptoBlock;
+    if (curOrder < ORDER.concepto) {
+      conceptoBlock = `<div class="bg-gray-50 rounded-2xl border border-dashed border-gray-200 p-5 mb-6 text-sm text-gray-400">🔒 Mi concepto — se habilita cuando contactes y pidas el video.</div>`;
+    } else if (cur === 'concepto') {
+      conceptoBlock = `
       <div class="bg-white rounded-2xl border-2 border-blue-300 ring-1 ring-blue-200 p-6 mb-6">
-        <h3 class="text-sm font-bold text-blue-800 uppercase tracking-wide mb-1">📞 Etapa 1 · Primer contacto <span class="text-blue-500 font-normal normal-case">— en curso (Federico)</span></h3>
-        <p class="text-xs text-gray-500 mb-4">Validar video, mallas y observaciones iniciales.</p>
+        <h3 class="text-sm font-bold text-blue-800 uppercase tracking-wide mb-1">📝 Mi concepto <span class="text-blue-500 font-normal normal-case">— en curso (Federico)</span></h3>
+        <p class="text-xs text-gray-500 mb-4">Revisa el video y las mallas, registra tu concepto y, si es viable, pásalo a la entrevista de Laura.</p>
         <div class="grid md:grid-cols-2 gap-5">
-          <div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mallas de seguridad</label>
-            <select id="editMallas" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">${selOpt('sin_definir','Sin definir',s.mallas_estado)}${selOpt('acepta_instalar','Aceptó instalar',s.mallas_estado)}${selOpt('ya_instaladas','Ya instaladas',s.mallas_estado)}${selOpt('no_acepta','No acepta',s.mallas_estado)}</select></div>
-          <div class="grid grid-cols-2 gap-3">
-            <div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Envió video?</label><select id="editVideoRec" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">${selOpt('0','No', String(s.video_recibido||0))}${selOpt('1','Sí', String(s.video_recibido||0))}</select></div>
-            <div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Video viable?</label><select id="editVideoViable" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">${selOpt('sin_revisar','Sin revisar',s.video_viable)}${selOpt('si','Sí, viable',s.video_viable)}${selOpt('no','No viable',s.video_viable)}</select></div>
-          </div>
+          <div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mallas de seguridad</label><select id="editMallas" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">${selOpt('sin_definir','Sin definir',s.mallas_estado)}${selOpt('acepta_instalar','Aceptó instalar',s.mallas_estado)}${selOpt('ya_instaladas','Ya instaladas',s.mallas_estado)}${selOpt('no_acepta','No acepta',s.mallas_estado)}</select></div>
+          <div class="grid grid-cols-2 gap-3"><div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Envió video?</label><select id="editVideoRec" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">${selOpt('0','No', String(s.video_recibido||0))}${selOpt('1','Sí', String(s.video_recibido||0))}</select></div><div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Video viable?</label><select id="editVideoViable" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">${selOpt('sin_revisar','Sin revisar',s.video_viable)}${selOpt('si','Sí, viable',s.video_viable)}${selOpt('no','No viable',s.video_viable)}</select></div></div>
         </div>
         <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas del video</label><input id="editVideoNotas" type="text" value="${esc(s.video_notas || '')}" placeholder="Observaciones del video del hogar..." class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500" /></div>
-        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Observaciones iniciales (Federico)</label><textarea id="editObsContacto" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Resultado del primer contacto...">${esc(s.observaciones_contacto || '')}</textarea></div>
+        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mi concepto (Federico)</label><textarea id="editObsContacto" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Concepto tras revisar video, mallas y el contacto...">${esc(s.observaciones_contacto || '')}</textarea></div>
       </div>`;
     } else {
-      // superada → solo lectura
-      contactoBlock = `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-6 mb-6">
-        <h3 class="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">✓ Etapa 1 · Primer contacto <span class="text-green-600 font-normal normal-case">— superada</span></h3>
-        ${roRow('Mallas de seguridad', s.mallas_estado)}${roRow('¿Envió video?', fmtBool(s.video_recibido))}${roRow('¿Video viable?', s.video_viable)}${roRow('Notas del video', s.video_notas)}${roRow('Observaciones (Federico)', s.observaciones_contacto)}
-      </div>`;
+      conceptoBlock = `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-6 mb-6"><h3 class="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">✓ Mi concepto <span class="text-green-600 font-normal normal-case">— superado</span></h3>${roRow('Mallas de seguridad', s.mallas_estado)}${roRow('¿Envió video?', fmtBool(s.video_recibido))}${roRow('¿Video viable?', s.video_viable)}${roRow('Notas del video', s.video_notas)}${roRow('Concepto (Federico)', s.observaciones_contacto)}</div>`;
     }
 
-    // ── Bloque Entrevista (Laura) · estado según etapa ──
+    // ── Bloque «Concepto de Laura» (entrevista) ──
     let entrevistaBlock;
     if (curOrder < ORDER.entrevista) {
-      entrevistaBlock = `<div class="bg-gray-50 rounded-2xl border border-dashed border-gray-200 p-5 mb-6 text-sm text-gray-400">🔒 Etapa 2 · Entrevista final — se habilita cuando se supere el primer contacto.</div>`;
+      entrevistaBlock = `<div class="bg-gray-50 rounded-2xl border border-dashed border-gray-200 p-5 mb-6 text-sm text-gray-400">🔒 Concepto de Laura — se habilita cuando se supere tu concepto inicial.</div>`;
     } else if (cur === 'entrevista') {
       entrevistaBlock = `
       <div class="bg-white rounded-2xl border-2 border-amber-300 ring-1 ring-amber-200 p-6 mb-6">
-        <h3 class="text-sm font-bold text-amber-800 uppercase tracking-wide mb-1">🎙️ Etapa 2 · Entrevista final <span class="text-amber-600 font-normal normal-case">— en curso (Laura)</span></h3>
+        <h3 class="text-sm font-bold text-amber-800 uppercase tracking-wide mb-1">🎙️ Concepto de Laura <span class="text-amber-600 font-normal normal-case">— en curso</span></h3>
         <p class="text-xs text-gray-500 mb-4">Entrevista a fondo y, de ser viable, escalar a rescatista.</p>
-        <div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas de la entrevista (Laura)</label><textarea id="editEntrevista" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-amber-500 focus:border-amber-500" placeholder="Conclusiones de la entrevista final...">${esc(s.entrevista_notas || '')}</textarea></div>
+        <div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Concepto de la entrevista (Laura)</label><textarea id="editEntrevista" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-amber-500 focus:border-amber-500" placeholder="Conclusiones de la entrevista final...">${esc(s.entrevista_notas || '')}</textarea></div>
         <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Rescatista asignado (para la entrega)</label><input id="editRescatista" type="text" value="${esc(s.rescatista_asignado || '')}" placeholder="Nombre del rescatista que coordina la entrega" class="w-full rounded-xl border-gray-200 text-sm focus:ring-amber-500 focus:border-amber-500" /></div>
       </div>`;
     } else {
-      entrevistaBlock = `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-6 mb-6">
-        <h3 class="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">✓ Etapa 2 · Entrevista final <span class="text-green-600 font-normal normal-case">— superada</span></h3>
-        ${roRow('Notas de la entrevista (Laura)', s.entrevista_notas)}${roRow('Rescatista asignado', s.rescatista_asignado)}
-      </div>`;
+      entrevistaBlock = `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-6 mb-6"><h3 class="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">✓ Concepto de Laura <span class="text-green-600 font-normal normal-case">— superado</span></h3>${roRow('Concepto (Laura)', s.entrevista_notas)}${roRow('Rescatista asignado', s.rescatista_asignado)}</div>`;
     }
-
-    // Acciones + gestión general
-    const gestion = `
-      <div class="bg-white rounded-2xl border-2 border-utopia-200 p-6 mb-6">
-        <div class="mb-5">${buildAcciones(s)}</div>
-        <div class="border-t border-gray-100 pt-5"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Asignado a</label>
-          <input id="editAsignado" type="text" value="${esc(s.asignado_a || '')}" placeholder="Responsable" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" /></div>
-        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas generales del equipo</label>
-          <textarea id="editNotas" rows="2" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" placeholder="Seguimiento general...">${esc(s.notas_humanas || '')}</textarea></div>
-        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Agregar nota al historial (opcional)</label>
-          <input id="editNotaHist" type="text" placeholder="Quedará registrada con tu nombre y la fecha" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" /></div>
-        <input type="hidden" id="editEtapa" value="${esc(cur)}" />
-        <div class="mt-5 flex flex-wrap gap-3"><button onclick="exportarPdf()" class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-5 py-2.5 rounded-xl text-sm">📄 Exportar PDF</button></div>
-      </div>`;
 
     const timeline = `<div id="timelineBox" class="bg-white rounded-2xl border border-gray-200 p-6 mb-6"><h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">🕘 Historial de cambios</h3><p class="text-sm text-gray-400" id="timelineContent">Cargando…</p></div>`;
 
@@ -508,7 +501,7 @@ import Layout from '../../layouts/Layout.astro';
     const mapa = mapQuery ? section('Ubicación', `<p class="text-sm text-gray-700 mb-2">${esc([s.direccion, s.barrio, s.ciudad].filter(Boolean).join(' · ') || '—')}</p><iframe width="100%" height="240" style="border:0;border-radius:12px" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&z=14&output=embed"></iframe>`) : '';
 
     document.getElementById('modalContent').innerHTML =
-      stepper + zonaBanner + iaPanel + whatsapp + gestion + contactoBlock + entrevistaBlock + timeline +
+      stepper + zonaBanner + iaPanel + whatsapp + gestion + conceptoBlock + entrevistaBlock + timeline +
       `<div class="grid md:grid-cols-2 gap-x-5"><div>${personal}${vivienda}${mapa}${redes}${mascotas}</div><div>${motivacion}${planes}${hogar}${compromiso}</div></div>`;
 
     document.getElementById('modalSaveStatus').textContent = '';
@@ -528,6 +521,7 @@ import Layout from '../../layouts/Layout.astro';
         let desc;
         if (h.accion === 'etapa') desc = `cambió la <b>etapa</b> a <b>${esc((ETAPAS[h.valor_nuevo]||{}).label || h.valor_nuevo)}</b>`;
         else if (h.accion === 'nota') desc = `dejó una nota: <span class="text-gray-700">"${esc(h.valor_nuevo)}"</span>`;
+        else if (h.campo === 'motivo_rechazo') desc = `registró el <b>motivo de rechazo</b>: <span class="text-gray-700">"${esc(h.valor_nuevo)}"</span>`;
         else desc = `actualizó <b>${esc(h.campo)}</b>${h.valor_nuevo ? ` → <span class="text-gray-700">${esc(h.valor_nuevo)}</span>` : ''}`;
         const who = h.usuario === 'ia' ? '🤖 IA' : '👤 ' + esc(h.usuario_nombre || h.usuario);
         return `<li class="flex gap-3 pb-3 border-b border-gray-50 last:border-0"><div class="text-xs text-gray-400 whitespace-nowrap w-32 shrink-0">${fmtDate(h.created_at)}</div><div class="text-sm text-gray-600"><b class="text-gray-800">${who}</b> ${desc}</div></li>`;
@@ -555,6 +549,7 @@ import Layout from '../../layouts/Layout.astro';
     const entr = val('editEntrevista'); if (entr !== undefined) payload.entrevista_notas = entr;
     const resc = val('editRescatista'); if (resc !== undefined) payload.rescatista_asignado = resc;
     const nh = val('editNotaHist'); if (nh) payload.nota_historial = nh;
+    if (window.__motivoRechazo) payload.motivo_rechazo = window.__motivoRechazo;
 
     btn.disabled = true; btn.textContent = 'Guardando...'; status.textContent = '';
     try {
@@ -562,7 +557,7 @@ import Layout from '../../layouts/Layout.astro';
       if (res.ok) { await loadData(); closeModal(); }
       else { status.textContent = '❌ Error al guardar'; }
     } catch (err) { status.textContent = '❌ Error de conexión'; }
-    finally { btn.disabled = false; btn.textContent = 'Guardar y cerrar'; window.__overrideEtapa = null; }
+    finally { btn.disabled = false; btn.textContent = 'Guardar y cerrar'; window.__overrideEtapa = null; window.__motivoRechazo = null; }
   };
 
   document.getElementById('btnRefresh').onclick = loadData;

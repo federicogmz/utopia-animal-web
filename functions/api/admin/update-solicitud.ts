@@ -5,8 +5,9 @@ interface Env extends AuthEnv {
 }
 
 const ESTADOS_VALIDOS = new Set(['pendiente', 'proceso', 'aprobada', 'rechazada']);
-// Flujo simplificado: recepcion (pend. IA) -> contacto (pend. contacto inicial) -> entrevista -> entrega -> completada ; rechazada
-const ETAPAS_VALIDAS = new Set(['recepcion', 'contacto', 'entrevista', 'entrega', 'completada', 'rechazada']);
+// Flujo: recepcion (pend. IA) -> filtro (filtro inicial) -> concepto (mi concepto)
+//        -> entrevista (concepto de Laura) -> entrega -> completada ; rechazada
+const ETAPAS_VALIDAS = new Set(['recepcion', 'filtro', 'concepto', 'entrevista', 'entrega', 'completada', 'rechazada']);
 const MALLAS_VALIDOS = new Set(['sin_definir', 'acepta_instalar', 'ya_instaladas', 'no_acepta']);
 const VIDEO_VIABLE_VALIDOS = new Set(['sin_revisar', 'si', 'no']);
 
@@ -14,7 +15,8 @@ const VIDEO_VIABLE_VALIDOS = new Set(['sin_revisar', 'si', 'no']);
 function estadoDeEtapa(etapa: string): string {
   switch (etapa) {
     case 'recepcion': return 'pendiente';
-    case 'contacto':
+    case 'filtro':
+    case 'concepto':
     case 'entrevista': return 'proceso';
     case 'entrega':
     case 'completada': return 'aprobada';
@@ -35,6 +37,7 @@ const CAMPOS: Record<string, (v: unknown) => unknown> = {
   observaciones_contacto: v => v,
   entrevista_notas: v => v,
   rescatista_asignado: v => v,
+  motivo_rechazo: v => v,
 };
 
 function bad(error: string, status = 400) {
