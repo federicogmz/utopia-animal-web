@@ -45,7 +45,13 @@ const fullTitle = title === 'Utopia Animal'
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-VQZ2NJDZQK');
+      // Medición entre dominios (cross-domain) con la landing puente:
+      // decora los enlaces salientes hacia fundsumate.org con el parámetro _gl
+      // y acepta el _gl entrante, para que el viaje puente -> formulario sea una
+      // sola sesión y se preserve el gclid de Google Ads (atribución de conversión).
+      gtag('config', 'G-VQZ2NJDZQK', {
+        linker: { domains: ['utopianimal.org', 'refugioanimal.fundsumate.org', 'fundsumate.org'] }
+      });
     </script>
 
     <!-- Favicon -->
