@@ -1,7 +1,7 @@
 // Auth compartido para todos los endpoints protegidos del panel/intranet.
 // Acepta dos credenciales equivalentes:
-//   - Cookie de sesión HMAC (navegador, login de la intranet)
-//   - Authorization: Bearer <ADMIN_TOKEN> (procesos máquina: batch de evaluación)
+//   - Cookie de sesión HMAC (navegador, login de la intranet) → identifica al usuario
+//   - Authorization: Bearer <ADMIN_TOKEN> (procesos máquina: batch de evaluación) → actor 'ia'
 // Falla cerrado: si el secret correspondiente no está configurado, esa vía
 // simplemente no autoriza. Nunca hay secret por defecto.
 
@@ -12,18 +12,19 @@ export interface AuthEnv {
 
 const SESSION_MAX_AGE_MS = 2592000000; // 30 días
 
-async function verifySessionCookie(request: Request, secret: string): Promise<boolean> {
+// Devuelve el username embebido en la cookie si la firma y la vigencia son válidas.
+async function readSessionUser(request: Request, secret: string): Promise<string | null> {
   const cookie = request.headers.get('Cookie');
-  if (!cookie) return false;
+  if (!cookie) return null;
 
   const sessionRow = cookie.split(';').map(c => c.trim()).find(row => row.startsWith('session='));
-  if (!sessionRow) return false;
+  if (!sessionRow) return null;
   const session = sessionRow.substring('session='.length);
-  if (!session) return false;
+  if (!session) return null;
 
   const [dataB64, signatureHex] = session.split('.');
   if (!dataB64 || !signatureHex || !/^[0-9a-f]+$/i.test(signatureHex) || signatureHex.length % 2 !== 0) {
-    return false;
+    return null;
   }
 
   try {
@@ -39,14 +40,19 @@ async function verifySessionCookie(request: Request, secret: string): Promise<bo
 
     const sigBytes = new Uint8Array(signatureHex.match(/.{1,2}/g)!.map(b => parseInt(b, 16)));
     const isValid = await crypto.subtle.verify('HMAC', key, sigBytes, encoder.encode(data));
-    if (!isValid) return false;
+    if (!isValid) return null;
 
-    const [, timestamp] = data.split(':');
-    if (!timestamp || Date.now() - parseInt(timestamp, 10) > SESSION_MAX_AGE_MS) return false;
+    // data = "<user>:<timestamp>"
+    const sep = data.lastIndexOf(':');
+    if (sep < 0) return null;
+    const user = data.slice(0, sep);
+    const timestamp = data.slice(sep + 1);
+    if (!timestamp || Date.now() - parseInt(timestamp, 10) > SESSION_MAX_AGE_MS) return null;
+    if (!user) return null;
 
-    return true;
+    return user;
   } catch {
-    return false;
+    return null;
   }
 }
 
@@ -63,8 +69,21 @@ function checkBearer(request: Request, adminToken: string): boolean {
 
 export async function isAuthorized(request: Request, env: AuthEnv): Promise<boolean> {
   if (env.ADMIN_TOKEN && checkBearer(request, env.ADMIN_TOKEN)) return true;
-  if (env.SESSION_SECRET && await verifySessionCookie(request, env.SESSION_SECRET)) return true;
+  if (env.SESSION_SECRET && await readSessionUser(request, env.SESSION_SECRET)) return true;
   return false;
+}
+
+// Identidad de quien ejecuta la acción, para trazabilidad.
+// - Bearer (batch de evaluación) → 'ia'
+// - Cookie de sesión válida → username
+// - Nada válido → null
+export async function getActor(request: Request, env: AuthEnv): Promise<string | null> {
+  if (env.ADMIN_TOKEN && checkBearer(request, env.ADMIN_TOKEN)) return 'ia';
+  if (env.SESSION_SECRET) {
+    const user = await readSessionUser(request, env.SESSION_SECRET);
+    if (user) return user;
+  }
+  return null;
 }
 
 export function unauthorized(): Response {

@@ -56,9 +56,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         `INSERT INTO adopciones (${cols.join(', ')}) VALUES (${placeholders})`
       ).bind(...values).run();
       const newId = (r as { meta?: { last_row_id?: number } }).meta?.last_row_id ?? null;
-      // Si viene de una solicitud, márcala como aprobada.
+      // Si viene de una solicitud, márcala como entregada/completada.
       if (body.solicitud_id) {
-        await env.DB.prepare(`UPDATE solicitudes SET estado = 'aprobada' WHERE id = ?`).bind(Number(body.solicitud_id)).run();
+        await env.DB.prepare(`UPDATE solicitudes SET estado = 'aprobada', etapa = 'completada' WHERE id = ?`).bind(Number(body.solicitud_id)).run();
       }
       return json({ ok: true, id: newId });
     }

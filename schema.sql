@@ -78,12 +78,45 @@ CREATE TABLE IF NOT EXISTS solicitudes (
   mallas_estado TEXT DEFAULT 'sin_definir',
   video_recibido INTEGER DEFAULT 0,
   video_viable TEXT DEFAULT 'sin_revisar',
-  video_notas TEXT
+  video_notas TEXT,
+
+  -- Flujo en etapas: recepcion -> evaluada_ia -> contacto -> entrevista -> entrega -> completada ; rechazada
+  etapa TEXT DEFAULT 'recepcion',
+  observaciones_contacto TEXT,   -- Federico (etapa contacto)
+  entrevista_notas TEXT,         -- Laura (etapa entrevista)
+  rescatista_asignado TEXT       -- Laura escala a rescatista (etapa entrega)
 );
 
 CREATE INDEX IF NOT EXISTS idx_estado ON solicitudes(estado);
 CREATE INDEX IF NOT EXISTS idx_evaluado ON solicitudes(evaluado_at);
 CREATE INDEX IF NOT EXISTS idx_fecha ON solicitudes(fecha_envio);
+CREATE INDEX IF NOT EXISTS idx_etapa ON solicitudes(etapa);
+
+-- Usuarios de la intranet (login multiusuario + roles)
+CREATE TABLE IF NOT EXISTS usuarios (
+  username TEXT PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  rol TEXT NOT NULL DEFAULT 'admin',          -- 'admin' | 'contacto' | 'entrevista'
+  etapa_responsable TEXT,                       -- 'contacto' | 'entrevista' | null
+  password_hash TEXT,                           -- pbkdf2$<iter>$<saltHex>$<hashHex>
+  activo INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Trazabilidad: historial de modificaciones por usuario
+CREATE TABLE IF NOT EXISTS solicitud_historial (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  solicitud_id INTEGER NOT NULL,
+  usuario TEXT NOT NULL,
+  accion TEXT NOT NULL,                          -- 'campo' | 'etapa' | 'nota'
+  campo TEXT,
+  valor_anterior TEXT,
+  valor_nuevo TEXT,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (solicitud_id) REFERENCES solicitudes(id)
+);
+CREATE INDEX IF NOT EXISTS idx_hist_solicitud ON solicitud_historial(solicitud_id);
+CREATE INDEX IF NOT EXISTS idx_hist_fecha ON solicitud_historial(created_at);
 
 CREATE TABLE IF NOT EXISTS adopciones (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
