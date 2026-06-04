@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS solicitudes (
   video_viable TEXT DEFAULT 'sin_revisar',
   video_notas TEXT,
 
-  -- Flujo en etapas: recepcion -> evaluada_ia -> contacto -> entrevista -> entrega -> completada ; rechazada
+  -- Flujo en etapas (simplificado): recepcion (pend. IA) -> contacto (pend. contacto inicial) -> entrevista -> entrega -> completada ; rechazada
   etapa TEXT DEFAULT 'recepcion',
   observaciones_contacto TEXT,   -- Federico (etapa contacto)
   entrevista_notas TEXT,         -- Laura (etapa entrevista)

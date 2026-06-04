@@ -5,15 +5,15 @@ interface Env extends AuthEnv {
 }
 
 const ESTADOS_VALIDOS = new Set(['pendiente', 'proceso', 'aprobada', 'rechazada']);
-const ETAPAS_VALIDAS = new Set(['recepcion', 'evaluada_ia', 'contacto', 'entrevista', 'entrega', 'completada', 'rechazada']);
+// Flujo simplificado: recepcion (pend. IA) -> contacto (pend. contacto inicial) -> entrevista -> entrega -> completada ; rechazada
+const ETAPAS_VALIDAS = new Set(['recepcion', 'contacto', 'entrevista', 'entrega', 'completada', 'rechazada']);
 const MALLAS_VALIDOS = new Set(['sin_definir', 'acepta_instalar', 'ya_instaladas', 'no_acepta']);
 const VIDEO_VIABLE_VALIDOS = new Set(['sin_revisar', 'si', 'no']);
 
 // Estado heredado derivado de la etapa, para mantener compatibilidad.
 function estadoDeEtapa(etapa: string): string {
   switch (etapa) {
-    case 'recepcion':
-    case 'evaluada_ia': return 'pendiente';
+    case 'recepcion': return 'pendiente';
     case 'contacto':
     case 'entrevista': return 'proceso';
     case 'entrega':
