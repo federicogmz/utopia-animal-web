@@ -3,40 +3,56 @@ import Layout from '../../layouts/Layout.astro';
 ---
 
 <Layout title="Centro de Control · Adopciones Elim" brand="parent">
-  <section class="bg-gray-50 min-h-screen py-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+
+<style is:global>
+  /* ── Dashboard responsive helpers ─────────────────── */
+  @media (max-width: 640px) {
+    #modalDetail > div {
+      height: 100% !important;
+      max-height: 100dvh !important;
+      border-radius: 0 !important;
+    }
+  }
+</style>
+
+  <section class="bg-gray-50 min-h-screen py-5 sm:py-10">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-5 gap-3">
         <div>
-          <h1 class="text-3xl font-extrabold text-gray-900">Centro de Control · Adopciones</h1>
-          <p class="text-gray-500 mt-1" id="userBanner">Cargando sesión…</p>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900">Centro de Control · Adopciones</h1>
+          <p class="text-gray-500 mt-1 text-sm" id="userBanner">Cargando sesión…</p>
         </div>
-        <div class="flex items-center gap-3">
-          <a href="/intranet/adopciones" class="inline-flex items-center gap-2 bg-elim-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-elim-500 transition-colors">🐱 Adopciones</a>
-          <button id="btnRefresh" class="inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">🔄 Actualizar</button>
-          <button id="btnLogout" class="inline-flex items-center gap-2 bg-red-50 text-red-700 border border-red-100 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-red-100 transition-colors">Cerrar Sesión</button>
+        <div class="flex items-center gap-2 flex-wrap">
+          <a href="/intranet/adopciones" class="inline-flex items-center gap-1.5 bg-elim-600 text-white px-3 py-2 rounded-xl text-sm font-semibold hover:bg-elim-500 transition-colors">🐱 Adopciones</a>
+          <button id="btnRefresh" class="inline-flex items-center gap-1.5 bg-white border border-gray-200 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">🔄 Actualizar</button>
+          <button id="btnLogout" class="inline-flex items-center gap-1.5 bg-red-50 text-red-700 border border-red-100 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-red-100 transition-colors">Salir</button>
         </div>
       </div>
 
-      <div class="grid grid-cols-3 md:grid-cols-7 gap-3 mb-6" id="pipelineStats"></div>
+      <!-- Pipeline stats -->
+      <div class="grid grid-cols-3 md:grid-cols-7 gap-2 sm:gap-3 mb-5" id="pipelineStats"></div>
 
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-6 flex flex-col lg:flex-row gap-3 lg:items-center">
-        <label id="misPendientesWrap" class="hidden items-center gap-2 cursor-pointer select-none bg-utopia-50 border border-utopia-200 rounded-xl px-4 py-2.5">
+      <!-- Filters -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-4 mb-5 flex flex-col lg:flex-row gap-2 lg:items-center">
+        <label id="misPendientesWrap" class="hidden items-center gap-2 cursor-pointer select-none bg-utopia-50 border border-utopia-200 rounded-xl px-3 py-2">
           <input type="checkbox" id="filterMine" class="rounded text-utopia-600 focus:ring-utopia-500" />
           <span class="text-sm font-bold text-utopia-800" id="filterMineLabel">Solo mis pendientes</span>
         </label>
-        <input id="searchInput" type="text" placeholder="Buscar por nombre, correo, teléfono o ciudad..."
-          class="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
-        <select id="filterEtapa" class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:ring-utopia-500 focus:border-utopia-500">
+        <input id="searchInput" type="text" placeholder="Buscar nombre, teléfono o ciudad..."
+          class="flex-1 rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
+        <select id="filterEtapa" class="rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500">
           <option value="">Todas las etapas</option>
           <option value="recepcion">📥 Pendiente IA</option>
           <option value="filtro">🔎 Filtro inicial</option>
-          <option value="concepto">📝 Pendiente mi concepto</option>
-          <option value="entrevista">🎙️ Concepto de Laura</option>
-          <option value="entrega">🤝 Entrega (rescatista)</option>
+          <option value="concepto">📝 Mi concepto</option>
+          <option value="entrevista">🎙️ Entrevista Laura</option>
+          <option value="entrega">🤝 Entrega</option>
           <option value="completada">✅ Completada</option>
           <option value="rechazada">⛔ Rechazada</option>
         </select>
-        <select id="filterReco" class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:ring-utopia-500 focus:border-utopia-500">
+        <select id="filterReco" class="rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500">
           <option value="">Toda recomendación IA</option>
           <option value="avanzar">✅ Avanzar</option>
           <option value="revisar">🟡 Revisar</option>
@@ -45,17 +61,18 @@ import Layout from '../../layouts/Layout.astro';
         </select>
       </div>
 
+      <!-- Table -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
             <thead class="bg-gray-50 border-b border-gray-100">
               <tr>
-                <th class="px-5 py-4 font-bold text-gray-700">ID / Fecha</th>
-                <th class="px-5 py-4 font-bold text-gray-700">Solicitante</th>
-                <th class="px-5 py-4 font-bold text-gray-700">Zona</th>
-                <th class="px-5 py-4 font-bold text-gray-700">IA</th>
-                <th class="px-5 py-4 font-bold text-gray-700">Etapa</th>
-                <th class="px-5 py-4 font-bold text-gray-700 text-right">Acciones</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 hidden sm:table-cell w-24">ID / Fecha</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700">Solicitante</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 hidden lg:table-cell">Zona</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700">IA</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 hidden sm:table-cell">Etapa</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 text-right w-16"></th>
               </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-50">
@@ -64,55 +81,70 @@ import Layout from '../../layouts/Layout.astro';
           </table>
         </div>
       </div>
+
     </div>
   </section>
 
-  <div id="modalDetail" class="hidden fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-5xl max-h-[92vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col">
-      <div class="px-8 py-5 border-b border-gray-100 flex items-center justify-between bg-white">
-        <h2 class="text-xl font-bold text-gray-900" id="modalTitle">Detalle de Solicitud</h2>
-        <button id="btnCloseModal" title="Cerrar sin guardar" class="text-gray-400 hover:text-gray-600 p-2">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+  <!-- Detail Modal -->
+  <div id="modalDetail" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center sm:p-4">
+    <div class="bg-white w-full sm:max-w-5xl sm:max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col" style="max-height:95dvh">
+
+      <!-- Modal header with nav arrows -->
+      <div class="px-4 sm:px-8 py-4 border-b border-gray-100 flex items-center gap-2 bg-white flex-shrink-0">
+        <button id="btnPrevModal" title="Solicitud anterior" class="p-2 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors flex-shrink-0 disabled:opacity-30 disabled:cursor-not-allowed">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 class="flex-1 text-sm sm:text-lg font-bold text-gray-900 truncate min-w-0" id="modalTitle">Detalle de Solicitud</h2>
+        <button id="btnNextModal" title="Siguiente solicitud" class="p-2 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors flex-shrink-0 disabled:opacity-30 disabled:cursor-not-allowed">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button id="btnCloseModal" title="Cerrar" class="p-2 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0 ml-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
-      <div class="p-8 overflow-y-auto flex-1 bg-gray-50" id="modalContent"></div>
-      <div class="px-8 py-5 border-t border-gray-100 bg-white flex justify-between items-center gap-3">
+
+      <div class="p-4 sm:p-8 overflow-y-auto flex-1 bg-gray-50" id="modalContent"></div>
+
+      <div class="px-4 sm:px-8 py-4 border-t border-gray-100 bg-white flex justify-between items-center gap-3 flex-shrink-0">
         <span id="modalSaveStatus" class="text-sm text-gray-400"></span>
-        <button id="btnSaveModal" class="px-6 py-2.5 rounded-xl bg-utopia-600 text-white font-bold hover:bg-utopia-700 transition-colors shadow-lg shadow-utopia-900/20">Guardar y cerrar</button>
+        <button id="btnSaveModal" class="px-5 sm:px-6 py-2.5 rounded-xl bg-utopia-600 text-white font-bold hover:bg-utopia-700 transition-colors shadow-lg shadow-utopia-900/20 text-sm">Guardar y cerrar</button>
       </div>
     </div>
   </div>
+
 </Layout>
 
 <script is:inline>
   let solicitudes = [];
   let currentId = null;
+  let currentFilteredIds = [];  // for prev/next navigation
+  let waOverride = null;         // null | 'continuar' | 'rechazar'
   let me = { user: '', nombre: '', rol: 'admin', etapa_responsable: null };
 
   // ── Etapas del flujo ──
   const ETAPAS = {
-    recepcion:  { label: 'Pendiente evaluación IA', short: 'Pend. IA',     icon: '📥', badge: 'bg-gray-100 text-gray-700',   bar: 'bg-gray-400',   owner: 'IA' },
-    filtro:     { label: 'Filtro inicial',          short: 'Filtro',       icon: '🔎', badge: 'bg-indigo-100 text-indigo-700', bar: 'bg-indigo-500', owner: 'Federico Gómez' },
-    concepto:   { label: 'Pendiente de mi concepto', short: 'Mi concepto', icon: '📝', badge: 'bg-blue-100 text-blue-700',   bar: 'bg-blue-500',   owner: 'Federico Gómez' },
-    entrevista: { label: 'Concepto de Laura',        short: 'Entrevista',  icon: '🎙️', badge: 'bg-amber-100 text-amber-800', bar: 'bg-amber-500',  owner: 'Laura López' },
-    entrega:    { label: 'Entrega (rescatista)',     short: 'Entrega',     icon: '🤝', badge: 'bg-teal-100 text-teal-700',   bar: 'bg-teal-500',   owner: 'Rescatista' },
-    completada: { label: 'Completada',               short: 'Completada',  icon: '✅', badge: 'bg-green-100 text-green-700', bar: 'bg-green-500',  owner: '—' },
-    rechazada:  { label: 'Rechazada',                short: 'Rechazada',   icon: '⛔', badge: 'bg-red-100 text-red-700',     bar: 'bg-red-500',    owner: '—' },
+    recepcion:  { label: 'Pendiente evaluación IA', short: 'Pend. IA',      icon: '📥', badge: 'bg-gray-100 text-gray-700',    bar: 'bg-gray-400',   owner: 'IA' },
+    filtro:     { label: 'Filtro inicial',           short: 'Filtro',        icon: '🔎', badge: 'bg-indigo-100 text-indigo-700', bar: 'bg-indigo-500', owner: 'Federico Gómez' },
+    concepto:   { label: 'Pendiente de mi concepto', short: 'Mi concepto',   icon: '📝', badge: 'bg-blue-100 text-blue-700',    bar: 'bg-blue-500',   owner: 'Federico Gómez' },
+    entrevista: { label: 'Concepto de Laura',         short: 'Entrevista',   icon: '🎙️', badge: 'bg-amber-100 text-amber-800',  bar: 'bg-amber-500',  owner: 'Laura López' },
+    entrega:    { label: 'Entrega (rescatista)',      short: 'Entrega',       icon: '🤝', badge: 'bg-teal-100 text-teal-700',    bar: 'bg-teal-500',   owner: 'Rescatista' },
+    completada: { label: 'Completada',                short: 'Completada',    icon: '✅', badge: 'bg-green-100 text-green-700',  bar: 'bg-green-500',  owner: '—' },
+    rechazada:  { label: 'Rechazada',                 short: 'Rechazada',     icon: '⛔', badge: 'bg-red-100 text-red-700',      bar: 'bg-red-500',    owner: '—' },
   };
   const PIPELINE = ['recepcion', 'filtro', 'concepto', 'entrevista', 'entrega', 'completada'];
-  const ORDER = { recepcion: 0, filtro: 1, concepto: 2, entrevista: 3, entrega: 4, completada: 5 };
-  function etapaOf(s) { return ETAPAS[s.etapa] ? s.etapa : 'recepcion'; }
-  function etapaMeta(e) { return ETAPAS[e] || ETAPAS.recepcion; }
+  const ORDER    = { recepcion: 0, filtro: 1, concepto: 2, entrevista: 3, entrega: 4, completada: 5 };
+  function etapaOf(s)  { return ETAPAS[s.etapa] ? s.etapa : 'recepcion'; }
+  function etapaMeta(e){ return ETAPAS[e] || ETAPAS.recepcion; }
   const esFederico = () => ['filtro', 'concepto', 'contacto'].includes(me.etapa_responsable);
-  const esLaura = () => me.etapa_responsable === 'entrevista';
+  const esLaura    = () => me.etapa_responsable === 'entrevista';
 
-  // ── Cruce con zonas de alto abandono del Valle de Aburrá (red flag de entrada) ──
+  // ── Zonas de alto abandono del Valle de Aburrá ──
   const ZONAS_RIESGO = [
-    { comuna: 'Comuna 4 · Aranjuez',     kw: ['aranjuez','aranjues','moravia','berlin','san isidro','bermejal','palermo','miranda','la piñuela','la pinuela'] },
-    { comuna: 'Comuna 7 · Robledo',      kw: ['robledo','aures','pajarito','cucaracho','bello horizonte','san german','pilarica','el diamante','villa flora','la pola'] },
-    { comuna: 'Comuna 3 · Manrique',     kw: ['manrique','versalles','las granjas','la salle','campo valdes','santa ines','la cruz','la honda','carambolas'] },
-    { comuna: 'Comuna 1 · Popular',      kw: ['popular','santo domingo','granizal','moscu','villa guadalupe','aldea pablo vi','la avanzada','carpinelo'] },
-    { comuna: 'San Antonio de Prado',    kw: ['san antonio de prado'] },
+    { comuna: 'Comuna 4 · Aranjuez',       kw: ['aranjuez','aranjues','moravia','berlin','san isidro','bermejal','palermo','miranda','la piñuela','la pinuela'] },
+    { comuna: 'Comuna 7 · Robledo',        kw: ['robledo','aures','pajarito','cucaracho','bello horizonte','san german','pilarica','el diamante','villa flora','la pola'] },
+    { comuna: 'Comuna 3 · Manrique',       kw: ['manrique','versalles','las granjas','la salle','campo valdes','santa ines','la cruz','la honda','carambolas'] },
+    { comuna: 'Comuna 1 · Popular',        kw: ['popular','santo domingo','granizal','moscu','villa guadalupe','aldea pablo vi','la avanzada','carpinelo'] },
+    { comuna: 'San Antonio de Prado',      kw: ['san antonio de prado'] },
     { comuna: 'Comuna 10 · La Candelaria', kw: ['corazon de jesus','san benito','guayaquil','perpetuo socorro'] },
   ];
   function norm(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
@@ -126,10 +158,11 @@ import Layout from '../../layouts/Layout.astro';
   function esMiPendiente(s) {
     const e = etapaOf(s);
     if (esFederico()) return e === 'filtro' || e === 'concepto';
-    if (esLaura()) return e === 'entrevista';
+    if (esLaura())    return e === 'entrevista';
     return e !== 'completada' && e !== 'rechazada';
   }
 
+  // ── Utils ──
   function esc(v) {
     if (v === null || v === undefined) return '';
     return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
@@ -140,7 +173,7 @@ import Layout from '../../layouts/Layout.astro';
     try { const p = JSON.parse(v); return Array.isArray(p) ? p : [p]; } catch (e) { return [String(v)]; }
   }
   function fmtBool(v) {
-    if (v === 1 || v === '1' || v === true) return '✅ Sí';
+    if (v === 1 || v === '1' || v === true)  return '✅ Sí';
     if (v === 0 || v === '0' || v === false) return '❌ No';
     return '—';
   }
@@ -150,10 +183,10 @@ import Layout from '../../layouts/Layout.astro';
   }
   function recoMeta(reco) {
     return {
-      avanzar:   { label: 'Avanzar', icon: '✅', badge: 'bg-green-100 text-green-800', bar: 'bg-green-500' },
-      revisar:   { label: 'Revisar', icon: '🟡', badge: 'bg-amber-100 text-amber-800', bar: 'bg-amber-500' },
-      descartar: { label: 'Descartar', icon: '⛔', badge: 'bg-red-100 text-red-800', bar: 'bg-red-500' },
-    }[reco] || { label: 'Sin evaluar', icon: '⏳', badge: 'bg-gray-100 text-gray-600', bar: 'bg-gray-300' };
+      avanzar:   { label: 'Avanzar',   icon: '✅', badge: 'bg-green-100 text-green-800', bar: 'bg-green-500' },
+      revisar:   { label: 'Revisar',   icon: '🟡', badge: 'bg-amber-100 text-amber-800', bar: 'bg-amber-500' },
+      descartar: { label: 'Descartar', icon: '⛔', badge: 'bg-red-100 text-red-800',     bar: 'bg-red-500'   },
+    }[reco] || { label: 'Sin evaluar', icon: '⏳', badge: 'bg-gray-100 text-gray-600',   bar: 'bg-gray-300'  };
   }
   function scoreColor(score) {
     if (score === null || score === undefined || score === '') return 'text-gray-400';
@@ -168,9 +201,12 @@ import Layout from '../../layouts/Layout.astro';
     return d;
   }
 
-  function buildWaMessage(s) {
+  // ── WhatsApp message builder ──
+  // mode: 'continuar' | 'rechazar' | null (auto from IA reco)
+  function buildWaMessage(s, mode) {
+    const isRechazo = mode === 'rechazar' || (!mode && s.recomendacion === 'descartar');
     const first = (s.nombre_completo || '').trim().split(/\s+/)[0] || '';
-    if (s.recomendacion === 'descartar') {
+    if (isRechazo) {
       return [
         `Hola ${first} 👋, te escribimos del equipo de Elim Refugio Animal.`, '',
         'Antes que todo, gracias de corazón por tu interés en adoptar y por el tiempo que dedicaste a la solicitud. 💛', '',
@@ -191,14 +227,47 @@ import Layout from '../../layouts/Layout.astro';
     return lines.join('\n');
   }
 
-  window.sendWhatsApp = function() {
+  // Toggle WA mode (continuar / rechazar)
+  window.setWaToggle = function(mode) {
+    waOverride = mode;
+    const btnC = document.getElementById('waToggleContinuar');
+    const btnR = document.getElementById('waToggleRechazar');
+    if (!btnC || !btnR) return;
+    const s = solicitudes.find(x => x.id === currentId);
+    if (!s) return;
+    if (mode === 'continuar') {
+      btnC.className = 'flex-1 py-2 rounded-xl text-sm font-bold bg-green-600 text-white transition-colors';
+      btnR.className = 'flex-1 py-2 rounded-xl text-sm font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors';
+    } else {
+      btnC.className = 'flex-1 py-2 rounded-xl text-sm font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors';
+      btnR.className = 'flex-1 py-2 rounded-xl text-sm font-bold bg-red-600 text-white transition-colors';
+    }
+    const ta = document.getElementById('waMessage');
+    if (ta) ta.value = buildWaMessage(s, mode);
+  };
+
+  // Open WhatsApp and auto-advance if continuing
+  window.sendWhatsApp = async function() {
     const s = solicitudes.find(x => x.id === currentId);
     if (!s) return;
     const phone = waPhone(s.telefono);
     if (!phone || phone.length < 10) { alert('Esta solicitud no tiene un teléfono válido.'); return; }
     const ta = document.getElementById('waMessage');
-    const text = ta ? ta.value : buildWaMessage(s);
+    const text = ta ? ta.value : buildWaMessage(s, waOverride);
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+
+    // Auto-advance to concepto only when continuing the process
+    const effectiveMode = waOverride !== null ? waOverride : (s.recomendacion === 'descartar' ? 'rechazar' : 'continuar');
+    if (etapaOf(s) === 'filtro' && effectiveMode === 'continuar') {
+      try {
+        const res = await fetch('/api/admin/update-solicitud', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: currentId, etapa: 'concepto', nota_historial: 'Contactado por WhatsApp · video pedido' }),
+        });
+        if (res.ok) { await loadData(); closeModal(); }
+      } catch (e) { /* noop */ }
+    }
   };
 
   window.concretarAdopcion = function() {
@@ -214,7 +283,6 @@ import Layout from '../../layouts/Layout.astro';
     document.getElementById('btnSaveModal').click();
   };
 
-  // Rechazo con motivo obligatorio.
   window.pedirMotivo = function() {
     const box = document.getElementById('accionesBox');
     if (!box) return;
@@ -229,6 +297,7 @@ import Layout from '../../layouts/Layout.astro';
       </div>`;
     const t = document.getElementById('motivoRechazoInput'); if (t) t.focus();
   };
+
   window.confirmarRechazo = function() {
     const el = document.getElementById('motivoRechazoInput');
     const m = el ? el.value.trim() : '';
@@ -239,13 +308,25 @@ import Layout from '../../layouts/Layout.astro';
     document.getElementById('btnSaveModal').click();
   };
 
+  // Toggle zona riesgo — updates in-memory + hidden field without re-rendering modal
+  window.toggleZonaRiesgo = function() {
+    const s = solicitudes.find(x => x.id === currentId);
+    if (!s) return;
+    s.zona_riesgo_manual = s.zona_riesgo_manual ? 0 : 1;
+    const el = document.getElementById('editZonaRiesgo');
+    if (el) el.value = String(s.zona_riesgo_manual);
+    const wrap = document.getElementById('zonaBannerWrap');
+    if (wrap) wrap.innerHTML = makeZonaBanner(s);
+    renderTable();
+  };
+
   window.exportarPdf = function() {
     const s = solicitudes.find(x => x.id === currentId);
     if (!s) return;
     const buenas = parseArr(s.senales_buenas), alertas = parseArr(s.senales_alerta), fu = parseArr(s.preguntas_followup), comp = parseArr(s.compromisos_aceptados);
     const rm = recoMeta(s.recomendacion); const em = etapaMeta(etapaOf(s));
     const li = a => a.length ? '<ul>' + a.map(x => `<li>${esc(x)}</li>`).join('') + '</ul>' : '<p>—</p>';
-    const f = (l, v) => `<tr><td class="k">${esc(l)}</td><td>${esc(v == null || v === '' ? '—' : v)}</td></tr>`;
+    const f  = (l, v) => `<tr><td class="k">${esc(l)}</td><td>${esc(v == null || v === '' ? '—' : v)}</td></tr>`;
     const fb = (l, v) => `<tr><td class="k">${esc(l)}</td><td>${fmtBool(v)}</td></tr>`;
     const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Solicitud #${s.id} · ${esc(s.nombre_completo)}</title>
       <style>body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#1f2937;margin:32px;font-size:12px;line-height:1.5}
@@ -268,9 +349,10 @@ import Layout from '../../layouts/Layout.astro';
     if (w) { w.document.write(html); w.document.close(); }
   };
 
+  // ── Session / data ──
   function roleLabel() {
     if (esFederico()) return 'Filtro y concepto inicial';
-    if (esLaura()) return 'Entrevista final';
+    if (esLaura())    return 'Entrevista final';
     return me.rol === 'admin' ? 'Administrador' : me.rol;
   }
 
@@ -309,9 +391,9 @@ import Layout from '../../layouts/Layout.astro';
     const cards = order.map(e => {
       const m = ETAPAS[e];
       const mine = mineStages.includes(e);
-      return `<button data-etapa="${e}" class="statCard text-left bg-white p-4 rounded-2xl shadow-sm border ${mine ? 'border-utopia-300 ring-1 ring-utopia-200' : 'border-gray-100'} hover:shadow-md transition-shadow">
-        <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">${m.icon} ${m.short}</p>
-        <p class="text-2xl font-black text-gray-900">${counts[e] || 0}</p></button>`;
+      return `<button data-etapa="${e}" class="statCard text-left bg-white p-3 sm:p-4 rounded-2xl shadow-sm border ${mine ? 'border-utopia-300 ring-1 ring-utopia-200' : 'border-gray-100'} hover:shadow-md transition-shadow">
+        <p class="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1 leading-tight">${m.icon} ${m.short}</p>
+        <p class="text-xl sm:text-2xl font-black text-gray-900">${counts[e] || 0}</p></button>`;
     }).join('');
     document.getElementById('pipelineStats').innerHTML = cards;
     document.querySelectorAll('.statCard').forEach(b => b.onclick = () => {
@@ -322,17 +404,17 @@ import Layout from '../../layouts/Layout.astro';
   }
 
   function getFiltered() {
-    const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+    const q      = (document.getElementById('searchInput').value || '').toLowerCase().trim();
     const fEtapa = document.getElementById('filterEtapa').value;
-    const fr = document.getElementById('filterReco').value;
-    const mine = document.getElementById('filterMine').checked;
+    const fr     = document.getElementById('filterReco').value;
+    const mine   = document.getElementById('filterMine').checked;
     return solicitudes.filter(s => {
       if (mine && !esMiPendiente(s)) return false;
       if (fEtapa && etapaOf(s) !== fEtapa) return false;
       if (fr === '__none__' && s.evaluado_at) return false;
       else if (fr && fr !== '__none__' && s.recomendacion !== fr) return false;
       if (q) {
-        const hay = `${s.nombre_completo || ''} ${s.correo || ''} ${s.telefono || ''} ${s.ciudad || ''} ${s.barrio || ''}`.toLowerCase();
+        const hay = `${s.nombre_completo||''} ${s.correo||''} ${s.telefono||''} ${s.ciudad||''} ${s.barrio||''}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -341,164 +423,318 @@ import Layout from '../../layouts/Layout.astro';
 
   function renderTable() {
     const tbody = document.getElementById('tableBody');
-    const rows = getFiltered();
-    if (rows.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">No hay solicitudes que coincidan.</td></tr>'; return; }
+    const rows  = getFiltered();
+    currentFilteredIds = rows.map(s => s.id);
+    updateNavArrows();
+
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">No hay solicitudes que coincidan.</td></tr>';
+      return;
+    }
     tbody.innerHTML = rows.map(s => {
-      const rm = recoMeta(s.recomendacion);
-      const em = etapaMeta(etapaOf(s));
-      const mine = esMiPendiente(s);
-      const zona = zonaRiesgo(s.barrio, s.ciudad);
+      const rm       = recoMeta(s.recomendacion);
+      const em       = etapaMeta(etapaOf(s));
+      const mine     = esMiPendiente(s);
+      const zonaAuto = zonaRiesgo(s.barrio, s.ciudad);
+      const flagged  = zonaAuto || !!s.zona_riesgo_manual;
       const scoreTxt = (s.score === null || s.score === undefined || s.score === '') ? '—' : Math.round(Number(s.score));
       return `
       <tr class="hover:bg-gray-50 transition-colors ${mine ? 'bg-utopia-50/40' : ''}">
-        <td class="px-5 py-4 align-top">${mine ? '<span class="inline-block w-1.5 h-1.5 rounded-full bg-utopia-500 mr-1 align-middle" title="Te corresponde"></span>' : ''}<span class="font-bold text-gray-900">#${esc(s.id)}</span><div class="text-xs text-gray-500">${esc(new Date(s.fecha_envio).toLocaleDateString())}</div></td>
-        <td class="px-5 py-4 align-top font-medium text-gray-900">${esc(s.nombre_completo)}<div class="text-xs font-normal text-gray-400">${esc(s.telefono)}</div></td>
-        <td class="px-5 py-4 align-top text-gray-600">${esc(s.ciudad || '-')}<br/><span class="text-xs">${esc(s.barrio || '-')}</span>${zona ? `<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700" title="${esc(zona)}">🚩 Zona alto abandono</span></div>` : ''}</td>
-        <td class="px-5 py-4 align-top"><div class="flex items-center gap-2"><span class="font-black ${scoreColor(s.score)}">${scoreTxt}</span><span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${rm.badge}">${rm.icon} ${rm.label}</span></div></td>
-        <td class="px-5 py-4 align-top"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${em.badge}">${em.icon} ${em.short}</span></td>
-        <td class="px-5 py-4 align-top text-right"><button onclick="openDetail(${Number(s.id)})" class="text-utopia-600 font-bold hover:text-utopia-800 transition-colors whitespace-nowrap">Gestionar →</button></td>
+        <td class="px-3 sm:px-5 py-3 sm:py-4 align-top hidden sm:table-cell">
+          ${mine ? '<span class="inline-block w-1.5 h-1.5 rounded-full bg-utopia-500 mr-1 align-middle"></span>' : ''}
+          <span class="font-bold text-gray-900">#${esc(s.id)}</span>
+          <div class="text-xs text-gray-500">${esc(new Date(s.fecha_envio).toLocaleDateString('es-CO'))}</div>
+        </td>
+        <td class="px-3 sm:px-5 py-3 sm:py-4 align-top">
+          <div class="flex items-center gap-1 font-medium text-gray-900">
+            ${mine ? '<span class="w-1.5 h-1.5 rounded-full bg-utopia-500 flex-shrink-0 sm:hidden"></span>' : ''}
+            <span>${esc(s.nombre_completo)}</span>
+            ${flagged ? '<span class="text-red-500 text-xs" title="Zona de alto abandono">🚩</span>' : ''}
+          </div>
+          <div class="text-xs text-gray-400">${esc(s.telefono)}</div>
+          <div class="text-xs text-gray-400 sm:hidden">#${esc(s.id)} · ${esc(new Date(s.fecha_envio).toLocaleDateString('es-CO'))}</div>
+          <div class="sm:hidden mt-0.5"><span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${em.badge}">${em.icon} ${em.short}</span></div>
+        </td>
+        <td class="px-3 sm:px-5 py-3 sm:py-4 align-top text-gray-600 hidden lg:table-cell">
+          ${esc(s.ciudad || '—')}<br/><span class="text-xs">${esc(s.barrio || '—')}</span>
+          ${flagged ? '<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700">🚩 Alto abandono</span></div>' : ''}
+        </td>
+        <td class="px-3 sm:px-5 py-3 sm:py-4 align-top">
+          <div class="flex items-center gap-1.5">
+            <span class="font-black ${scoreColor(s.score)}">${scoreTxt}</span>
+            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${rm.badge} hidden sm:inline">${rm.icon} ${rm.label}</span>
+            <span class="text-base sm:hidden">${rm.icon}</span>
+          </div>
+        </td>
+        <td class="px-3 sm:px-5 py-3 sm:py-4 align-top hidden sm:table-cell">
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold ${em.badge}">${em.icon} ${em.short}</span>
+        </td>
+        <td class="px-3 sm:px-5 py-3 sm:py-4 align-top text-right">
+          <button onclick="openDetail(${Number(s.id)})" class="text-utopia-600 font-bold hover:text-utopia-800 transition-colors p-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </td>
       </tr>`;
     }).join('');
   }
 
-  function row(label, value) { return `<dt class="text-gray-500">${esc(label)}:</dt> <dd class="text-gray-900 break-words">${esc(value === null || value === undefined || value === '' ? '—' : value)}</dd>`; }
-  function boolRow(label, value) { return `<dt class="text-gray-500">${esc(label)}:</dt> <dd class="text-gray-900 font-medium">${fmtBool(value)}</dd>`; }
-  function longField(label, value) { return `<div><p class="text-gray-500 mb-1">${esc(label)}</p><p class="text-gray-900 p-3 bg-white rounded-lg border border-gray-200 whitespace-pre-wrap">${esc(value || '—')}</p></div>`; }
-  function section(title, inner) { return `<div class="bg-white rounded-xl border border-gray-200 p-5 mb-5"><h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-100 pb-2 mb-4">${esc(title)}</h3>${inner}</div>`; }
-  function dl(inner) { return `<dl class="grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm">${inner}</dl>`; }
-  function chips(arr, cls) { if (!arr.length) return '<span class="text-gray-400 text-sm">—</span>'; return arr.map(x => `<li class="flex gap-2"><span>${cls.icon}</span><span>${esc(x)}</span></li>`).join(''); }
-  function roRow(label, value) { return `<div class="flex justify-between gap-3 py-1.5 border-b border-gray-50 last:border-0"><span class="text-gray-500 text-sm">${esc(label)}</span><span class="text-gray-900 text-sm font-medium text-right">${esc(value === null || value === undefined || value === '' ? '—' : value)}</span></div>`; }
+  // ── Navigation arrows ──
+  function updateNavArrows() {
+    const prev = document.getElementById('btnPrevModal');
+    const next = document.getElementById('btnNextModal');
+    if (!prev || !next) return;
+    const idx = currentFilteredIds.indexOf(currentId);
+    prev.disabled = idx <= 0;
+    next.disabled = idx < 0 || idx >= currentFilteredIds.length - 1;
+  }
+  window.prevDetail = function() {
+    const idx = currentFilteredIds.indexOf(currentId);
+    if (idx > 0) openDetail(currentFilteredIds[idx - 1]);
+  };
+  window.nextDetail = function() {
+    const idx = currentFilteredIds.indexOf(currentId);
+    if (idx >= 0 && idx < currentFilteredIds.length - 1) openDetail(currentFilteredIds[idx + 1]);
+  };
+
+  // ── Detail view helpers ──
+  function row(label, value)     { return `<dt class="text-gray-500">${esc(label)}:</dt><dd class="text-gray-900 break-words">${esc(value === null || value === undefined || value === '' ? '—' : value)}</dd>`; }
+  function boolRow(label, value) { return `<dt class="text-gray-500">${esc(label)}:</dt><dd class="text-gray-900 font-medium">${fmtBool(value)}</dd>`; }
+  function longField(label, value) { return `<div><p class="text-gray-500 mb-1 text-sm">${esc(label)}</p><p class="text-gray-900 p-3 bg-white rounded-lg border border-gray-200 whitespace-pre-wrap text-sm">${esc(value || '—')}</p></div>`; }
+  function section(title, inner) { return `<div class="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 mb-4 sm:mb-5"><h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-100 pb-2 mb-4">${esc(title)}</h3>${inner}</div>`; }
+  function dl(inner)             { return `<dl class="grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm">${inner}</dl>`; }
+  function chips(arr, cls)       { if (!arr.length) return '<span class="text-gray-400 text-sm">—</span>'; return arr.map(x => `<li class="flex gap-2 text-sm"><span>${cls.icon}</span><span>${esc(x)}</span></li>`).join(''); }
+  function roRow(label, value)   { return `<div class="flex justify-between gap-3 py-1.5 border-b border-gray-50 last:border-0"><span class="text-gray-500 text-sm">${esc(label)}</span><span class="text-gray-900 text-sm font-medium text-right">${esc(value === null || value === undefined || value === '' ? '—' : value)}</span></div>`; }
 
   function buildStepper(cur, motivo) {
-    if (cur === 'rechazada') return `<div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">⛔</span><span class="font-bold text-red-700">Solicitud rechazada</span></div>${motivo ? `<p class="text-sm text-red-700 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
+    if (cur === 'rechazada') return `<div class="mb-5 p-4 bg-red-50 border border-red-200 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">⛔</span><span class="font-bold text-red-700">Solicitud rechazada</span></div>${motivo ? `<p class="text-sm text-red-700 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
     const curStep = ORDER[cur];
     const items = PIPELINE.map((e, i) => {
       const m = ETAPAS[e];
       const done = i < curStep, active = i === curStep;
       const dot = active ? `${m.bar} text-white ring-4 ring-offset-1 ring-gray-100` : done ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-400';
-      return `<div class="flex-1 flex flex-col items-center text-center"><div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${dot}">${done ? '✓' : i + 1}</div><span class="text-[10px] mt-1 font-semibold ${active ? 'text-gray-900' : done ? 'text-green-600' : 'text-gray-400'}">${m.icon} ${m.short}</span></div>`;
-    }).join('<div class="flex-1 h-0.5 bg-gray-200 mt-4"></div>');
-    return `<div class="flex items-start mb-6 px-2">${items}</div>`;
+      return `<div class="flex-1 flex flex-col items-center text-center min-w-0"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${dot}">${done ? '✓' : i + 1}</div><span class="text-[9px] sm:text-[10px] mt-1 font-semibold leading-tight ${active ? 'text-gray-900' : done ? 'text-green-600' : 'text-gray-400'}">${m.short}</span></div>`;
+    }).join('<div class="flex-1 h-0.5 bg-gray-200 mt-3.5 flex-shrink"></div>');
+    return `<div class="flex items-start mb-5 px-1">${items}</div>`;
+  }
+
+  // Zona de riesgo banner — rendered independently for in-place toggle
+  function makeZonaBanner(s) {
+    const zonaAuto   = zonaRiesgo(s.barrio, s.ciudad);
+    const zonaManual = !!s.zona_riesgo_manual;
+    const flagged    = zonaAuto || zonaManual;
+    if (!flagged) {
+      return `<div class="flex justify-end mb-3">
+        <button onclick="toggleZonaRiesgo()" class="text-xs text-gray-400 hover:text-red-600 border border-gray-200 hover:border-red-300 px-3 py-1.5 rounded-lg transition-colors">
+          🚩 Marcar como zona de alto abandono
+        </button>
+      </div>`;
+    }
+    const autoLabel  = zonaAuto ? ` — ${esc(zonaAuto)}` : '';
+    const manualTag  = zonaManual && !zonaAuto ? ' <span class="font-normal">(marcada manualmente)</span>' : '';
+    return `<div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 mb-5 flex items-start gap-3">
+      <span class="text-xl flex-shrink-0">🚩</span>
+      <div class="flex-1 min-w-0">
+        <p class="font-bold text-red-800 text-sm">Zona de alto abandono${autoLabel}${manualTag}</p>
+        <p class="text-xs text-red-700 mt-0.5">Red flag: exige verificación domiciliaria estricta antes de cualquier entrega.</p>
+      </div>
+      ${!zonaAuto ? `<button onclick="toggleZonaRiesgo()" title="Quitar bandera" class="text-xs text-red-400 hover:text-red-700 px-2 py-1 rounded-lg border border-red-200 hover:bg-red-100 transition-colors flex-shrink-0">Quitar</button>` : ''}
+    </div>`;
   }
 
   function buildAcciones(s) {
     const e = etapaOf(s);
-    const btn = (label, fn, cls) => `<button onclick="${fn}" class="inline-flex items-center gap-2 ${cls} font-bold px-5 py-2.5 rounded-xl text-sm transition-colors">${label}</button>`;
+    const btn = (label, fn, cls) => `<button onclick="${fn}" class="inline-flex items-center gap-2 ${cls} font-bold px-4 sm:px-5 py-2.5 rounded-xl text-sm transition-colors">${label}</button>`;
     const reject = btn('⛔ Rechazar', `pedirMotivo()`, 'bg-red-50 text-red-700 border border-red-200 hover:bg-red-100');
-    if (e === 'recepcion') return `<span class="text-sm text-gray-500">Esperando evaluación de la IA. Al calificar, entrará al filtro inicial.</span>`;
+    if (e === 'recepcion')  return `<span class="text-sm text-gray-500">Esperando evaluación de la IA. Al calificar, entrará al filtro inicial.</span>`;
     if (e === 'completada') return `<div class="flex items-center gap-2 text-green-700 font-bold"><span>✅</span> Adopción completada</div>`;
     let primary = '';
-    if (e === 'filtro') primary = btn('📲 Contacté y pedí el video', `avanzarEtapa('concepto')`, 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-900/20');
-    else if (e === 'concepto') primary = btn('🎙️ Dar mi concepto y pasar a entrevista', `avanzarEtapa('entrevista')`, 'bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-900/20');
-    else if (e === 'entrevista') primary = btn('🤝 Aprobar y escalar a rescatista', `avanzarEtapa('entrega')`, 'bg-teal-600 hover:bg-teal-700 text-white shadow-lg shadow-teal-900/20');
-    else if (e === 'entrega') return `<div class="flex flex-wrap items-center gap-3">${btn('🐱 Concretar adopción', `concretarAdopcion()`, 'bg-elim-600 hover:bg-elim-500 text-white shadow-lg shadow-elim-900/20')}</div>`;
+    if (e === 'filtro')      primary = btn('📲 Contacté y pedí el video', `avanzarEtapa('concepto')`,   'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-900/20');
+    else if (e === 'concepto')    primary = btn('🎙️ Dar mi concepto y pasar a entrevista', `avanzarEtapa('entrevista')`, 'bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-900/20');
+    else if (e === 'entrevista')  primary = btn('🤝 Aprobar y escalar a rescatista', `avanzarEtapa('entrega')`,     'bg-teal-600 hover:bg-teal-700 text-white shadow-lg shadow-teal-900/20');
+    else if (e === 'entrega')     return `<div class="flex flex-wrap items-center gap-3">${btn('🐱 Concretar adopción', `concretarAdopcion()`, 'bg-elim-600 hover:bg-elim-500 text-white shadow-lg shadow-elim-900/20')}</div>`;
     return `<div class="flex flex-wrap items-center gap-3">${primary}${reject}</div>`;
   }
 
   window.openDetail = function(id) {
     currentId = id;
+    waOverride = null;
     window.__overrideEtapa = null; window.__motivoRechazo = null;
     const s = solicitudes.find(x => x.id === id);
     if (!s) return;
-    const cur = etapaOf(s); const em = etapaMeta(cur); const curOrder = ORDER[cur] ?? 0;
+    const cur      = etapaOf(s);
+    const em       = etapaMeta(cur);
+    const curOrder = ORDER[cur] ?? 0;
     const evaluada = !!s.evaluado_at;
-    const zona = zonaRiesgo(s.barrio, s.ciudad);
 
-    document.getElementById('modalTitle').innerHTML = `Solicitud #${esc(s.id)} · ${esc(s.nombre_completo)} <span class="ml-2 px-2.5 py-1 rounded-full text-xs font-bold ${em.badge}">${em.icon} ${em.label}</span>`;
+    updateNavArrows();
+
+    document.getElementById('modalTitle').innerHTML =
+      `<span class="hidden sm:inline">#${esc(s.id)} · </span>${esc(s.nombre_completo)} <span class="ml-1 px-2 py-0.5 rounded-full text-xs font-bold ${em.badge}">${em.icon} ${em.short}</span>`;
 
     const compromisos = parseArr(s.compromisos_aceptados);
-    const buenas = parseArr(s.senales_buenas);
-    const alertas = parseArr(s.senales_alerta);
-    const followups = parseArr(s.preguntas_followup);
-    const rm = recoMeta(s.recomendacion);
-    const scoreTxt = (s.score === null || s.score === undefined || s.score === '') ? '—' : Math.round(Number(s.score));
+    const buenas      = parseArr(s.senales_buenas);
+    const alertas     = parseArr(s.senales_alerta);
+    const followups   = parseArr(s.preguntas_followup);
+    const rm          = recoMeta(s.recomendacion);
+    const scoreTxt    = (s.score === null || s.score === undefined || s.score === '') ? '—' : Math.round(Number(s.score));
 
-    const stepper = buildStepper(cur, s.motivo_rechazo);
+    const stepper    = buildStepper(cur, s.motivo_rechazo);
+    const zonaBanner = `<div id="zonaBannerWrap">${makeZonaBanner(s)}</div>`;
 
-    const zonaBanner = zona ? `<div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 mb-6 flex items-start gap-3"><span class="text-xl">🚩</span><div><p class="font-bold text-red-800 text-sm">Zona de alto abandono — ${esc(zona)}</p><p class="text-xs text-red-700 mt-0.5">Barrio en una de las zonas con mayor índice de abandono/maltrato del Valle de Aburrá. Red flag de entrada: exige verificación domiciliaria estricta antes de cualquier entrega.</p></div></div>` : '';
+    const iaPanel = !evaluada
+      ? `<div class="bg-gray-50 rounded-2xl border border-gray-200 p-5 mb-5 text-sm text-gray-500">⏳ Esta solicitud aún no ha sido evaluada por la IA.</div>`
+      : `<div class="bg-gradient-to-br from-utopia-50 to-white rounded-2xl border border-utopia-100 p-5 mb-5">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-bold text-utopia-700 uppercase tracking-widest">Evaluación IA</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold ${rm.badge}">${rm.icon} ${rm.label}</span>
+            </div>
+            <div class="text-right"><span class="text-3xl font-black ${scoreColor(s.score)}">${scoreTxt}</span><span class="text-gray-400 text-sm font-semibold">/100</span></div>
+          </div>
+          <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-4"><div class="h-full ${rm.bar}" style="width:${Math.max(0,Math.min(100,Number(s.score)||0))}%"></div></div>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div><p class="text-xs font-bold text-green-700 uppercase mb-2">Señales buenas</p><ul class="space-y-1">${chips(buenas,{icon:'✅'})}</ul></div>
+            <div><p class="text-xs font-bold text-red-700 uppercase mb-2">Señales de alerta</p><ul class="space-y-1">${chips(alertas,{icon:'⚠️'})}</ul></div>
+          </div>
+          <div class="mt-4"><p class="text-xs font-bold text-blue-700 uppercase mb-2">Preguntas de seguimiento</p><ul class="space-y-1">${chips(followups,{icon:'❓'})}</ul></div>
+          ${s.notas_ia ? `<div class="mt-4 bg-white rounded-lg border border-gray-200 p-4"><p class="text-xs font-bold text-gray-500 uppercase mb-1">Notas IA</p><p class="text-sm text-gray-700 whitespace-pre-wrap">${esc(s.notas_ia)}</p></div>` : ''}
+          <p class="text-xs text-gray-400 mt-3">Evaluado: ${fmtDate(s.evaluado_at)}</p>
+        </div>`;
 
-    const iaPanel = !evaluada ? `<div class="bg-gray-50 rounded-2xl border border-gray-200 p-6 mb-6 text-sm text-gray-500">⏳ Esta solicitud aún no ha sido evaluada por la IA. Al calificarse, entrará al filtro inicial.</div>` : `
-      <div class="bg-gradient-to-br from-utopia-50 to-white rounded-2xl border border-utopia-100 p-6 mb-6">
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-5"><div class="flex items-center gap-3"><span class="text-xs font-bold text-utopia-700 uppercase tracking-widest">Evaluación IA</span><span class="px-3 py-1 rounded-full text-xs font-bold ${rm.badge}">${rm.icon} ${rm.label}</span></div><div class="text-right"><span class="text-3xl font-black ${scoreColor(s.score)}">${scoreTxt}</span><span class="text-gray-400 text-sm font-semibold">/100</span></div></div>
-        <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-5"><div class="h-full ${rm.bar}" style="width:${Math.max(0, Math.min(100, Number(s.score) || 0))}%"></div></div>
-        <div class="grid md:grid-cols-2 gap-5"><div><p class="text-xs font-bold text-green-700 uppercase mb-2">Señales buenas</p><ul class="space-y-1.5 text-sm text-gray-700">${chips(buenas, { icon: '✅' })}</ul></div><div><p class="text-xs font-bold text-red-700 uppercase mb-2">Señales de alerta</p><ul class="space-y-1.5 text-sm text-gray-700">${chips(alertas, { icon: '⚠️' })}</ul></div></div>
-        <div class="mt-5"><p class="text-xs font-bold text-blue-700 uppercase mb-2">Preguntas de seguimiento</p><ul class="space-y-1.5 text-sm text-gray-700">${chips(followups, { icon: '❓' })}</ul></div>
-        ${s.notas_ia ? `<div class="mt-5 bg-white rounded-lg border border-gray-200 p-4"><p class="text-xs font-bold text-gray-500 uppercase mb-1">Notas IA</p><p class="text-sm text-gray-700 whitespace-pre-wrap">${esc(s.notas_ia)}</p></div>` : ''}
-        <p class="text-xs text-gray-400 mt-4">Evaluado: ${fmtDate(s.evaluado_at)}</p>
-      </div>`;
+    // WhatsApp section — only in filtro, with toggle
+    const phoneFmt  = waPhone(s.telefono);
+    const iaRechazo = s.recomendacion === 'descartar';
+    const defMode   = iaRechazo ? 'rechazar' : 'continuar';
+    const contCls   = !iaRechazo
+      ? 'flex-1 py-2 rounded-xl text-sm font-bold bg-green-600 text-white transition-colors'
+      : 'flex-1 py-2 rounded-xl text-sm font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors';
+    const rechCls   = iaRechazo
+      ? 'flex-1 py-2 rounded-xl text-sm font-bold bg-red-600 text-white transition-colors'
+      : 'flex-1 py-2 rounded-xl text-sm font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors';
 
-    // WhatsApp: solo en el FILTRO inicial (para pedir el video o cerrar amablemente). Desaparece al avanzar.
-    const phoneFmt = waPhone(s.telefono);
-    const esRechazo = s.recomendacion === 'descartar';
     const whatsapp = (cur === 'filtro') ? `
-      <div class="bg-white rounded-2xl border-2 ${esRechazo ? 'border-red-200' : 'border-green-200'} p-6 mb-6">
-        <div class="flex items-center justify-between mb-2"><h3 class="text-sm font-bold ${esRechazo ? 'text-red-800' : 'text-green-800'} uppercase tracking-wide">📲 ${esRechazo ? 'Mensaje de cierre (rechazo)' : 'Mensaje para pedir el video'}</h3><span class="text-xs text-gray-400">${phoneFmt ? '+' + esc(phoneFmt) : 'sin teléfono válido'}</span></div>
-        <p class="text-xs text-gray-500 mb-3">${esRechazo ? 'La IA recomienda no continuar; este mensaje es para un cierre amable.' : 'La IA recomienda continuar: este mensaje pide el video del hogar.'} Tras enviarlo, marca abajo «Contacté y pedí el video». Este mensaje desaparece al avanzar.</p>
-        <textarea id="waMessage" rows="10" class="w-full rounded-xl border-gray-200 text-sm focus:ring-green-500 focus:border-green-500">${esc(buildWaMessage(s))}</textarea>
-        <div class="flex justify-end mt-3"><button onclick="sendWhatsApp()" class="inline-flex items-center gap-2 ${esRechazo ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white font-bold px-6 py-2.5 rounded-xl transition-colors shadow-lg">Abrir WhatsApp →</button></div>
+      <div class="bg-white rounded-2xl border-2 border-utopia-200 p-5 mb-5">
+        <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wide mb-2">📲 Mensaje de WhatsApp</h3>
+        <p class="text-xs text-gray-500 mb-3">La IA recomienda <b>${rm.label}</b>. Puedes cambiar la decisión antes de enviar.</p>
+        <div class="flex gap-2 mb-3">
+          <button id="waToggleContinuar" onclick="setWaToggle('continuar')" class="${contCls}">✅ Continuar proceso</button>
+          <button id="waToggleRechazar"  onclick="setWaToggle('rechazar')"  class="${rechCls}">⛔ Rechazar</button>
+        </div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs text-gray-400">${phoneFmt ? '+' + esc(phoneFmt) : '⚠️ sin teléfono válido'}</span>
+        </div>
+        <textarea id="waMessage" rows="9" class="w-full rounded-xl border-gray-200 text-sm focus:ring-green-500 focus:border-green-500">${esc(buildWaMessage(s, defMode))}</textarea>
+        <p class="text-xs text-amber-700 mt-2 bg-amber-50 rounded-lg px-3 py-2">Al tocar «Abrir WhatsApp», si elegiste <b>continuar</b>, la solicitud avanzará automáticamente a la etapa de concepto.</p>
+        <div class="flex justify-end mt-3">
+          <button onclick="sendWhatsApp()" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-2.5 rounded-xl transition-colors shadow-lg">
+            Abrir WhatsApp →
+          </button>
+        </div>
       </div>` : '';
 
     const selOpt = (val, label, cur2) => `<option value="${val}" ${cur2 === val ? 'selected' : ''}>${label}</option>`;
 
     // ── Acciones + gestión general ──
     const gestion = `
-      <div class="bg-white rounded-2xl border-2 border-utopia-200 p-6 mb-6">
+      <div class="bg-white rounded-2xl border-2 border-utopia-200 p-5 mb-5">
         <div id="accionesBox" class="mb-5">${buildAcciones(s)}</div>
-        <div class="border-t border-gray-100 pt-5"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Asignado a</label><input id="editAsignado" type="text" value="${esc(s.asignado_a || '')}" placeholder="Responsable" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" /></div>
-        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas generales del equipo</label><textarea id="editNotas" rows="2" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" placeholder="Seguimiento general...">${esc(s.notas_humanas || '')}</textarea></div>
-        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Agregar nota al historial (opcional)</label><input id="editNotaHist" type="text" placeholder="Quedará registrada con tu nombre y la fecha" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" /></div>
+        <div class="border-t border-gray-100 pt-4">
+          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Asignado a</label>
+          <input id="editAsignado" type="text" value="${esc(s.asignado_a||'')}" placeholder="Responsable" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
+        </div>
+        <div class="mt-4">
+          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas generales del equipo</label>
+          <textarea id="editNotas" rows="2" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" placeholder="Seguimiento general...">${esc(s.notas_humanas||'')}</textarea>
+        </div>
+        <div class="mt-4">
+          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Agregar nota al historial (opcional)</label>
+          <input id="editNotaHist" type="text" placeholder="Quedará registrada con tu nombre y la fecha" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
+        </div>
         <input type="hidden" id="editEtapa" value="${esc(cur)}" />
-        <div class="mt-5"><button onclick="exportarPdf()" class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-5 py-2.5 rounded-xl text-sm">📄 Exportar PDF</button></div>
+        <input type="hidden" id="editZonaRiesgo" value="${s.zona_riesgo_manual ? '1' : '0'}" />
+        <div class="mt-4">
+          <button onclick="exportarPdf()" class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-4 py-2 rounded-xl text-sm">📄 Exportar PDF</button>
+        </div>
       </div>`;
 
-    // ── Bloque «Mi concepto» (Federico): video / mallas / observaciones ──
+    // ── Bloque «Mi concepto» (Federico) ──
     let conceptoBlock;
     if (curOrder < ORDER.concepto) {
-      conceptoBlock = `<div class="bg-gray-50 rounded-2xl border border-dashed border-gray-200 p-5 mb-6 text-sm text-gray-400">🔒 Mi concepto — se habilita cuando contactes y pidas el video.</div>`;
+      conceptoBlock = `<div class="bg-gray-50 rounded-2xl border border-dashed border-gray-200 p-5 mb-5 text-sm text-gray-400">🔒 Mi concepto — se habilita cuando contactes y pidas el video.</div>`;
     } else if (cur === 'concepto') {
       conceptoBlock = `
-      <div class="bg-white rounded-2xl border-2 border-blue-300 ring-1 ring-blue-200 p-6 mb-6">
+      <div class="bg-white rounded-2xl border-2 border-blue-300 ring-1 ring-blue-200 p-5 mb-5">
         <h3 class="text-sm font-bold text-blue-800 uppercase tracking-wide mb-1">📝 Mi concepto <span class="text-blue-500 font-normal normal-case">— en curso (Federico)</span></h3>
         <p class="text-xs text-gray-500 mb-4">Revisa el video y las mallas, registra tu concepto y, si es viable, pásalo a la entrevista de Laura.</p>
-        <div class="grid md:grid-cols-2 gap-5">
-          <div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mallas de seguridad</label><select id="editMallas" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">${selOpt('sin_definir','Sin definir',s.mallas_estado)}${selOpt('acepta_instalar','Aceptó instalar',s.mallas_estado)}${selOpt('ya_instaladas','Ya instaladas',s.mallas_estado)}${selOpt('no_acepta','No acepta',s.mallas_estado)}</select></div>
-          <div class="grid grid-cols-2 gap-3"><div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Envió video?</label><select id="editVideoRec" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">${selOpt('0','No', String(s.video_recibido||0))}${selOpt('1','Sí', String(s.video_recibido||0))}</select></div><div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Video viable?</label><select id="editVideoViable" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">${selOpt('sin_revisar','Sin revisar',s.video_viable)}${selOpt('si','Sí, viable',s.video_viable)}${selOpt('no','No viable',s.video_viable)}</select></div></div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mallas de seguridad</label>
+            <select id="editMallas" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">
+              ${selOpt('sin_definir','Sin definir',s.mallas_estado)}${selOpt('acepta_instalar','Aceptó instalar',s.mallas_estado)}${selOpt('ya_instaladas','Ya instaladas',s.mallas_estado)}${selOpt('no_acepta','No acepta',s.mallas_estado)}
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Envió video?</label>
+              <select id="editVideoRec" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">
+                ${selOpt('0','No',String(s.video_recibido||0))}${selOpt('1','Sí',String(s.video_recibido||0))}
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Video viable?</label>
+              <select id="editVideoViable" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">
+                ${selOpt('sin_revisar','Sin revisar',s.video_viable)}${selOpt('si','Sí, viable',s.video_viable)}${selOpt('no','No viable',s.video_viable)}
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas del video</label><input id="editVideoNotas" type="text" value="${esc(s.video_notas || '')}" placeholder="Observaciones del video del hogar..." class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500" /></div>
-        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mi concepto (Federico)</label><textarea id="editObsContacto" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Concepto tras revisar video, mallas y el contacto...">${esc(s.observaciones_contacto || '')}</textarea></div>
+        <div class="mt-4">
+          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas del video</label>
+          <input id="editVideoNotas" type="text" value="${esc(s.video_notas||'')}" placeholder="Observaciones del video del hogar..." class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500" />
+        </div>
+        <div class="mt-4">
+          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mi concepto (Federico)</label>
+          <textarea id="editObsContacto" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Concepto tras revisar video, mallas y el contacto...">${esc(s.observaciones_contacto||'')}</textarea>
+        </div>
       </div>`;
     } else {
-      conceptoBlock = `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-6 mb-6"><h3 class="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">✓ Mi concepto <span class="text-green-600 font-normal normal-case">— superado</span></h3>${roRow('Mallas de seguridad', s.mallas_estado)}${roRow('¿Envió video?', fmtBool(s.video_recibido))}${roRow('¿Video viable?', s.video_viable)}${roRow('Notas del video', s.video_notas)}${roRow('Concepto (Federico)', s.observaciones_contacto)}</div>`;
+      conceptoBlock = `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-5 mb-5"><h3 class="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">✓ Mi concepto <span class="text-green-600 font-normal normal-case">— superado</span></h3>${roRow('Mallas de seguridad',s.mallas_estado)}${roRow('¿Envió video?',fmtBool(s.video_recibido))}${roRow('¿Video viable?',s.video_viable)}${roRow('Notas del video',s.video_notas)}${roRow('Concepto (Federico)',s.observaciones_contacto)}</div>`;
     }
 
-    // ── Bloque «Concepto de Laura» (entrevista) ──
+    // ── Bloque «Concepto de Laura» ──
     let entrevistaBlock;
     if (curOrder < ORDER.entrevista) {
-      entrevistaBlock = `<div class="bg-gray-50 rounded-2xl border border-dashed border-gray-200 p-5 mb-6 text-sm text-gray-400">🔒 Concepto de Laura — se habilita cuando se supere tu concepto inicial.</div>`;
+      entrevistaBlock = `<div class="bg-gray-50 rounded-2xl border border-dashed border-gray-200 p-5 mb-5 text-sm text-gray-400">🔒 Concepto de Laura — se habilita cuando se supere tu concepto inicial.</div>`;
     } else if (cur === 'entrevista') {
       entrevistaBlock = `
-      <div class="bg-white rounded-2xl border-2 border-amber-300 ring-1 ring-amber-200 p-6 mb-6">
+      <div class="bg-white rounded-2xl border-2 border-amber-300 ring-1 ring-amber-200 p-5 mb-5">
         <h3 class="text-sm font-bold text-amber-800 uppercase tracking-wide mb-1">🎙️ Concepto de Laura <span class="text-amber-600 font-normal normal-case">— en curso</span></h3>
         <p class="text-xs text-gray-500 mb-4">Entrevista a fondo y, de ser viable, escalar a rescatista.</p>
-        <div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Concepto de la entrevista (Laura)</label><textarea id="editEntrevista" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-amber-500 focus:border-amber-500" placeholder="Conclusiones de la entrevista final...">${esc(s.entrevista_notas || '')}</textarea></div>
-        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Rescatista asignado (para la entrega)</label><input id="editRescatista" type="text" value="${esc(s.rescatista_asignado || '')}" placeholder="Nombre del rescatista que coordina la entrega" class="w-full rounded-xl border-gray-200 text-sm focus:ring-amber-500 focus:border-amber-500" /></div>
+        <div>
+          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Concepto de la entrevista (Laura)</label>
+          <textarea id="editEntrevista" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-amber-500 focus:border-amber-500" placeholder="Conclusiones de la entrevista final...">${esc(s.entrevista_notas||'')}</textarea>
+        </div>
+        <div class="mt-4">
+          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Rescatista asignado (para la entrega)</label>
+          <input id="editRescatista" type="text" value="${esc(s.rescatista_asignado||'')}" placeholder="Nombre del rescatista que coordina la entrega" class="w-full rounded-xl border-gray-200 text-sm focus:ring-amber-500 focus:border-amber-500" />
+        </div>
       </div>`;
     } else {
-      entrevistaBlock = `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-6 mb-6"><h3 class="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">✓ Concepto de Laura <span class="text-green-600 font-normal normal-case">— superado</span></h3>${roRow('Concepto (Laura)', s.entrevista_notas)}${roRow('Rescatista asignado', s.rescatista_asignado)}</div>`;
+      entrevistaBlock = `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-5 mb-5"><h3 class="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">✓ Concepto de Laura <span class="text-green-600 font-normal normal-case">— superado</span></h3>${roRow('Concepto (Laura)',s.entrevista_notas)}${roRow('Rescatista asignado',s.rescatista_asignado)}</div>`;
     }
 
-    const timeline = `<div id="timelineBox" class="bg-white rounded-2xl border border-gray-200 p-6 mb-6"><h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">🕘 Historial de cambios</h3><p class="text-sm text-gray-400" id="timelineContent">Cargando…</p></div>`;
+    const timeline = `<div id="timelineBox" class="bg-white rounded-2xl border border-gray-200 p-5 mb-5"><h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">🕘 Historial de cambios</h3><p class="text-sm text-gray-400" id="timelineContent">Cargando…</p></div>`;
 
-    const personal = section('Datos personales', dl(row('Nombre', s.nombre_completo) + row('Cédula', s.cedula) + row('Edad', s.edad) + row('Ocupación', s.ocupacion) + row('Teléfono', s.telefono) + row('Correo', s.correo) + row('Dirección', s.direccion) + row('Ciudad', s.ciudad) + row('Barrio', s.barrio) + row('Estrato', s.estrato)));
-    const vivienda = section('Vivienda', dl(row('Tipo de vivienda', s.tipo_vivienda) + row('Situación habitacional', s.situacion_habitacional) + boolRow('Mallas de seguridad (declarado)', s.mallas_seguridad)));
-    const redes = section('Redes y referencias', dl(row('Instagram', s.instagram) + row('Facebook', s.facebook) + row('Cómo nos conoció', s.como_nos_conociste) + row('Familiar', s.familiar_nombre) + row('Tel. familiar', s.familiar_telefono) + row('Referencia', s.referencia_nombre) + row('Tel. referencia', s.referencia_telefono)));
-    const motivacion = section('Motivación', `${longField('¿Por qué quiere adoptar?', s.por_que_adoptar)}<div class="mt-4">${dl(row('Género preferido', s.genero_preferido) + row('Edad del gato', s.edad_estimada_gatito) + row('Responsable de gastos', s.responsable_gastos) + row('Cuidador principal', s.cuidador_principal))}</div>`);
-    const planes = section('Planes ante escenarios', `${longField('Dificultad económica', s.plan_dificultad_economica)}<div class="mt-3">${longField('Problemas de comportamiento', s.plan_comportamiento)}</div><div class="mt-3">${longField('Enfermedad / tratamiento costoso', s.plan_enfermedad)}</div><div class="mt-3">${longField('Viajes / vacaciones', s.plan_vacaciones)}</div>`);
-    const mascotas = section('Otras mascotas', dl(boolRow('Tiene otras mascotas', s.tiene_otras_mascotas) + row('Tipo y cantidad', s.otras_mascotas_tipo) + boolRow('Esterilizadas', s.otras_esterilizadas) + row('Alimento', s.otras_alimento)) + (s.otras_anteriores ? `<div class="mt-3">${longField('Mascotas anteriores', s.otras_anteriores)}</div>` : ''));
-    const hogar = section('Hogar y familia', dl(row('Adultos en casa', s.adultos_casa) + row('Edades de niños', s.ninos_edades) + boolRow('Todos de acuerdo', s.todos_de_acuerdo) + row('Quién no está de acuerdo', s.quien_no_de_acuerdo) + boolRow('Planes de mudanza', s.planes_mudanza) + row('Cuándo / a dónde', s.cuando_mudanza) + boolRow('Alguien alérgico', s.alguien_alergico) + row('Quién / severidad', s.quien_alergico)));
-    const compromiso = section('Compromiso y donación', dl(row('Tipo de donación', s.donacion_tipo) + row('Monto (COP)', s.donacion_monto) + boolRow('Declaración final aceptada', s.declaracion_final)) + `<div class="mt-4"><p class="text-gray-500 text-sm mb-2">Compromisos aceptados:</p><ul class="text-sm text-gray-700 space-y-1">${chips(compromisos, { icon: '✔️' })}</ul></div>`);
-    const mapQuery = [s.direccion, s.barrio, s.ciudad, 'Colombia'].filter(Boolean).join(', ');
-    const mapa = mapQuery ? section('Ubicación', `<p class="text-sm text-gray-700 mb-2">${esc([s.direccion, s.barrio, s.ciudad].filter(Boolean).join(' · ') || '—')}</p><iframe width="100%" height="240" style="border:0;border-radius:12px" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&z=14&output=embed"></iframe>`) : '';
+    const personal    = section('Datos personales',     dl(row('Nombre',s.nombre_completo)+row('Cédula',s.cedula)+row('Edad',s.edad)+row('Ocupación',s.ocupacion)+row('Teléfono',s.telefono)+row('Correo',s.correo)+row('Dirección',s.direccion)+row('Ciudad',s.ciudad)+row('Barrio',s.barrio)+row('Estrato',s.estrato)));
+    const vivienda    = section('Vivienda',              dl(row('Tipo de vivienda',s.tipo_vivienda)+row('Situación habitacional',s.situacion_habitacional)+boolRow('Mallas (declarado)',s.mallas_seguridad)));
+    const redes       = section('Redes y referencias',   dl(row('Instagram',s.instagram)+row('Facebook',s.facebook)+row('Cómo nos conoció',s.como_nos_conociste)+row('Familiar',s.familiar_nombre)+row('Tel. familiar',s.familiar_telefono)+row('Referencia',s.referencia_nombre)+row('Tel. referencia',s.referencia_telefono)));
+    const motivacion  = section('Motivación',            `${longField('¿Por qué quiere adoptar?',s.por_que_adoptar)}<div class="mt-4">${dl(row('Género preferido',s.genero_preferido)+row('Edad del gato',s.edad_estimada_gatito)+row('Responsable de gastos',s.responsable_gastos)+row('Cuidador principal',s.cuidador_principal))}</div>`);
+    const planes      = section('Planes ante escenarios',`${longField('Dificultad económica',s.plan_dificultad_economica)}<div class="mt-3">${longField('Comportamiento',s.plan_comportamiento)}</div><div class="mt-3">${longField('Enfermedad',s.plan_enfermedad)}</div><div class="mt-3">${longField('Vacaciones',s.plan_vacaciones)}</div>`);
+    const mascotas    = section('Otras mascotas',        dl(boolRow('Tiene otras mascotas',s.tiene_otras_mascotas)+row('Tipo y cantidad',s.otras_mascotas_tipo)+boolRow('Esterilizadas',s.otras_esterilizadas)+row('Alimento',s.otras_alimento))+(s.otras_anteriores?`<div class="mt-3">${longField('Mascotas anteriores',s.otras_anteriores)}</div>`:''));
+    const hogar       = section('Hogar y familia',       dl(row('Adultos en casa',s.adultos_casa)+row('Edades de niños',s.ninos_edades)+boolRow('Todos de acuerdo',s.todos_de_acuerdo)+row('Quién no está de acuerdo',s.quien_no_de_acuerdo)+boolRow('Planes de mudanza',s.planes_mudanza)+row('Cuándo / a dónde',s.cuando_mudanza)+boolRow('Alguien alérgico',s.alguien_alergico)+row('Quién / severidad',s.quien_alergico)));
+    const compromiso  = section('Compromiso y donación', dl(row('Tipo de donación',s.donacion_tipo)+row('Monto (COP)',s.donacion_monto)+boolRow('Declaración final aceptada',s.declaracion_final))+`<div class="mt-4"><p class="text-gray-500 text-sm mb-2">Compromisos aceptados:</p><ul class="space-y-1">${chips(compromisos,{icon:'✔️'})}</ul></div>`);
+    const mapQuery    = [s.direccion, s.barrio, s.ciudad, 'Colombia'].filter(Boolean).join(', ');
+    const mapa        = mapQuery ? section('Ubicación', `<p class="text-sm text-gray-700 mb-2">${esc([s.direccion,s.barrio,s.ciudad].filter(Boolean).join(' · ')||'—')}</p><iframe width="100%" height="220" style="border:0;border-radius:12px" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&z=14&output=embed"></iframe>`) : '';
 
     document.getElementById('modalContent').innerHTML =
       stepper + zonaBanner + iaPanel + whatsapp + gestion + conceptoBlock + entrevistaBlock + timeline +
@@ -513,60 +749,77 @@ import Layout from '../../layouts/Layout.astro';
   async function loadTimeline(id) {
     try {
       const res = await fetch('/api/admin/historial?id=' + id);
-      const j = await res.json();
+      const j   = await res.json();
       const box = document.getElementById('timelineContent');
       if (!box) return;
       if (!j.ok || !j.historial.length) { box.innerHTML = '<span class="text-gray-400">Sin movimientos registrados todavía.</span>'; return; }
       const items = j.historial.map(h => {
         let desc;
-        if (h.accion === 'etapa') desc = `cambió la <b>etapa</b> a <b>${esc((ETAPAS[h.valor_nuevo]||{}).label || h.valor_nuevo)}</b>`;
-        else if (h.accion === 'nota') desc = `dejó una nota: <span class="text-gray-700">"${esc(h.valor_nuevo)}"</span>`;
+        if (h.accion === 'etapa')            desc = `cambió la <b>etapa</b> a <b>${esc((ETAPAS[h.valor_nuevo]||{}).label||h.valor_nuevo)}</b>`;
+        else if (h.accion === 'nota')        desc = `dejó una nota: <span class="text-gray-700">"${esc(h.valor_nuevo)}"</span>`;
         else if (h.campo === 'motivo_rechazo') desc = `registró el <b>motivo de rechazo</b>: <span class="text-gray-700">"${esc(h.valor_nuevo)}"</span>`;
-        else desc = `actualizó <b>${esc(h.campo)}</b>${h.valor_nuevo ? ` → <span class="text-gray-700">${esc(h.valor_nuevo)}</span>` : ''}`;
+        else                                 desc = `actualizó <b>${esc(h.campo)}</b>${h.valor_nuevo?` → <span class="text-gray-700">${esc(h.valor_nuevo)}</span>`:''}`;
         const who = h.usuario === 'ia' ? '🤖 IA' : '👤 ' + esc(h.usuario_nombre || h.usuario);
-        return `<li class="flex gap-3 pb-3 border-b border-gray-50 last:border-0"><div class="text-xs text-gray-400 whitespace-nowrap w-32 shrink-0">${fmtDate(h.created_at)}</div><div class="text-sm text-gray-600"><b class="text-gray-800">${who}</b> ${desc}</div></li>`;
+        return `<li class="flex gap-3 pb-3 border-b border-gray-50 last:border-0"><div class="text-xs text-gray-400 whitespace-nowrap w-28 sm:w-32 shrink-0">${fmtDate(h.created_at)}</div><div class="text-sm text-gray-600"><b class="text-gray-800">${who}</b> ${desc}</div></li>`;
       }).join('');
       document.getElementById('timelineBox').innerHTML = `<h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">🕘 Historial de cambios</h3><ul class="space-y-3">${items}</ul>`;
     } catch (e) { /* noop */ }
   }
 
-  function closeModal() { document.getElementById('modalDetail').classList.add('hidden'); document.body.style.overflow = 'auto'; }
+  function closeModal() {
+    document.getElementById('modalDetail').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+
   document.getElementById('btnCloseModal').onclick = closeModal;
+  document.getElementById('btnPrevModal').onclick  = window.prevDetail;
+  document.getElementById('btnNextModal').onclick  = window.nextDetail;
+
+  // Close modal on backdrop click
+  document.getElementById('modalDetail').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
 
   document.getElementById('btnSaveModal').onclick = async () => {
-    const btn = document.getElementById('btnSaveModal');
+    const btn    = document.getElementById('btnSaveModal');
     const status = document.getElementById('modalSaveStatus');
     const val = id => { const el = document.getElementById(id); return el ? el.value : undefined; };
-    const payload = { id: currentId };
-    const etapa = window.__overrideEtapa || val('editEtapa'); if (etapa !== undefined) payload.etapa = etapa;
-    const asign = val('editAsignado'); if (asign !== undefined) payload.asignado_a = asign;
-    const notas = val('editNotas'); if (notas !== undefined) payload.notas_humanas = notas;
-    const mallas = val('editMallas'); if (mallas !== undefined) payload.mallas_estado = mallas;
-    const vrec = val('editVideoRec'); if (vrec !== undefined) payload.video_recibido = Number(vrec);
-    const vvia = val('editVideoViable'); if (vvia !== undefined) payload.video_viable = vvia;
-    const vnot = val('editVideoNotas'); if (vnot !== undefined) payload.video_notas = vnot;
-    const obs = val('editObsContacto'); if (obs !== undefined) payload.observaciones_contacto = obs;
-    const entr = val('editEntrevista'); if (entr !== undefined) payload.entrevista_notas = entr;
-    const resc = val('editRescatista'); if (resc !== undefined) payload.rescatista_asignado = resc;
-    const nh = val('editNotaHist'); if (nh) payload.nota_historial = nh;
+
+    const payload   = { id: currentId };
+    const etapa     = window.__overrideEtapa || val('editEtapa'); if (etapa     !== undefined) payload.etapa                = etapa;
+    const asign     = val('editAsignado');   if (asign     !== undefined) payload.asignado_a             = asign;
+    const notas     = val('editNotas');      if (notas     !== undefined) payload.notas_humanas           = notas;
+    const mallas    = val('editMallas');     if (mallas    !== undefined) payload.mallas_estado           = mallas;
+    const vrec      = val('editVideoRec');   if (vrec      !== undefined) payload.video_recibido          = Number(vrec);
+    const vvia      = val('editVideoViable');if (vvia      !== undefined) payload.video_viable            = vvia;
+    const vnot      = val('editVideoNotas'); if (vnot      !== undefined) payload.video_notas             = vnot;
+    const obs       = val('editObsContacto');if (obs       !== undefined) payload.observaciones_contacto  = obs;
+    const entr      = val('editEntrevista'); if (entr      !== undefined) payload.entrevista_notas        = entr;
+    const resc      = val('editRescatista'); if (resc      !== undefined) payload.rescatista_asignado     = resc;
+    const nh        = val('editNotaHist');   if (nh)                      payload.nota_historial          = nh;
+    const zona      = val('editZonaRiesgo'); if (zona      !== undefined) payload.zona_riesgo_manual      = Number(zona);
     if (window.__motivoRechazo) payload.motivo_rechazo = window.__motivoRechazo;
 
     btn.disabled = true; btn.textContent = 'Guardando...'; status.textContent = '';
     try {
-      const res = await fetch('/api/admin/update-solicitud', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const res = await fetch('/api/admin/update-solicitud', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
       if (res.ok) { await loadData(); closeModal(); }
       else { status.textContent = '❌ Error al guardar'; }
     } catch (err) { status.textContent = '❌ Error de conexión'; }
     finally { btn.disabled = false; btn.textContent = 'Guardar y cerrar'; window.__overrideEtapa = null; window.__motivoRechazo = null; }
   };
 
-  document.getElementById('btnRefresh').onclick = loadData;
-  document.getElementById('searchInput').oninput = renderTable;
-  document.getElementById('filterEtapa').onchange = renderTable;
-  document.getElementById('filterReco').onchange = renderTable;
-  document.getElementById('filterMine').onchange = renderTable;
-  document.getElementById('btnLogout').onclick = () => {
-    document.cookie = "session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+  document.getElementById('btnRefresh').onclick       = loadData;
+  document.getElementById('searchInput').oninput      = renderTable;
+  document.getElementById('filterEtapa').onchange     = renderTable;
+  document.getElementById('filterReco').onchange      = renderTable;
+  document.getElementById('filterMine').onchange      = renderTable;
+  document.getElementById('btnLogout').onclick        = () => {
+    document.cookie = 'session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     window.location.href = '/intranet/login';
   };
 

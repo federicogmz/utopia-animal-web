@@ -38,6 +38,7 @@ const CAMPOS: Record<string, (v: unknown) => unknown> = {
   entrevista_notas: v => v,
   rescatista_asignado: v => v,
   motivo_rechazo: v => v,
+  zona_riesgo_manual: v => (v ? 1 : 0),
 };
 
 function bad(error: string, status = 400) {
