@@ -81,12 +81,13 @@ CREATE TABLE IF NOT EXISTS solicitudes (
   video_notas TEXT,
 
   -- Flujo: recepcion (pend. IA) -> filtro (filtro inicial) -> concepto (mi concepto)
-  --        -> entrevista (concepto de Laura) -> entrega -> completada ; rechazada
+  --        -> entrevista (concepto de Laura) -> entrega -> completada ; rechazada / cerrada
   etapa TEXT DEFAULT 'recepcion',
   observaciones_contacto TEXT,   -- Federico (concepto inicial)
   entrevista_notas TEXT,         -- Laura (concepto de entrevista)
   rescatista_asignado TEXT,      -- Laura escala a rescatista (etapa entrega)
-  motivo_rechazo TEXT            -- motivo registrado al rechazar
+  motivo_rechazo TEXT,           -- motivo registrado al rechazar
+  motivo_cierre TEXT             -- motivo registrado al cerrar sin rechazar (ej. adoptó en otro lugar)
 );
 
 CREATE INDEX IF NOT EXISTS idx_estado ON solicitudes(estado);

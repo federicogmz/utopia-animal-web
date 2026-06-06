@@ -4,10 +4,10 @@ interface Env extends AuthEnv {
   DB: D1Database;
 }
 
-const ESTADOS_VALIDOS = new Set(['pendiente', 'proceso', 'aprobada', 'rechazada']);
+const ESTADOS_VALIDOS = new Set(['pendiente', 'proceso', 'aprobada', 'rechazada', 'cerrada']);
 // Flujo: recepcion (pend. IA) -> filtro (filtro inicial) -> concepto (mi concepto)
-//        -> entrevista (concepto de Laura) -> entrega -> completada ; rechazada
-const ETAPAS_VALIDAS = new Set(['recepcion', 'filtro', 'concepto', 'entrevista', 'entrega', 'completada', 'rechazada']);
+//        -> entrevista (concepto de Laura) -> entrega -> completada ; rechazada / cerrada
+const ETAPAS_VALIDAS = new Set(['recepcion', 'filtro', 'concepto', 'entrevista', 'entrega', 'completada', 'rechazada', 'cerrada']);
 const MALLAS_VALIDOS = new Set(['sin_definir', 'acepta_instalar', 'ya_instaladas', 'no_acepta']);
 const VIDEO_VIABLE_VALIDOS = new Set(['sin_revisar', 'si', 'no']);
 
@@ -21,6 +21,7 @@ function estadoDeEtapa(etapa: string): string {
     case 'entrega':
     case 'completada': return 'aprobada';
     case 'rechazada': return 'rechazada';
+    case 'cerrada': return 'cerrada';
     default: return 'pendiente';
   }
 }
@@ -38,6 +39,7 @@ const CAMPOS: Record<string, (v: unknown) => unknown> = {
   entrevista_notas: v => v,
   rescatista_asignado: v => v,
   motivo_rechazo: v => v,
+  motivo_cierre: v => v,
   zona_riesgo_manual: v => (v ? 1 : 0),
 };
 

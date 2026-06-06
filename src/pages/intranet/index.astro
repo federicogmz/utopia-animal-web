@@ -51,6 +51,7 @@ import Layout from '../../layouts/Layout.astro';
           <option value="entrega">🤝 Entrega</option>
           <option value="completada">✅ Completada</option>
           <option value="rechazada">⛔ Rechazada</option>
+          <option value="cerrada">🔒 Cerrada</option>
         </select>
         <select id="filterReco" class="rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500">
           <option value="">Toda recomendación IA</option>
@@ -130,6 +131,7 @@ import Layout from '../../layouts/Layout.astro';
     entrega:    { label: 'Entrega (rescatista)',      short: 'Entrega',       icon: '🤝', badge: 'bg-teal-100 text-teal-700',    bar: 'bg-teal-500',   owner: 'Rescatista' },
     completada: { label: 'Completada',                short: 'Completada',    icon: '✅', badge: 'bg-green-100 text-green-700',  bar: 'bg-green-500',  owner: '—' },
     rechazada:  { label: 'Rechazada',                 short: 'Rechazada',     icon: '⛔', badge: 'bg-red-100 text-red-700',      bar: 'bg-red-500',    owner: '—' },
+    cerrada:    { label: 'Cerrada (sin rechazo)',     short: 'Cerrada',       icon: '🔒', badge: 'bg-gray-200 text-gray-600',    bar: 'bg-gray-400',   owner: '—' },
   };
   const PIPELINE = ['recepcion', 'filtro', 'concepto', 'entrevista', 'entrega', 'completada'];
   const ORDER    = { recepcion: 0, filtro: 1, concepto: 2, entrevista: 3, entrega: 4, completada: 5 };
@@ -159,7 +161,7 @@ import Layout from '../../layouts/Layout.astro';
     const e = etapaOf(s);
     if (esFederico()) return e === 'filtro' || e === 'concepto';
     if (esLaura())    return e === 'entrevista';
-    return e !== 'completada' && e !== 'rechazada';
+    return e !== 'completada' && e !== 'rechazada' && e !== 'cerrada';
   }
 
   // ── Utils ──
@@ -308,6 +310,34 @@ import Layout from '../../layouts/Layout.astro';
     document.getElementById('btnSaveModal').click();
   };
 
+  // Cerrar proceso sin rechazar (ej. el solicitante ya adoptó en otro lugar,
+  // cambiaron sus circunstancias) — no es un juicio sobre el solicitante.
+  window.pedirMotivoCierre = function() {
+    const box = document.getElementById('accionesBox');
+    if (!box) return;
+    box.innerHTML = `
+      <div class="w-full bg-gray-100 border border-gray-300 rounded-xl p-4">
+        <label class="text-xs font-bold text-gray-600 uppercase mb-1 block">Motivo del cierre (obligatorio)</label>
+        <p class="text-xs text-gray-500 mb-2">Para casos donde el proceso se cierra sin que sea un rechazo: ya adoptó en otro lugar, desistió, cambiaron sus circunstancias, etc.</p>
+        <textarea id="motivoCierreInput" rows="2" class="w-full rounded-xl border-gray-300 text-sm focus:ring-gray-500 focus:border-gray-500" placeholder="Explica brevemente por qué se cierra esta solicitud..."></textarea>
+        <div class="flex gap-3 mt-3">
+          <button onclick="confirmarCierre()" class="bg-gray-700 hover:bg-gray-800 text-white font-bold px-5 py-2.5 rounded-xl text-sm">Confirmar cierre</button>
+          <button onclick="openDetail(currentId)" class="border border-gray-200 text-gray-700 font-semibold px-5 py-2.5 rounded-xl text-sm">Cancelar</button>
+        </div>
+      </div>`;
+    const t = document.getElementById('motivoCierreInput'); if (t) t.focus();
+  };
+
+  window.confirmarCierre = function() {
+    const el = document.getElementById('motivoCierreInput');
+    const m = el ? el.value.trim() : '';
+    if (!m) { alert('Escribe el motivo del cierre.'); return; }
+    window.__motivoCierre = m;
+    window.__overrideEtapa = 'cerrada';
+    const sel = document.getElementById('editEtapa'); if (sel) sel.value = 'cerrada';
+    document.getElementById('btnSaveModal').click();
+  };
+
   // Toggle zona riesgo — updates in-memory + hidden field without re-rendering modal
   window.toggleZonaRiesgo = function() {
     const s = solicitudes.find(x => x.id === currentId);
@@ -335,7 +365,7 @@ import Layout from '../../layouts/Layout.astro';
       td.k{color:#6b7280;width:38%} ul{margin:4px 0;padding-left:18px} .badge{display:inline-block;padding:2px 10px;border-radius:99px;background:#ede9fe;color:#5b21b6;font-weight:700;font-size:11px}
       .muted{color:#9ca3af;font-size:11px} .score{font-size:22px;font-weight:800}</style></head><body>
       <h1>Solicitud #${esc(s.id)} · ${esc(s.nombre_completo)}</h1>
-      <p class="muted">Enviada: ${esc(fmtDate(s.fecha_envio))} · Etapa: ${esc(em.label)}${s.etapa==='rechazada'&&s.motivo_rechazo?` · Motivo: ${esc(s.motivo_rechazo)}`:''}</p>
+      <p class="muted">Enviada: ${esc(fmtDate(s.fecha_envio))} · Etapa: ${esc(em.label)}${s.etapa==='rechazada'&&s.motivo_rechazo?` · Motivo: ${esc(s.motivo_rechazo)}`:''}${s.etapa==='cerrada'&&s.motivo_cierre?` · Motivo: ${esc(s.motivo_cierre)}`:''}</p>
       <h2>Evaluación IA</h2>
       <p><span class="score">${(s.score==null||s.score==='')?'—':Math.round(Number(s.score))}</span>/100 &nbsp; <span class="badge">${rm.icon} ${rm.label}</span></p>
       <b>Señales buenas</b>${li(buenas)}<b>Señales de alerta</b>${li(alertas)}<b>Preguntas de seguimiento</b>${li(fu)}
@@ -343,7 +373,7 @@ import Layout from '../../layouts/Layout.astro';
       <h2>Datos personales</h2><table>${f('Cédula',s.cedula)}${f('Edad',s.edad)}${f('Ocupación',s.ocupacion)}${f('Teléfono',s.telefono)}${f('Correo',s.correo)}${f('Dirección',s.direccion)}${f('Ciudad/Barrio',(s.ciudad||'—')+' / '+(s.barrio||'—'))}${f('Estrato',s.estrato)}</table>
       <h2>Vivienda y hogar</h2><table>${f('Tipo de vivienda',s.tipo_vivienda)}${f('Situación',s.situacion_habitacional)}${fb('Mallas de seguridad',s.mallas_seguridad)}${f('Adultos en casa',s.adultos_casa)}${f('Niños',s.ninos_edades)}${fb('Todos de acuerdo',s.todos_de_acuerdo)}${fb('Otras mascotas',s.tiene_otras_mascotas)}${f('Detalle mascotas',s.otras_mascotas_tipo)}</table>
       <h2>Motivación y planes</h2><table>${f('¿Por qué adoptar?',s.por_que_adoptar)}${f('Género preferido',s.genero_preferido)}${f('Edad del gato',s.edad_estimada_gatito)}${f('Responsable gastos',s.responsable_gastos)}${f('Plan dificultad económica',s.plan_dificultad_economica)}${f('Plan comportamiento',s.plan_comportamiento)}${f('Plan enfermedad',s.plan_enfermedad)}${f('Plan vacaciones',s.plan_vacaciones)}</table>
-      <h2>Gestión por etapas</h2><table>${f('Etapa actual',em.label)}${f('Mallas (gestión)',s.mallas_estado)}${fb('Video recibido',s.video_recibido)}${f('Video viable',s.video_viable)}${f('Notas video',s.video_notas)}${f('Mi concepto (Federico)',s.observaciones_contacto)}${f('Concepto entrevista (Laura)',s.entrevista_notas)}${f('Rescatista asignado',s.rescatista_asignado)}${f('Motivo de rechazo',s.motivo_rechazo)}${f('Notas humanas',s.notas_humanas)}</table>
+      <h2>Gestión por etapas</h2><table>${f('Etapa actual',em.label)}${f('Mallas (gestión)',s.mallas_estado)}${fb('Video recibido',s.video_recibido)}${f('Video viable',s.video_viable)}${f('Notas video',s.video_notas)}${f('Mi concepto (Federico)',s.observaciones_contacto)}${f('Concepto entrevista (Laura)',s.entrevista_notas)}${f('Rescatista asignado',s.rescatista_asignado)}${f('Motivo de rechazo',s.motivo_rechazo)}${f('Motivo de cierre',s.motivo_cierre)}${f('Notas humanas',s.notas_humanas)}</table>
       <script>window.onload=function(){window.print()}<\/script></body></html>`;
     const w = window.open('', '_blank');
     if (w) { w.document.write(html); w.document.close(); }
@@ -384,9 +414,9 @@ import Layout from '../../layouts/Layout.astro';
   }
 
   function renderStats() {
-    const counts = {}; PIPELINE.concat(['rechazada']).forEach(e => counts[e] = 0);
+    const counts = {}; PIPELINE.concat(['rechazada','cerrada']).forEach(e => counts[e] = 0);
     solicitudes.forEach(s => { const e = etapaOf(s); counts[e] = (counts[e] || 0) + 1; });
-    const order = ['recepcion','filtro','concepto','entrevista','entrega','completada','rechazada'];
+    const order = ['recepcion','filtro','concepto','entrevista','entrega','completada','rechazada','cerrada'];
     const mineStages = esFederico() ? ['filtro','concepto'] : esLaura() ? ['entrevista'] : [];
     const cards = order.map(e => {
       const m = ETAPAS[e];
@@ -507,6 +537,7 @@ import Layout from '../../layouts/Layout.astro';
 
   function buildStepper(cur, motivo) {
     if (cur === 'rechazada') return `<div class="mb-5 p-4 bg-red-50 border border-red-200 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">⛔</span><span class="font-bold text-red-700">Solicitud rechazada</span></div>${motivo ? `<p class="text-sm text-red-700 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
+    if (cur === 'cerrada') return `<div class="mb-5 p-4 bg-gray-100 border border-gray-300 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">🔒</span><span class="font-bold text-gray-700">Proceso cerrado (sin rechazo)</span></div>${motivo ? `<p class="text-sm text-gray-600 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
     const curStep = ORDER[cur];
     const items = PIPELINE.map((e, i) => {
       const m = ETAPAS[e];
@@ -545,20 +576,22 @@ import Layout from '../../layouts/Layout.astro';
     const e = etapaOf(s);
     const btn = (label, fn, cls) => `<button onclick="${fn}" class="inline-flex items-center gap-2 ${cls} font-bold px-4 sm:px-5 py-2.5 rounded-xl text-sm transition-colors">${label}</button>`;
     const reject = btn('⛔ Rechazar', `pedirMotivo()`, 'bg-red-50 text-red-700 border border-red-200 hover:bg-red-100');
+    const close  = btn('🔒 Cerrar sin rechazar', `pedirMotivoCierre()`, 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200');
     if (e === 'recepcion')  return `<span class="text-sm text-gray-500">Esperando evaluación de la IA. Al calificar, entrará al filtro inicial.</span>`;
     if (e === 'completada') return `<div class="flex items-center gap-2 text-green-700 font-bold"><span>✅</span> Adopción completada</div>`;
+    if (e === 'cerrada')    return `<div class="flex items-center gap-2 text-gray-600 font-bold"><span>🔒</span> Proceso cerrado</div>`;
     let primary = '';
     if (e === 'filtro')      primary = btn('📲 Contacté y pedí el video', `avanzarEtapa('concepto')`,   'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-900/20');
     else if (e === 'concepto')    primary = btn('🎙️ Dar mi concepto y pasar a entrevista', `avanzarEtapa('entrevista')`, 'bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-900/20');
     else if (e === 'entrevista')  primary = btn('🤝 Aprobar y escalar a rescatista', `avanzarEtapa('entrega')`,     'bg-teal-600 hover:bg-teal-700 text-white shadow-lg shadow-teal-900/20');
     else if (e === 'entrega')     return `<div class="flex flex-wrap items-center gap-3">${btn('🐱 Concretar adopción', `concretarAdopcion()`, 'bg-elim-600 hover:bg-elim-500 text-white shadow-lg shadow-elim-900/20')}</div>`;
-    return `<div class="flex flex-wrap items-center gap-3">${primary}${reject}</div>`;
+    return `<div class="flex flex-wrap items-center gap-3">${primary}${reject}${close}</div>`;
   }
 
   window.openDetail = function(id) {
     currentId = id;
     waOverride = null;
-    window.__overrideEtapa = null; window.__motivoRechazo = null;
+    window.__overrideEtapa = null; window.__motivoRechazo = null; window.__motivoCierre = null;
     const s = solicitudes.find(x => x.id === id);
     if (!s) return;
     const cur      = etapaOf(s);
@@ -578,7 +611,7 @@ import Layout from '../../layouts/Layout.astro';
     const rm          = recoMeta(s.recomendacion);
     const scoreTxt    = (s.score === null || s.score === undefined || s.score === '') ? '—' : Math.round(Number(s.score));
 
-    const stepper    = buildStepper(cur, s.motivo_rechazo);
+    const stepper    = buildStepper(cur, cur === 'cerrada' ? s.motivo_cierre : s.motivo_rechazo);
     const zonaBanner = `<div id="zonaBannerWrap">${makeZonaBanner(s)}</div>`;
 
     const iaPanel = !evaluada
@@ -758,6 +791,7 @@ import Layout from '../../layouts/Layout.astro';
         if (h.accion === 'etapa')            desc = `cambió la <b>etapa</b> a <b>${esc((ETAPAS[h.valor_nuevo]||{}).label||h.valor_nuevo)}</b>`;
         else if (h.accion === 'nota')        desc = `dejó una nota: <span class="text-gray-700">"${esc(h.valor_nuevo)}"</span>`;
         else if (h.campo === 'motivo_rechazo') desc = `registró el <b>motivo de rechazo</b>: <span class="text-gray-700">"${esc(h.valor_nuevo)}"</span>`;
+        else if (h.campo === 'motivo_cierre') desc = `registró el <b>motivo de cierre</b>: <span class="text-gray-700">"${esc(h.valor_nuevo)}"</span>`;
         else                                 desc = `actualizó <b>${esc(h.campo)}</b>${h.valor_nuevo?` → <span class="text-gray-700">${esc(h.valor_nuevo)}</span>`:''}`;
         const who = h.usuario === 'ia' ? '🤖 IA' : '👤 ' + esc(h.usuario_nombre || h.usuario);
         return `<li class="flex gap-3 pb-3 border-b border-gray-50 last:border-0"><div class="text-xs text-gray-400 whitespace-nowrap w-28 sm:w-32 shrink-0">${fmtDate(h.created_at)}</div><div class="text-sm text-gray-600"><b class="text-gray-800">${who}</b> ${desc}</div></li>`;
@@ -799,6 +833,7 @@ import Layout from '../../layouts/Layout.astro';
     const nh        = val('editNotaHist');   if (nh)                      payload.nota_historial          = nh;
     const zona      = val('editZonaRiesgo'); if (zona      !== undefined) payload.zona_riesgo_manual      = Number(zona);
     if (window.__motivoRechazo) payload.motivo_rechazo = window.__motivoRechazo;
+    if (window.__motivoCierre) payload.motivo_cierre = window.__motivoCierre;
 
     btn.disabled = true; btn.textContent = 'Guardando...'; status.textContent = '';
     try {
@@ -810,7 +845,7 @@ import Layout from '../../layouts/Layout.astro';
       if (res.ok) { await loadData(); closeModal(); }
       else { status.textContent = '❌ Error al guardar'; }
     } catch (err) { status.textContent = '❌ Error de conexión'; }
-    finally { btn.disabled = false; btn.textContent = 'Guardar y cerrar'; window.__overrideEtapa = null; window.__motivoRechazo = null; }
+    finally { btn.disabled = false; btn.textContent = 'Guardar y cerrar'; window.__overrideEtapa = null; window.__motivoRechazo = null; window.__motivoCierre = null; }
   };
 
   document.getElementById('btnRefresh').onclick       = loadData;
