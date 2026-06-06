@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Página puente de WhatsApp para Utopía Animal Vet.
+// Registra el clic en GA4 (evento `contact`, importable a Google Ads como
+// conversión) preservando los UTMs de origen, y luego reenvía a WhatsApp.
+// wa.me descarta los parámetros UTM, por eso medimos aquí ANTES de redirigir.
+const VET_WHATSAPP = '573215308188';
+const PREFILL = 'Hola 👋 vengo del Instagram de Utopía Animal Vet, quiero agendar una cita.';
+const waUrl = `https://wa.me/${VET_WHATSAPP}?text=${encodeURIComponent(PREFILL)}`;
+---
+
+<Layout
+  title="Conectando con WhatsApp · Utopía Animal Vet"
+  description="Te estamos conectando con Utopía Animal Vet por WhatsApp."
+  brand="utopia"
+>
+  <section class="bg-white py-24 sm:py-32">
+    <div class="max-w-md mx-auto px-6 text-center">
+      <div class="text-6xl mb-5">💬</div>
+      <h1 class="text-2xl font-extrabold text-gray-900 mb-3">Abriendo WhatsApp…</h1>
+      <p class="text-gray-600 mb-8">
+        Te estamos conectando con el equipo de Utopía Animal Vet.
+        Si no se abre solo, toca el botón.
+      </p>
+      <a
+        id="wa-link"
+        href={waUrl}
+        class="inline-block bg-utopia-600 hover:bg-utopia-700 text-white font-bold rounded-xl px-8 py-4 transition-colors"
+      >
+        Abrir WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ waUrl }}>
+    (function () {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var payload = {
+          method: 'whatsapp',
+          event_category: 'contacto',
+          event_label: 'wa_vet',
+          utm_source: params.get('utm_source') || '(direct)',
+          utm_medium: params.get('utm_medium') || '(none)',
+          utm_campaign: params.get('utm_campaign') || '(none)',
+          utm_content: params.get('utm_content') || '(none)',
+        };
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'contact', payload);
+        }
+      } catch (e) {}
+      // Pequeño margen para que el beacon de GA salga antes de redirigir.
+      setTimeout(function () {
+        window.location.replace(waUrl);
+      }, 800);
+    })();
+  </script>
+</Layout>
