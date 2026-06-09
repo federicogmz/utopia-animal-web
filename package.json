@@ -15,7 +15,8 @@
     "ads:optimize": "node scripts/google-ads-optimize.mjs",
     "ads:jornada": "node scripts/google-ads-jornada-esterilizacion.mjs",
     "ads:fix-vet-url": "node scripts/google-ads/fix-vet-consulta-url.mjs",
-    "ads:add-negatives": "node scripts/google-ads/add-negative-keywords.mjs"
+    "ads:add-negatives": "node scripts/google-ads/add-negative-keywords.mjs",
+    "ads:eutanasia": "node scripts/google-ads-eutanasia-adgroup.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.1.6",
