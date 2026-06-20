@@ -3,45 +3,35 @@ import Layout from '../../layouts/Layout.astro';
 ---
 
 <Layout
-  title="Solicitud recibida · Elim Refugio Animal"
-  description="Tu solicitud de adopción ha sido recibida correctamente."
+  title="Solicitud de hogar temporal recibida · Elim Refugio Animal"
+  description="Tu solicitud para ser hogar temporal ha sido recibida correctamente."
   brand="elim"
 >
   <section class="bg-white py-24 sm:py-32">
     <div class="max-w-3xl mx-auto px-4 sm:px-6">
       <div class="bg-elim-50 border border-elim-100 rounded-2xl p-10 sm:p-14 text-center">
-        <div class="text-6xl mb-5">💚</div>
+        <div class="text-6xl mb-5">🏠</div>
         <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-3">Postulación recibida</p>
-        <h2 class="text-3xl font-extrabold text-gray-900 mb-5">¡Gracias por tu interés en adoptar!</h2>
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-5">¡Gracias por querer ser hogar temporal!</h2>
         <p class="text-gray-600 leading-relaxed max-w-xl mx-auto mb-6">
-          Hemos recibido tu solicitud correctamente. Nuestro equipo revisará la información y evaluará si tu hogar es el match ideal para uno de nuestros gatos.
+          Hemos recibido tu solicitud correctamente. La evaluamos con el mismo cuidado que una adopción: un hogar temporal es clave para que un gato se recupere antes de encontrar familia definitiva.
         </p>
         <div class="bg-white/50 rounded-xl p-6 mb-8 text-left border border-elim-100/50">
           <h3 class="font-bold text-gray-900 mb-2 text-sm">¿Qué sigue ahora?</h3>
           <ul class="text-sm text-gray-600 space-y-2">
-            <li class="flex gap-2">
-              <span class="text-elim-500">1.</span>
-              <span>Evaluamos tu perfil y referencias.</span>
-            </li>
-            <li class="flex gap-2">
-              <span class="text-elim-500">2.</span>
-              <span>Te contactaremos vía WhatsApp o correo para informarte si la solicitud continúa o no.</span>
-            </li>
-            <li class="flex gap-2">
-              <span class="text-elim-500">3.</span>
-              <span>Si continúas, agendaremos una entrevista y visita (virtual o presencial).</span>
-            </li>
+            <li class="flex gap-2"><span class="text-elim-500">1.</span><span>Evaluamos tu perfil, espacio y referencias.</span></li>
+            <li class="flex gap-2"><span class="text-elim-500">2.</span><span>Te contactaremos por WhatsApp o correo para los siguientes pasos.</span></li>
+            <li class="flex gap-2"><span class="text-elim-500">3.</span><span>Si continúas, coordinamos la entrega y el acompañamiento del gato en acogida.</span></li>
           </ul>
         </div>
         <p class="text-gray-500 text-sm mb-8">
-          Por el momento no necesitas realizar ninguna acción adicional. Te escribiremos por correo o WhatsApp cuando tengamos novedades sobre tu postulación.
+          Por el momento no necesitas hacer nada más. Te escribiremos cuando tengamos novedades.
         </p>
 
-        <!-- ── SÍGUENOS MIENTRAS TANTO ───────────────────── -->
         <div class="border-t border-elim-100 pt-8 mb-8">
           <h3 class="font-bold text-gray-900 mb-2 text-base">Mientras evaluamos, síguenos 💛</h3>
           <p class="text-sm text-gray-600 max-w-lg mx-auto mb-6">
-            Conoce a los gatos que están en adopción, mira su día a día en el refugio y aprende sobre cuidado felino con nuestro contenido.
+            Conoce a los gatos del refugio y aprende sobre cuidado felino con nuestro contenido.
           </p>
           <div class="grid sm:grid-cols-2 gap-4 max-w-lg mx-auto">
             <a href="https://www.instagram.com/refugioanimalelim/" target="_blank" rel="noopener noreferrer"
@@ -64,28 +54,28 @@ import Layout from '../../layouts/Layout.astro';
             Volver al inicio
           </a>
           <a href="/refugio" class="inline-flex items-center justify-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-7 py-3.5 rounded-xl transition-colors">
-            Ver otros gatos
+            Conocer el refugio
           </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Conversión GA4: dispara el evento solo si se llegó tras enviar el formulario -->
+  <!-- Conversión: dispara el evento solo si se llegó tras enviar el formulario -->
   <script is:inline>
     (function () {
       try {
-        if (sessionStorage.getItem('adopcion_enviada') === '1') {
-          sessionStorage.removeItem('adopcion_enviada');
+        if (sessionStorage.getItem('hogar_enviada') === '1') {
+          sessionStorage.removeItem('hogar_enviada');
           if (typeof window.gtag === 'function') {
             window.gtag('event', 'generate_lead', {
-              event_category: 'adopcion',
-              event_label: 'solicitud_adopcion_enviada',
+              event_category: 'hogar_temporal',
+              event_label: 'solicitud_hogar_temporal_enviada',
               value: 1,
             });
           }
           if (typeof window.fbq === 'function') {
-            window.fbq('track', 'Lead', { content_name: 'solicitud_adopcion', content_category: 'adopcion' });
+            window.fbq('track', 'Lead', { content_name: 'solicitud_hogar_temporal', content_category: 'hogar_temporal' });
           }
         }
       } catch (e) {}

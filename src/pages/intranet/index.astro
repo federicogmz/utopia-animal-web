@@ -26,6 +26,7 @@ import Layout from '../../layouts/Layout.astro';
         </div>
         <div class="flex items-center gap-2 flex-wrap">
           <a href="/intranet/adopciones" class="inline-flex items-center gap-1.5 bg-elim-600 text-white px-3 py-2 rounded-xl text-sm font-semibold hover:bg-elim-500 transition-colors">🐱 Adopciones</a>
+          <a href="/intranet/hogares" class="inline-flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors">🏠 Hogares temporales</a>
           <button id="btnRefresh" class="inline-flex items-center gap-1.5 bg-white border border-gray-200 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">🔄 Actualizar</button>
           <button id="btnLogout" class="inline-flex items-center gap-1.5 bg-red-50 text-red-700 border border-red-100 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-red-100 transition-colors">Salir</button>
         </div>
@@ -44,13 +45,11 @@ import Layout from '../../layouts/Layout.astro';
           class="flex-1 rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
         <select id="filterEtapa" class="rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500">
           <option value="">Todas las etapas</option>
-          <option value="recepcion">📥 Pendiente IA</option>
-          <option value="filtro">🔎 Filtro inicial</option>
+          <option value="recepcion">📥 Recepción</option>
           <option value="concepto">📝 Mi concepto</option>
-          <option value="entrevista">🎙️ Entrevista Laura</option>
-          <option value="entrega">🤝 Entrega</option>
-          <option value="completada">✅ Completada</option>
-          <option value="rechazada">⛔ Rechazada</option>
+          <option value="aprobado">✅ Aprobado</option>
+          <option value="adoptado">🏠 Adoptado</option>
+          <option value="rechazado">⛔ Rechazado</option>
           <option value="cerrada">🔒 Cerrada</option>
         </select>
         <select id="filterReco" class="rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500">
@@ -122,23 +121,35 @@ import Layout from '../../layouts/Layout.astro';
   let waOverride = null;         // null | 'continuar' | 'rechazar'
   let me = { user: '', nombre: '', rol: 'admin', etapa_responsable: null };
 
-  // ── Etapas del flujo ──
+  // ── Etapas del flujo (simplificado) ──
+  // recepcion -> (contacto WhatsApp) concepto -> aprobado | rechazado ; aprobado -> adoptado ; cerrada
   const ETAPAS = {
-    recepcion:  { label: 'Pendiente evaluación IA', short: 'Pend. IA',      icon: '📥', badge: 'bg-gray-100 text-gray-700',    bar: 'bg-gray-400',   owner: 'IA' },
-    filtro:     { label: 'Filtro inicial',           short: 'Filtro',        icon: '🔎', badge: 'bg-indigo-100 text-indigo-700', bar: 'bg-indigo-500', owner: 'Federico Gómez' },
-    concepto:   { label: 'Pendiente de mi concepto', short: 'Mi concepto',   icon: '📝', badge: 'bg-blue-100 text-blue-700',    bar: 'bg-blue-500',   owner: 'Federico Gómez' },
-    entrevista: { label: 'Concepto de Laura',         short: 'Entrevista',   icon: '🎙️', badge: 'bg-amber-100 text-amber-800',  bar: 'bg-amber-500',  owner: 'Laura López' },
-    entrega:    { label: 'Entrega (rescatista)',      short: 'Entrega',       icon: '🤝', badge: 'bg-teal-100 text-teal-700',    bar: 'bg-teal-500',   owner: 'Rescatista' },
-    completada: { label: 'Completada',                short: 'Completada',    icon: '✅', badge: 'bg-green-100 text-green-700',  bar: 'bg-green-500',  owner: '—' },
-    rechazada:  { label: 'Rechazada',                 short: 'Rechazada',     icon: '⛔', badge: 'bg-red-100 text-red-700',      bar: 'bg-red-500',    owner: '—' },
-    cerrada:    { label: 'Cerrada (sin rechazo)',     short: 'Cerrada',       icon: '🔒', badge: 'bg-gray-200 text-gray-600',    bar: 'bg-gray-400',   owner: '—' },
+    recepcion: { label: 'Recepción',         short: 'Recepción',   icon: '📥', badge: 'bg-gray-100 text-gray-700',  bar: 'bg-gray-400',  owner: 'Federico Gómez' },
+    concepto:  { label: 'Mi concepto',        short: 'Mi concepto', icon: '📝', badge: 'bg-blue-100 text-blue-700',  bar: 'bg-blue-500',  owner: 'Federico Gómez' },
+    aprobado:  { label: 'Aprobado',           short: 'Aprobado',    icon: '✅', badge: 'bg-green-100 text-green-700', bar: 'bg-green-500', owner: '—' },
+    adoptado:  { label: 'Adoptado',           short: 'Adoptado',    icon: '🏠', badge: 'bg-teal-100 text-teal-700',  bar: 'bg-teal-500',  owner: '—' },
+    rechazado: { label: 'Rechazado',          short: 'Rechazado',   icon: '⛔', badge: 'bg-red-100 text-red-700',    bar: 'bg-red-500',   owner: '—' },
+    cerrada:   { label: 'Cerrada (sin rechazo)', short: 'Cerrada',  icon: '🔒', badge: 'bg-gray-200 text-gray-600',  bar: 'bg-gray-400',  owner: '—' },
   };
-  const PIPELINE = ['recepcion', 'filtro', 'concepto', 'entrevista', 'entrega', 'completada'];
-  const ORDER    = { recepcion: 0, filtro: 1, concepto: 2, entrevista: 3, entrega: 4, completada: 5 };
+  const PIPELINE = ['recepcion', 'concepto', 'aprobado', 'adoptado'];
+  const ORDER    = { recepcion: 0, concepto: 1, aprobado: 2, adoptado: 3 };
+  const TERMINALES = ['adoptado', 'rechazado', 'cerrada'];
   function etapaOf(s)  { return ETAPAS[s.etapa] ? s.etapa : 'recepcion'; }
   function etapaMeta(e){ return ETAPAS[e] || ETAPAS.recepcion; }
-  const esFederico = () => ['filtro', 'concepto', 'contacto'].includes(me.etapa_responsable);
+  // Federico es dueño de recepción + concepto (su valor en BD puede ser 'filtro' por migraciones previas).
+  const esFederico = () => ['filtro', 'recepcion', 'concepto', 'contacto'].includes(me.etapa_responsable);
   const esLaura    = () => me.etapa_responsable === 'entrevista';
+
+  // Días desde el contacto por WhatsApp (inicio de "mi concepto"); base de la alerta de seguimiento.
+  function diasEnConcepto(s) {
+    if (etapaOf(s) !== 'concepto' || !s.contacto_at) return null;
+    const ms = Date.now() - new Date(s.contacto_at).getTime();
+    return Math.floor(ms / 86400000);
+  }
+  function necesitaSeguimiento(s) {
+    const d = diasEnConcepto(s);
+    return d !== null && d > 4;
+  }
 
   // ── Zonas de alto abandono del Valle de Aburrá ──
   const ZONAS_RIESGO = [
@@ -159,9 +170,9 @@ import Layout from '../../layouts/Layout.astro';
 
   function esMiPendiente(s) {
     const e = etapaOf(s);
-    if (esFederico()) return e === 'filtro' || e === 'concepto';
-    if (esLaura())    return e === 'entrevista';
-    return e !== 'completada' && e !== 'rechazada' && e !== 'cerrada';
+    if (esFederico()) return e === 'recepcion' || e === 'concepto';
+    if (esLaura())    return e === 'aprobado';
+    return !TERMINALES.includes(e);
   }
 
   // ── Utils ──
@@ -260,7 +271,7 @@ import Layout from '../../layouts/Layout.astro';
 
     // Auto-advance to concepto only when continuing the process
     const effectiveMode = waOverride !== null ? waOverride : (s.recomendacion === 'descartar' ? 'rechazar' : 'continuar');
-    if (etapaOf(s) === 'filtro' && effectiveMode === 'continuar') {
+    if (etapaOf(s) === 'recepcion' && effectiveMode === 'continuar') {
       try {
         const res = await fetch('/api/admin/update-solicitud', {
           method: 'POST',
@@ -305,8 +316,8 @@ import Layout from '../../layouts/Layout.astro';
     const m = el ? el.value.trim() : '';
     if (!m) { alert('Escribe el motivo del rechazo.'); return; }
     window.__motivoRechazo = m;
-    window.__overrideEtapa = 'rechazada';
-    const sel = document.getElementById('editEtapa'); if (sel) sel.value = 'rechazada';
+    window.__overrideEtapa = 'rechazado';
+    const sel = document.getElementById('editEtapa'); if (sel) sel.value = 'rechazado';
     document.getElementById('btnSaveModal').click();
   };
 
@@ -365,7 +376,7 @@ import Layout from '../../layouts/Layout.astro';
       td.k{color:#6b7280;width:38%} ul{margin:4px 0;padding-left:18px} .badge{display:inline-block;padding:2px 10px;border-radius:99px;background:#ede9fe;color:#5b21b6;font-weight:700;font-size:11px}
       .muted{color:#9ca3af;font-size:11px} .score{font-size:22px;font-weight:800}</style></head><body>
       <h1>Solicitud #${esc(s.id)} · ${esc(s.nombre_completo)}</h1>
-      <p class="muted">Enviada: ${esc(fmtDate(s.fecha_envio))} · Etapa: ${esc(em.label)}${s.etapa==='rechazada'&&s.motivo_rechazo?` · Motivo: ${esc(s.motivo_rechazo)}`:''}${s.etapa==='cerrada'&&s.motivo_cierre?` · Motivo: ${esc(s.motivo_cierre)}`:''}</p>
+      <p class="muted">Enviada: ${esc(fmtDate(s.fecha_envio))} · Etapa: ${esc(em.label)}${s.etapa==='rechazado'&&s.motivo_rechazo?` · Motivo: ${esc(s.motivo_rechazo)}`:''}${s.etapa==='cerrada'&&s.motivo_cierre?` · Motivo: ${esc(s.motivo_cierre)}`:''}</p>
       <h2>Evaluación IA</h2>
       <p><span class="score">${(s.score==null||s.score==='')?'—':Math.round(Number(s.score))}</span>/100 &nbsp; <span class="badge">${rm.icon} ${rm.label}</span></p>
       <b>Señales buenas</b>${li(buenas)}<b>Señales de alerta</b>${li(alertas)}<b>Preguntas de seguimiento</b>${li(fu)}
@@ -398,7 +409,7 @@ import Layout from '../../layouts/Layout.astro';
           const wrap = document.getElementById('misPendientesWrap');
           wrap.classList.remove('hidden'); wrap.classList.add('flex');
           document.getElementById('filterMine').checked = true;
-          document.getElementById('filterMineLabel').textContent = esFederico() ? 'Solo mis pendientes (filtro / concepto)' : 'Solo mis pendientes (entrevista)';
+          document.getElementById('filterMineLabel').textContent = esFederico() ? 'Solo mis pendientes (recepción / concepto)' : 'Solo mis pendientes';
         }
       }
     } catch (e) { console.error(e); }
@@ -414,10 +425,10 @@ import Layout from '../../layouts/Layout.astro';
   }
 
   function renderStats() {
-    const counts = {}; PIPELINE.concat(['rechazada','cerrada']).forEach(e => counts[e] = 0);
+    const counts = {}; PIPELINE.concat(['rechazado','cerrada']).forEach(e => counts[e] = 0);
     solicitudes.forEach(s => { const e = etapaOf(s); counts[e] = (counts[e] || 0) + 1; });
-    const order = ['recepcion','filtro','concepto','entrevista','entrega','completada','rechazada','cerrada'];
-    const mineStages = esFederico() ? ['filtro','concepto'] : esLaura() ? ['entrevista'] : [];
+    const order = ['recepcion','concepto','aprobado','adoptado','rechazado','cerrada'];
+    const mineStages = esFederico() ? ['recepcion','concepto'] : esLaura() ? ['aprobado'] : [];
     const cards = order.map(e => {
       const m = ETAPAS[e];
       const mine = mineStages.includes(e);
@@ -482,6 +493,7 @@ import Layout from '../../layouts/Layout.astro';
             ${flagged ? '<span class="text-red-500 text-xs" title="Zona de alto abandono">🚩</span>' : ''}
           </div>
           <div class="text-xs text-gray-400">${esc(s.telefono)}</div>
+          ${necesitaSeguimiento(s) ? `<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800" title="Más de 4 días desde el contacto por WhatsApp. Da seguimiento o cierra el proceso.">⚠️ Seguimiento · ${diasEnConcepto(s)}d</span></div>` : ''}
           <div class="text-xs text-gray-400 sm:hidden">#${esc(s.id)} · ${esc(new Date(s.fecha_envio).toLocaleDateString('es-CO'))}</div>
           <div class="sm:hidden mt-0.5"><span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${em.badge}">${em.icon} ${em.short}</span></div>
         </td>
@@ -536,7 +548,7 @@ import Layout from '../../layouts/Layout.astro';
   function roRow(label, value)   { return `<div class="flex justify-between gap-3 py-1.5 border-b border-gray-50 last:border-0"><span class="text-gray-500 text-sm">${esc(label)}</span><span class="text-gray-900 text-sm font-medium text-right">${esc(value === null || value === undefined || value === '' ? '—' : value)}</span></div>`; }
 
   function buildStepper(cur, motivo) {
-    if (cur === 'rechazada') return `<div class="mb-5 p-4 bg-red-50 border border-red-200 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">⛔</span><span class="font-bold text-red-700">Solicitud rechazada</span></div>${motivo ? `<p class="text-sm text-red-700 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
+    if (cur === 'rechazado') return `<div class="mb-5 p-4 bg-red-50 border border-red-200 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">⛔</span><span class="font-bold text-red-700">Solicitud rechazada</span></div>${motivo ? `<p class="text-sm text-red-700 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
     if (cur === 'cerrada') return `<div class="mb-5 p-4 bg-gray-100 border border-gray-300 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">🔒</span><span class="font-bold text-gray-700">Proceso cerrado (sin rechazo)</span></div>${motivo ? `<p class="text-sm text-gray-600 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
     const curStep = ORDER[cur];
     const items = PIPELINE.map((e, i) => {
@@ -577,14 +589,12 @@ import Layout from '../../layouts/Layout.astro';
     const btn = (label, fn, cls) => `<button onclick="${fn}" class="inline-flex items-center gap-2 ${cls} font-bold px-4 sm:px-5 py-2.5 rounded-xl text-sm transition-colors">${label}</button>`;
     const reject = btn('⛔ Rechazar', `pedirMotivo()`, 'bg-red-50 text-red-700 border border-red-200 hover:bg-red-100');
     const close  = btn('🔒 Cerrar sin rechazar', `pedirMotivoCierre()`, 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200');
-    if (e === 'recepcion')  return `<span class="text-sm text-gray-500">Esperando evaluación de la IA. Al calificar, entrará al filtro inicial.</span>`;
-    if (e === 'completada') return `<div class="flex items-center gap-2 text-green-700 font-bold"><span>✅</span> Adopción completada</div>`;
-    if (e === 'cerrada')    return `<div class="flex items-center gap-2 text-gray-600 font-bold"><span>🔒</span> Proceso cerrado</div>`;
+    if (e === 'adoptado')  return `<div class="flex items-center gap-2 text-teal-700 font-bold"><span>🏠</span> Adopción completada</div>`;
+    if (e === 'cerrada')   return `<div class="flex items-center gap-2 text-gray-600 font-bold"><span>🔒</span> Proceso cerrado</div>`;
     let primary = '';
-    if (e === 'filtro')      primary = btn('📲 Contacté y pedí el video', `avanzarEtapa('concepto')`,   'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-900/20');
-    else if (e === 'concepto')    primary = btn('🎙️ Dar mi concepto y pasar a entrevista', `avanzarEtapa('entrevista')`, 'bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-900/20');
-    else if (e === 'entrevista')  primary = btn('🤝 Aprobar y escalar a rescatista', `avanzarEtapa('entrega')`,     'bg-teal-600 hover:bg-teal-700 text-white shadow-lg shadow-teal-900/20');
-    else if (e === 'entrega')     return `<div class="flex flex-wrap items-center gap-3">${btn('🐱 Concretar adopción', `concretarAdopcion()`, 'bg-elim-600 hover:bg-elim-500 text-white shadow-lg shadow-elim-900/20')}</div>`;
+    if (e === 'recepcion')      primary = btn('📲 Contacté y pedí el video', `avanzarEtapa('concepto')`, 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-900/20');
+    else if (e === 'concepto')  primary = btn('✅ Aprobar', `avanzarEtapa('aprobado')`, 'bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-900/20');
+    else if (e === 'aprobado')  return `<div class="flex flex-wrap items-center gap-3">${btn('🐱 Concretar adopción', `concretarAdopcion()`, 'bg-elim-600 hover:bg-elim-500 text-white shadow-lg shadow-elim-900/20')}${close}</div>`;
     return `<div class="flex flex-wrap items-center gap-3">${primary}${reject}${close}</div>`;
   }
 
@@ -645,7 +655,7 @@ import Layout from '../../layouts/Layout.astro';
       ? 'flex-1 py-2 rounded-xl text-sm font-bold bg-red-600 text-white transition-colors'
       : 'flex-1 py-2 rounded-xl text-sm font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors';
 
-    const whatsapp = (cur === 'filtro') ? `
+    const whatsapp = (cur === 'recepcion') ? `
       <div class="bg-white rounded-2xl border-2 border-utopia-200 p-5 mb-5">
         <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wide mb-2">📲 Mensaje de WhatsApp</h3>
         <p class="text-xs text-gray-500 mb-3">La IA recomienda <b>${rm.label}</b>. Puedes cambiar la decisión antes de enviar.</p>
@@ -698,7 +708,7 @@ import Layout from '../../layouts/Layout.astro';
       conceptoBlock = `
       <div class="bg-white rounded-2xl border-2 border-blue-300 ring-1 ring-blue-200 p-5 mb-5">
         <h3 class="text-sm font-bold text-blue-800 uppercase tracking-wide mb-1">📝 Mi concepto <span class="text-blue-500 font-normal normal-case">— en curso (Federico)</span></h3>
-        <p class="text-xs text-gray-500 mb-4">Revisa el video y las mallas, registra tu concepto y, si es viable, pásalo a la entrevista de Laura.</p>
+        <p class="text-xs text-gray-500 mb-4">Revisa el video y las mallas, registra tu concepto y decide: <b>Aprobar</b> o <b>Rechazar</b>.</p>
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
             <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mallas de seguridad</label>
@@ -734,27 +744,8 @@ import Layout from '../../layouts/Layout.astro';
       conceptoBlock = `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-5 mb-5"><h3 class="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">✓ Mi concepto <span class="text-green-600 font-normal normal-case">— superado</span></h3>${roRow('Mallas de seguridad',s.mallas_estado)}${roRow('¿Envió video?',fmtBool(s.video_recibido))}${roRow('¿Video viable?',s.video_viable)}${roRow('Notas del video',s.video_notas)}${roRow('Concepto (Federico)',s.observaciones_contacto)}</div>`;
     }
 
-    // ── Bloque «Concepto de Laura» ──
-    let entrevistaBlock;
-    if (curOrder < ORDER.entrevista) {
-      entrevistaBlock = `<div class="bg-gray-50 rounded-2xl border border-dashed border-gray-200 p-5 mb-5 text-sm text-gray-400">🔒 Concepto de Laura — se habilita cuando se supere tu concepto inicial.</div>`;
-    } else if (cur === 'entrevista') {
-      entrevistaBlock = `
-      <div class="bg-white rounded-2xl border-2 border-amber-300 ring-1 ring-amber-200 p-5 mb-5">
-        <h3 class="text-sm font-bold text-amber-800 uppercase tracking-wide mb-1">🎙️ Concepto de Laura <span class="text-amber-600 font-normal normal-case">— en curso</span></h3>
-        <p class="text-xs text-gray-500 mb-4">Entrevista a fondo y, de ser viable, escalar a rescatista.</p>
-        <div>
-          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Concepto de la entrevista (Laura)</label>
-          <textarea id="editEntrevista" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-amber-500 focus:border-amber-500" placeholder="Conclusiones de la entrevista final...">${esc(s.entrevista_notas||'')}</textarea>
-        </div>
-        <div class="mt-4">
-          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Rescatista asignado (para la entrega)</label>
-          <input id="editRescatista" type="text" value="${esc(s.rescatista_asignado||'')}" placeholder="Nombre del rescatista que coordina la entrega" class="w-full rounded-xl border-gray-200 text-sm focus:ring-amber-500 focus:border-amber-500" />
-        </div>
-      </div>`;
-    } else {
-      entrevistaBlock = `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-5 mb-5"><h3 class="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">✓ Concepto de Laura <span class="text-green-600 font-normal normal-case">— superado</span></h3>${roRow('Concepto (Laura)',s.entrevista_notas)}${roRow('Rescatista asignado',s.rescatista_asignado)}</div>`;
-    }
+    // Etapa de entrevista eliminada en el flujo simplificado.
+    const entrevistaBlock = '';
 
     const timeline = `<div id="timelineBox" class="bg-white rounded-2xl border border-gray-200 p-5 mb-5"><h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">🕘 Historial de cambios</h3><p class="text-sm text-gray-400" id="timelineContent">Cargando…</p></div>`;
 
@@ -769,8 +760,12 @@ import Layout from '../../layouts/Layout.astro';
     const mapQuery    = [s.direccion, s.barrio, s.ciudad, 'Colombia'].filter(Boolean).join(', ');
     const mapa        = mapQuery ? section('Ubicación', `<p class="text-sm text-gray-700 mb-2">${esc([s.direccion,s.barrio,s.ciudad].filter(Boolean).join(' · ')||'—')}</p><iframe width="100%" height="220" style="border:0;border-radius:12px" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&z=14&output=embed"></iframe>`) : '';
 
+    const segBanner = necesitaSeguimiento(s)
+      ? `<div class="mb-5 p-4 bg-amber-50 border border-amber-300 rounded-2xl flex items-start gap-3"><span class="text-lg">⚠️</span><div><p class="font-bold text-amber-800">Seguimiento pendiente · ${diasEnConcepto(s)} días desde el contacto</p><p class="text-sm text-amber-700">Han pasado más de 4 días desde que pediste el video por WhatsApp. Da seguimiento o cierra el proceso.</p></div></div>`
+      : '';
+
     document.getElementById('modalContent').innerHTML =
-      stepper + zonaBanner + iaPanel + whatsapp + gestion + conceptoBlock + entrevistaBlock + timeline +
+      stepper + segBanner + zonaBanner + iaPanel + whatsapp + gestion + conceptoBlock + entrevistaBlock + timeline +
       `<div class="grid md:grid-cols-2 gap-x-5"><div>${personal}${vivienda}${mapa}${redes}${mascotas}</div><div>${motivacion}${planes}${hogar}${compromiso}</div></div>`;
 
     document.getElementById('modalSaveStatus').textContent = '';

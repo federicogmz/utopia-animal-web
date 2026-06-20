@@ -1,0 +1,489 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const inputClass = "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-elim-400 focus:border-elim-400 transition";
+const labelClass = "block text-sm font-semibold text-gray-800 mb-2";
+const sectionTitleClass = "text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2";
+const sectionDescClass = "text-gray-500 mb-8";
+
+const compromisos = [
+  'Brindar cuidado, alimento y espacio seguro durante toda la acogida',
+  'Llevar al gato a sus citas veterinarias cuando Elim lo indique',
+  'No entregar el gato a terceros: la adopción la gestiona Elim',
+  'Devolver o reubicar al gato según lo acordado, sin abandonarlo',
+  'Permitir el seguimiento de Elim durante la acogida',
+];
+---
+
+<Layout
+  title="Quiero ser hogar temporal · Elim Refugio Animal"
+  description="Postúlate para ser hogar temporal de un gato de Elim. Una acogida da el tiempo y el cuidado que un gato necesita antes de su adopción definitiva."
+  brand="elim"
+>
+  <section class="bg-gradient-to-br from-elim-950 via-elim-900 to-gray-950 pt-24 pb-0 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-80 h-80 bg-elim-400 opacity-10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 relative pb-16">
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-xs font-semibold px-4 py-2 rounded-full mb-6">
+        <span class="w-1.5 h-1.5 bg-elim-300 rounded-full animate-pulse"></span>
+        Hogar temporal · Elim Refugio
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-white leading-tight mb-5">
+        Quiero ser<br/><span class="text-elim-400">hogar temporal</span>
+      </h1>
+      <p class="text-elim-200 text-lg leading-relaxed max-w-2xl">
+        Un hogar temporal le da a un gato el tiempo, el espacio y el cuidado que necesita antes de su adopción definitiva. Evaluamos cada acogida con el mismo rigor que una adopción.
+      </p>
+    </div>
+    <div class="relative -mb-px">
+      <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+        <path d="M0 50L1440 50L1440 0Q720 50 0 0Z" fill="white"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="bg-white py-16 sm:py-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+
+      <div id="errorBanner" class="hidden mb-6 bg-red-50 border border-red-200 text-red-800 rounded-xl px-5 py-4 text-sm">
+        <strong>Algo salió mal.</strong> <span id="errorMsg">Por favor intenta de nuevo en unos minutos.</span>
+      </div>
+
+      <form id="hogarForm" class="space-y-8" novalidate>
+
+        <div>
+          <div class="flex items-center justify-between mb-3 text-xs font-semibold text-gray-500">
+            <span id="stepLabel">Paso 1 de 6 · Datos personales</span>
+            <span id="stepCount">1 / 6</span>
+          </div>
+          <div class="w-full h-2 bg-elim-50 rounded-full overflow-hidden">
+            <div id="progressBar" class="h-full bg-elim-500 transition-all duration-300" style="width: 16.66%"></div>
+          </div>
+        </div>
+
+        <input type="text" name="_website" id="_website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" />
+
+        <!-- STEP 1: Datos personales -->
+        <fieldset data-step="1" class="space-y-6">
+          <div>
+            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 1</p>
+            <h2 class={sectionTitleClass}>Datos personales</h2>
+            <p class={sectionDescClass}>Cuéntanos quién eres.</p>
+          </div>
+          <div><label class={labelClass}>Nombre completo *</label>
+            <input class={inputClass} type="text" id="nombre_completo" name="nombre_completo" required /></div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class={labelClass}>Cédula</label>
+              <input class={inputClass} type="text" id="cedula" name="cedula" inputmode="numeric" /></div>
+            <div><label class={labelClass}>Edad</label>
+              <input class={inputClass} type="number" id="edad" name="edad" min="18" max="100" /></div>
+          </div>
+          <div><label class={labelClass}>Ocupación</label>
+            <input class={inputClass} type="text" id="ocupacion" name="ocupacion" /></div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class={labelClass}>Teléfono (WhatsApp) *</label>
+              <input class={inputClass} type="tel" id="telefono" name="telefono" inputmode="numeric" pattern="[0-9]{10}" placeholder="3103603232" required /></div>
+            <div><label class={labelClass}>Correo electrónico *</label>
+              <input class={inputClass} type="email" id="correo" name="correo" required /></div>
+          </div>
+          <div><label class={labelClass}>Dirección *</label>
+            <input class={inputClass} type="text" id="direccion" name="direccion" required /></div>
+          <div class="grid sm:grid-cols-3 gap-4">
+            <div><label class={labelClass}>Ciudad</label>
+              <input class={inputClass} type="text" id="ciudad" name="ciudad" /></div>
+            <div><label class={labelClass}>Barrio</label>
+              <input class={inputClass} type="text" id="barrio" name="barrio" /></div>
+            <div><label class={labelClass}>Estrato</label>
+              <input class={inputClass} type="number" id="estrato" name="estrato" min="1" max="6" /></div>
+          </div>
+        </fieldset>
+
+        <!-- STEP 2: Vivienda -->
+        <fieldset data-step="2" class="space-y-6 hidden">
+          <div>
+            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 2</p>
+            <h2 class={sectionTitleClass}>Tu vivienda</h2>
+            <p class={sectionDescClass}>El espacio donde acogerías al gato.</p>
+          </div>
+          <div><label class={labelClass}>Tipo de vivienda</label>
+            <select class={inputClass} id="tipo_vivienda" name="tipo_vivienda">
+              <option value="">Selecciona...</option>
+              <option>Casa</option><option>Apartamento</option><option>Finca</option><option>Habitación</option><option>Otro</option>
+            </select></div>
+          <div><label class={labelClass}>Situación habitacional</label>
+            <select class={inputClass} id="situacion_habitacional" name="situacion_habitacional">
+              <option value="">Selecciona...</option>
+              <option>Propia</option><option>Arrendada</option><option>Familiar</option><option>Otra</option>
+            </select></div>
+          <div><span class={labelClass}>¿Tu vivienda tiene mallas de seguridad en ventanas/balcones?</span>
+            <div class="flex gap-6 mt-1">
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="mallas_seguridad" value="1" class="accent-elim-600" /> Sí</label>
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="mallas_seguridad" value="0" class="accent-elim-600" /> No</label>
+            </div></div>
+        </fieldset>
+
+        <!-- STEP 3: Redes y referencias -->
+        <fieldset data-step="3" class="space-y-6 hidden">
+          <div>
+            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 3</p>
+            <h2 class={sectionTitleClass}>Redes y referencias</h2>
+            <p class={sectionDescClass}>Nos ayuda a conocerte mejor.</p>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class={labelClass}>Instagram</label>
+              <input class={inputClass} type="text" id="instagram" name="instagram" placeholder="@usuario" /></div>
+            <div><label class={labelClass}>Facebook</label>
+              <input class={inputClass} type="text" id="facebook" name="facebook" /></div>
+          </div>
+          <div><label class={labelClass}>¿Cómo nos conociste?</label>
+            <input class={inputClass} type="text" id="como_nos_conociste" name="como_nos_conociste" placeholder="Instagram, un amigo, búsqueda en Google..." /></div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class={labelClass}>Familiar de referencia</label>
+              <input class={inputClass} type="text" id="familiar_nombre" name="familiar_nombre" /></div>
+            <div><label class={labelClass}>Tel. familiar</label>
+              <input class={inputClass} type="tel" id="familiar_telefono" name="familiar_telefono" inputmode="numeric" /></div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class={labelClass}>Otra referencia</label>
+              <input class={inputClass} type="text" id="referencia_nombre" name="referencia_nombre" /></div>
+            <div><label class={labelClass}>Tel. referencia</label>
+              <input class={inputClass} type="tel" id="referencia_telefono" name="referencia_telefono" inputmode="numeric" /></div>
+          </div>
+        </fieldset>
+
+        <!-- STEP 4: Disponibilidad para acoger -->
+        <fieldset data-step="4" class="space-y-6 hidden">
+          <div>
+            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 4</p>
+            <h2 class={sectionTitleClass}>Tu disponibilidad para acoger</h2>
+            <p class={sectionDescClass}>Lo más importante de un hogar temporal.</p>
+          </div>
+          <div><label class={labelClass}>¿Por qué quieres ser hogar temporal?</label>
+            <textarea class={inputClass} id="por_que_hogar_temporal" name="por_que_hogar_temporal" rows="4" placeholder="Cuéntanos tu motivación..."></textarea></div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class={labelClass}>¿Cuántos gatos podrías acoger a la vez?</label>
+              <input class={inputClass} type="number" id="cuantos_puede_acoger" name="cuantos_puede_acoger" min="1" max="20" /></div>
+            <div><label class={labelClass}>¿Por cuánto tiempo puedes acoger?</label>
+              <input class={inputClass} type="text" id="tiempo_disponible" name="tiempo_disponible" placeholder="Ej: 1 mes, hasta que se adopte, indefinido..." /></div>
+          </div>
+          <div><label class={labelClass}>¿Tienes experiencia previa en acogida o cuidado de gatos?</label>
+            <textarea class={inputClass} id="experiencia_acogida" name="experiencia_acogida" rows="3" placeholder="Describe tu experiencia, si la tienes."></textarea></div>
+          <div><span class={labelClass}>¿Puedes aislar al gato en un espacio aparte si llega con un caso médico (cuarentena)?</span>
+            <div class="flex gap-6 mt-1">
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="espacio_aislamiento" value="1" class="accent-elim-600" /> Sí</label>
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="espacio_aislamiento" value="0" class="accent-elim-600" /> No</label>
+            </div></div>
+          <div><span class={labelClass}>¿Tienes disponibilidad para llevar al gato al veterinario cuando se requiera?</span>
+            <div class="flex gap-6 mt-1">
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="disponibilidad_transporte_vet" value="1" class="accent-elim-600" /> Sí</label>
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="disponibilidad_transporte_vet" value="0" class="accent-elim-600" /> No</label>
+            </div></div>
+          <div><span class={labelClass}>¿Aceptas visitas de seguimiento de Elim durante la acogida?</span>
+            <div class="flex gap-6 mt-1">
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="acepta_visitas_seguimiento" value="1" class="accent-elim-600" /> Sí</label>
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="acepta_visitas_seguimiento" value="0" class="accent-elim-600" /> No</label>
+            </div></div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class={labelClass}>¿Quién sería el cuidador principal?</label>
+              <input class={inputClass} type="text" id="cuidador_principal" name="cuidador_principal" /></div>
+            <div><label class={labelClass}>¿Quién cubre alimento y arena durante la acogida?</label>
+              <input class={inputClass} type="text" id="responsable_gastos" name="responsable_gastos" placeholder="Yo / compartido con Elim / ..." /></div>
+          </div>
+        </fieldset>
+
+        <!-- STEP 5: Hogar y familia -->
+        <fieldset data-step="5" class="space-y-6 hidden">
+          <div>
+            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 5</p>
+            <h2 class={sectionTitleClass}>Tu hogar y familia</h2>
+            <p class={sectionDescClass}>El entorno donde vivirá el gato.</p>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class={labelClass}>Adultos en casa</label>
+              <input class={inputClass} type="number" id="adultos_casa" name="adultos_casa" min="0" /></div>
+            <div><label class={labelClass}>Edades de niños (si hay)</label>
+              <input class={inputClass} type="text" id="ninos_edades" name="ninos_edades" placeholder="Ej: 5 y 9 años" /></div>
+          </div>
+          <div><span class={labelClass}>¿Todos en casa están de acuerdo con la acogida?</span>
+            <div class="flex gap-6 mt-1">
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="todos_de_acuerdo" value="1" class="accent-elim-600" data-toggles="quien_no_de_acuerdo_wrap" data-toggle-show="0" /> Sí</label>
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="todos_de_acuerdo" value="0" class="accent-elim-600" data-toggles="quien_no_de_acuerdo_wrap" data-toggle-show="1" /> No</label>
+            </div>
+            <div id="quien_no_de_acuerdo_wrap" class="hidden mt-3"><label class={labelClass}>¿Quién no está de acuerdo?</label>
+              <input class={inputClass} type="text" id="quien_no_de_acuerdo" name="quien_no_de_acuerdo" /></div></div>
+          <div><span class={labelClass}>¿Tienes planes de mudanza próximos?</span>
+            <div class="flex gap-6 mt-1">
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="planes_mudanza" value="1" class="accent-elim-600" data-toggles="cuando_mudanza_wrap" data-toggle-show="1" /> Sí</label>
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="planes_mudanza" value="0" class="accent-elim-600" data-toggles="cuando_mudanza_wrap" data-toggle-show="0" /> No</label>
+            </div>
+            <div id="cuando_mudanza_wrap" class="hidden mt-3"><label class={labelClass}>¿Cuándo / a dónde?</label>
+              <input class={inputClass} type="text" id="cuando_mudanza" name="cuando_mudanza" /></div></div>
+          <div><span class={labelClass}>¿Alguien en casa es alérgico a los gatos?</span>
+            <div class="flex gap-6 mt-1">
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="alguien_alergico" value="1" class="accent-elim-600" data-toggles="quien_alergico_wrap" data-toggle-show="1" /> Sí</label>
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="alguien_alergico" value="0" class="accent-elim-600" data-toggles="quien_alergico_wrap" data-toggle-show="0" /> No</label>
+            </div>
+            <div id="quien_alergico_wrap" class="hidden mt-3"><label class={labelClass}>¿Quién / severidad?</label>
+              <input class={inputClass} type="text" id="quien_alergico" name="quien_alergico" /></div></div>
+          <div><span class={labelClass}>¿Tienes otras mascotas?</span>
+            <div class="flex gap-6 mt-1">
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="tiene_otras_mascotas" value="1" class="accent-elim-600" data-toggles="otras_mascotas_wrap" data-toggle-show="1" /> Sí</label>
+              <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="tiene_otras_mascotas" value="0" class="accent-elim-600" data-toggles="otras_mascotas_wrap" data-toggle-show="0" /> No</label>
+            </div>
+            <div id="otras_mascotas_wrap" class="hidden mt-3 space-y-3">
+              <div><label class={labelClass}>Tipo y cantidad</label>
+                <input class={inputClass} type="text" id="otras_mascotas_tipo" name="otras_mascotas_tipo" placeholder="Ej: 1 perro adulto, 2 gatos" /></div>
+              <div><span class={labelClass}>¿Están esterilizadas?</span>
+                <div class="flex gap-6 mt-1">
+                  <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="otras_esterilizadas" value="1" class="accent-elim-600" /> Sí</label>
+                  <label class="flex items-center gap-2 text-sm text-gray-700"><input type="radio" name="otras_esterilizadas" value="0" class="accent-elim-600" /> No</label>
+                </div></div>
+              <div><label class={labelClass}>¿Qué alimento les das?</label>
+                <input class={inputClass} type="text" id="otras_alimento" name="otras_alimento" /></div>
+              <div><label class={labelClass}>Mascotas anteriores (qué pasó con ellas)</label>
+                <textarea class={inputClass} id="otras_anteriores" name="otras_anteriores" rows="3"></textarea></div>
+            </div></div>
+        </fieldset>
+
+        <!-- STEP 6: Compromiso -->
+        <fieldset data-step="6" class="space-y-6 hidden">
+          <div>
+            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 6</p>
+            <h2 class={sectionTitleClass}>Tu compromiso</h2>
+            <p class={sectionDescClass}>Cómo actuarías ante distintos escenarios.</p>
+          </div>
+          <div><label class={labelClass}>Si tienes una dificultad económica, ¿cómo manejarías el cuidado del gato?</label>
+            <textarea class={inputClass} id="plan_dificultad_economica" name="plan_dificultad_economica" rows="3"></textarea></div>
+          <div><label class={labelClass}>Si el gato presenta un problema de comportamiento, ¿qué harías?</label>
+            <textarea class={inputClass} id="plan_comportamiento" name="plan_comportamiento" rows="3"></textarea></div>
+          <div><label class={labelClass}>Si el gato se enferma, ¿qué harías?</label>
+            <textarea class={inputClass} id="plan_enfermedad" name="plan_enfermedad" rows="3"></textarea></div>
+          <div><label class={labelClass}>¿Qué harías con el gato durante un viaje o vacaciones?</label>
+            <textarea class={inputClass} id="plan_vacaciones" name="plan_vacaciones" rows="3"></textarea></div>
+
+          <div class="border-t border-gray-100 pt-6">
+            <span class={labelClass}>Compromisos del hogar temporal</span>
+            <p class="text-xs text-gray-500 mb-4">Marca los compromisos que estás dispuesto a asumir.</p>
+            <div class="space-y-3">
+              {compromisos.map((c) => (
+                <label class="flex items-start gap-3 px-4 py-3 rounded-xl border border-gray-200 bg-white cursor-pointer hover:bg-elim-50 hover:border-elim-200 transition">
+                  <input type="checkbox" name="compromisos_aceptados" value={c} class="mt-0.5 accent-elim-600" />
+                  <span class="text-sm text-gray-700">{c}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div class="border-t border-gray-100 pt-6">
+            <label class="flex items-start gap-3 px-4 py-4 rounded-xl border border-elim-200 bg-elim-50 cursor-pointer">
+              <input type="checkbox" name="declaracion_final" value="1" class="mt-0.5 accent-elim-600" required />
+              <span class="text-sm text-gray-800 font-medium">
+                Declaro que la información proporcionada es verdadera y entiendo que la acogida es un compromiso temporal pero serio, con el bienestar del gato como prioridad. *
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="flex items-center justify-between pt-6 border-t border-gray-100">
+          <button type="button" id="btnPrev" class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-6 py-3 rounded-xl transition-colors text-sm disabled:opacity-40 disabled:cursor-not-allowed" disabled>← Anterior</button>
+          <button type="button" id="btnNext" class="inline-flex items-center gap-2 bg-elim-600 hover:bg-elim-500 text-white font-bold px-7 py-3 rounded-xl transition-colors shadow-lg shadow-elim-900/20 text-sm">Siguiente →</button>
+          <button type="submit" id="btnSubmit" class="hidden items-center gap-2 bg-elim-700 hover:bg-elim-800 text-white font-bold px-7 py-3 rounded-xl transition-colors shadow-lg shadow-elim-900/20 text-sm">Enviar postulación</button>
+        </div>
+
+        <p class="text-xs text-gray-400 text-center pt-2">
+          * Campos obligatorios. Tu información se guarda de forma segura y solo es vista por el equipo de Elim.
+        </p>
+
+      </form>
+    </div>
+  </section>
+
+</Layout>
+
+<script is:inline>
+  (function () {
+    const STORAGE_KEY = 'elim-hogar-draft';
+    const TOTAL_STEPS = 6;
+    const STEP_LABELS = {
+      1: 'Datos personales',
+      2: 'Tu vivienda',
+      3: 'Redes y referencias',
+      4: 'Disponibilidad para acoger',
+      5: 'Tu hogar y familia',
+      6: 'Compromiso',
+    };
+    const REQUIRED_BY_STEP = {
+      1: ['nombre_completo', 'telefono', 'correo', 'direccion'],
+      2: [], 3: [], 4: [], 5: [],
+      6: ['declaracion_final'],
+    };
+
+    const form = document.getElementById('hogarForm');
+    if (!form) return;
+
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const stepLabel = document.getElementById('stepLabel');
+    const stepCount = document.getElementById('stepCount');
+    const progressBar = document.getElementById('progressBar');
+    const errorBanner = document.getElementById('errorBanner');
+    const errorMsg = document.getElementById('errorMsg');
+
+    let currentStep = 1;
+
+    function setStep(n) {
+      currentStep = Math.max(1, Math.min(TOTAL_STEPS, n));
+      form.querySelectorAll('fieldset[data-step]').forEach(fs => {
+        fs.classList.toggle('hidden', Number(fs.dataset.step) !== currentStep);
+      });
+      stepLabel.textContent = `Paso ${currentStep} de ${TOTAL_STEPS} · ${STEP_LABELS[currentStep]}`;
+      stepCount.textContent = `${currentStep} / ${TOTAL_STEPS}`;
+      progressBar.style.width = `${(currentStep / TOTAL_STEPS) * 100}%`;
+      btnPrev.disabled = currentStep === 1;
+      if (currentStep === TOTAL_STEPS) {
+        btnNext.classList.add('hidden');
+        btnSubmit.classList.remove('hidden');
+        btnSubmit.classList.add('inline-flex');
+      } else {
+        btnNext.classList.remove('hidden');
+        btnSubmit.classList.add('hidden');
+        btnSubmit.classList.remove('inline-flex');
+      }
+      window.scrollTo({ top: form.offsetTop - 80, behavior: 'smooth' });
+    }
+
+    function showError(msg) {
+      errorMsg.textContent = msg || 'Por favor intenta de nuevo en unos minutos.';
+      errorBanner.classList.remove('hidden');
+      window.scrollTo({ top: errorBanner.offsetTop - 80, behavior: 'smooth' });
+    }
+    function clearError() { errorBanner.classList.add('hidden'); }
+
+    function validateEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || '').trim()); }
+    function validatePhoneCO(v) { return String(v || '').replace(/\D/g, '').length === 10; }
+
+    function validateStep(step) {
+      const required = REQUIRED_BY_STEP[step] || [];
+      for (const name of required) {
+        if (name === 'declaracion_final') {
+          const cb = form.querySelector('input[name="declaracion_final"]');
+          if (!cb || !cb.checked) { showError('Debes aceptar la declaración final para continuar.'); return false; }
+          continue;
+        }
+        const el = form.querySelector(`[name="${name}"]`);
+        if (!el || !String(el.value || '').trim()) {
+          showError('Por favor completa los campos obligatorios marcados con *.');
+          if (el) el.focus();
+          return false;
+        }
+      }
+      if (step === 1) {
+        if (!validateEmail(form.querySelector('[name="correo"]').value)) { showError('Por favor ingresa un correo electrónico válido.'); return false; }
+        if (!validatePhoneCO(form.querySelector('[name="telefono"]').value)) { showError('El teléfono debe tener 10 dígitos (formato Colombia).'); return false; }
+      }
+      clearError();
+      return true;
+    }
+
+    btnNext.addEventListener('click', () => { if (!validateStep(currentStep)) return; saveDraft(); setStep(currentStep + 1); });
+    btnPrev.addEventListener('click', () => { saveDraft(); setStep(currentStep - 1); });
+
+    form.querySelectorAll('input[data-toggles]').forEach(input => {
+      input.addEventListener('change', () => {
+        const wrap = document.getElementById(input.dataset.toggles);
+        if (!wrap) return;
+        if (input.checked) wrap.classList.toggle('hidden', input.dataset.toggleShow !== '1');
+      });
+    });
+
+    function collectFormData() {
+      const data = {};
+      const fd = new FormData(form);
+      for (const [key, value] of fd.entries()) {
+        if (key === 'compromisos_aceptados') {
+          if (!data[key]) data[key] = [];
+          data[key].push(value);
+        } else if (data[key] !== undefined) {
+          if (!Array.isArray(data[key])) data[key] = [data[key]];
+          data[key].push(value);
+        } else { data[key] = value; }
+      }
+      if (!data.compromisos_aceptados) data.compromisos_aceptados = [];
+      data.declaracion_final = form.querySelector('input[name="declaracion_final"]').checked ? 1 : 0;
+      ['mallas_seguridad', 'todos_de_acuerdo', 'planes_mudanza', 'alguien_alergico', 'tiene_otras_mascotas', 'otras_esterilizadas',
+       'espacio_aislamiento', 'disponibilidad_transporte_vet', 'acepta_visitas_seguimiento', 'cuantos_puede_acoger'].forEach(k => {
+        if (data[k] !== undefined && data[k] !== '') data[k] = Number(data[k]);
+      });
+      return data;
+    }
+
+    function saveDraft() {
+      try {
+        const data = collectFormData();
+        delete data._website;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ step: currentStep, data }));
+      } catch (e) {}
+    }
+
+    function restoreDraft() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !parsed.data) return;
+        const data = parsed.data;
+        Object.keys(data).forEach(key => {
+          const val = data[key];
+          const inputs = form.querySelectorAll(`[name="${key}"]`);
+          if (!inputs.length) return;
+          if (inputs[0].type === 'radio') {
+            inputs.forEach(i => { i.checked = String(i.value) === String(val); i.dispatchEvent(new Event('change')); });
+          } else if (inputs[0].type === 'checkbox') {
+            const arr = Array.isArray(val) ? val.map(String) : [String(val)];
+            inputs.forEach(i => { i.checked = arr.includes(i.value) || (i.value === '1' && (val === 1 || val === '1' || val === true)); });
+          } else if (inputs[0].tagName === 'SELECT') {
+            inputs[0].value = val; inputs[0].dispatchEvent(new Event('change'));
+          } else { inputs[0].value = val; }
+        });
+        if (parsed.step) setStep(parsed.step);
+      } catch (e) {}
+    }
+
+    form.addEventListener('input', () => { saveDraft(); });
+    form.addEventListener('change', () => { saveDraft(); });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateStep(TOTAL_STEPS)) return;
+      const compromisos = Array.from(form.querySelectorAll('input[name="compromisos_aceptados"]:checked')).map(i => i.value);
+      if (compromisos.length === 0) { showError('Por favor marca al menos un compromiso de hogar temporal.'); return; }
+      clearError();
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'Enviando...';
+
+      const payload = collectFormData();
+      payload._website = document.getElementById('_website').value;
+
+      try {
+        const res = await fetch('/api/solicitud-hogar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.ok) throw new Error(json.error || 'submit_failed');
+        localStorage.removeItem(STORAGE_KEY);
+        try { sessionStorage.setItem('hogar_enviada', '1'); } catch (e) {}
+        window.location.href = '/refugio/solicitud-hogar-enviada';
+      } catch (err) {
+        showError('No pudimos enviar tu postulación en este momento. Por favor intenta de nuevo o escríbenos por WhatsApp.');
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Enviar postulación';
+      }
+    });
+
+    restoreDraft();
+    if (currentStep < 1 || currentStep > TOTAL_STEPS) setStep(1);
+    else setStep(currentStep);
+  })();
+</script>

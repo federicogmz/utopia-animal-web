@@ -5,13 +5,11 @@ interface Env extends AuthEnv {
 }
 
 const ESTADOS_VALIDOS = new Set(['pendiente', 'proceso', 'aprobada', 'rechazada', 'cerrada']);
-// Flujo simplificado: recepcion -> (contacto WhatsApp) concepto -> aprobado | rechazado ;
-//                     aprobado -> adoptado ; cerrada (cierre sin rechazo)
+// recepcion -> (contacto WhatsApp) concepto -> aprobado | rechazado ; aprobado -> activo (acogiendo) ; cerrada
 const ETAPAS_VALIDAS = new Set(['recepcion', 'concepto', 'aprobado', 'rechazado', 'adoptado', 'cerrada']);
 const MALLAS_VALIDOS = new Set(['sin_definir', 'acepta_instalar', 'ya_instaladas', 'no_acepta']);
 const VIDEO_VIABLE_VALIDOS = new Set(['sin_revisar', 'si', 'no']);
 
-// Estado heredado derivado de la etapa, para mantener compatibilidad.
 function estadoDeEtapa(etapa: string): string {
   switch (etapa) {
     case 'recepcion': return 'pendiente';
@@ -24,7 +22,6 @@ function estadoDeEtapa(etapa: string): string {
   }
 }
 
-// Campos editables y cómo se normalizan desde el body.
 const CAMPOS: Record<string, (v: unknown) => unknown> = {
   etapa: v => v,
   contacto_at: v => v,
@@ -35,11 +32,9 @@ const CAMPOS: Record<string, (v: unknown) => unknown> = {
   video_viable: v => v,
   video_notas: v => v,
   observaciones_contacto: v => v,
-  entrevista_notas: v => v,
   rescatista_asignado: v => v,
   motivo_rechazo: v => v,
   motivo_cierre: v => v,
-  zona_riesgo_manual: v => (v ? 1 : 0),
 };
 
 function bad(error: string, status = 400) {
@@ -54,26 +49,20 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const id = Number(body.id);
   if (!id) return bad('missing_id');
 
-  // Validaciones de dominio
   if (body.etapa != null && !ETAPAS_VALIDAS.has(body.etapa)) return bad('invalid_etapa');
   if (body.estado != null && !ESTADOS_VALIDOS.has(body.estado)) return bad('invalid_estado');
   if (body.mallas_estado != null && !MALLAS_VALIDOS.has(body.mallas_estado)) return bad('invalid_mallas');
   if (body.video_viable != null && !VIDEO_VIABLE_VALIDOS.has(body.video_viable)) return bad('invalid_video_viable');
 
-  // Estado actual (para diff de auditoría y para sincronizar estado/etapa).
-  const actual = await env.DB.prepare('SELECT * FROM solicitudes WHERE id = ?').bind(id).first<Record<string, any>>();
+  const actual = await env.DB.prepare('SELECT * FROM solicitudes_hogar WHERE id = ?').bind(id).first<Record<string, any>>();
   if (!actual) return bad('not_found', 404);
 
-  // Construye el set de cambios solo con los campos presentes.
   const updates: Record<string, unknown> = {};
   for (const [campo, norm] of Object.entries(CAMPOS)) {
     if (body[campo] !== undefined) updates[campo] = norm(body[campo]);
   }
-  // Si cambia la etapa, sincroniza el estado heredado.
   if (updates.etapa !== undefined) {
     updates.estado = estadoDeEtapa(String(updates.etapa));
-    // Al entrar a "mi concepto" (contacto por WhatsApp para pedir video), marca la
-    // fecha de contacto si aún no existe. Es el inicio del reloj de la alerta (>4 días).
     if (updates.etapa === 'concepto' && !actual.contacto_at && updates.contacto_at === undefined) {
       updates.contacto_at = new Date().toISOString();
     }
@@ -84,32 +73,24 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const cols = Object.keys(updates);
   if (cols.length === 0 && !body.nota_historial) return bad('no_fields');
 
-  // Diff para el historial (solo campos que realmente cambian de valor).
   const norm = (v: unknown) => (v === undefined || v === null ? '' : String(v));
   const historial: { campo: string; antes: string; despues: string; accion: string }[] = [];
   for (const c of cols) {
     const antes = norm(actual[c]);
     const despues = norm(updates[c]);
-    if (antes !== despues) {
-      historial.push({ campo: c, antes, despues, accion: c === 'etapa' ? 'etapa' : 'campo' });
-    }
+    if (antes !== despues) historial.push({ campo: c, antes, despues, accion: c === 'etapa' ? 'etapa' : 'campo' });
   }
 
   const stmts: D1PreparedStatement[] = [];
-
   if (cols.length > 0) {
     const setSql = cols.map(c => `${c} = ?`).join(', ');
     const values = cols.map(c => updates[c]);
-    stmts.push(env.DB.prepare(`UPDATE solicitudes SET ${setSql} WHERE id = ?`).bind(...values, id));
+    stmts.push(env.DB.prepare(`UPDATE solicitudes_hogar SET ${setSql} WHERE id = ?`).bind(...values, id));
   }
-
   const histInsert = env.DB.prepare(
-    'INSERT INTO solicitud_historial (solicitud_id, usuario, accion, campo, valor_anterior, valor_nuevo) VALUES (?, ?, ?, ?, ?, ?)'
+    'INSERT INTO hogar_historial (solicitud_id, usuario, accion, campo, valor_anterior, valor_nuevo) VALUES (?, ?, ?, ?, ?, ?)'
   );
-  for (const h of historial) {
-    stmts.push(histInsert.bind(id, actor, h.accion, h.campo, h.antes, h.despues));
-  }
-  // Nota libre opcional al historial (sin cambio de campo).
+  for (const h of historial) stmts.push(histInsert.bind(id, actor, h.accion, h.campo, h.antes, h.despues));
   if (typeof body.nota_historial === 'string' && body.nota_historial.trim()) {
     stmts.push(histInsert.bind(id, actor, 'nota', null, null, body.nota_historial.trim()));
   }
