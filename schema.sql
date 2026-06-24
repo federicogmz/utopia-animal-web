@@ -61,6 +61,17 @@ CREATE TABLE IF NOT EXISTS solicitudes (
 
   raw_json TEXT,
 
+  utm_source TEXT,
+  utm_medium TEXT,
+  utm_campaign TEXT,
+  utm_content TEXT,
+  utm_term TEXT,
+  utm_id TEXT,
+  fbclid TEXT,
+  gclid TEXT,
+  landing_page TEXT,
+  referrer TEXT,
+
   evaluado_at TEXT,
   score REAL,
   senales_buenas TEXT,

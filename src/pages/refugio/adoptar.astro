@@ -493,6 +493,19 @@ const compromisos = [
 <script is:inline>
   (function () {
     const STORAGE_KEY = 'elim-adopcion-draft';
+    const ATTRIBUTION_KEY = 'elim-adopcion-attribution';
+    const ATTRIBUTION_FIELDS = [
+      'utm_source',
+      'utm_medium',
+      'utm_campaign',
+      'utm_content',
+      'utm_term',
+      'utm_id',
+      'fbclid',
+      'gclid',
+      'landing_page',
+      'referrer',
+    ];
     const TOTAL_STEPS = 6;
     const STEP_LABELS = {
       1: 'Datos personales',
@@ -513,6 +526,33 @@ const compromisos = [
 
     const form = document.getElementById('adoptForm');
     if (!form) return;
+
+    function readAttribution() {
+      const params = new URLSearchParams(window.location.search);
+      let stored = {};
+      try { stored = JSON.parse(localStorage.getItem(ATTRIBUTION_KEY) || '{}') || {}; } catch (e) {}
+
+      const current = {
+        landing_page: window.location.href,
+        referrer: document.referrer || '',
+      };
+
+      ATTRIBUTION_FIELDS.forEach((field) => {
+        if (field === 'landing_page' || field === 'referrer') return;
+        const value = params.get(field);
+        if (value) current[field] = value;
+      });
+
+      const merged = { ...stored };
+      Object.entries(current).forEach(([key, value]) => {
+        if (value && !merged[key]) merged[key] = value;
+      });
+
+      try { localStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(merged)); } catch (e) {}
+      return merged;
+    }
+
+    readAttribution();
 
     const btnPrev = document.getElementById('btnPrev');
     const btnNext = document.getElementById('btnNext');
@@ -701,6 +741,7 @@ const compromisos = [
       btnSubmit.textContent = 'Enviando...';
 
       const payload = collectFormData();
+      Object.assign(payload, readAttribution());
       payload._website = document.getElementById('_website').value;
 
       try {
