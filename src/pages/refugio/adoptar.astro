@@ -17,8 +17,8 @@ const compromisos = [
 ---
 
 <Layout
-  title="Quiero adoptar · Elim Refugio Animal"
-  description="Postúlate para adoptar un gato con Elim Refugio Animal. Llena el formulario de adopción responsable y nuestro equipo revisará tu solicitud."
+  title="Adoptar un gato en Medellín · Elim Refugio Animal"
+  description="¿Quieres adoptar un gato en Medellín? Postúlate con Elim: adopción responsable, sin costo de compra y con acompañamiento. Llena el formulario y te contactamos."
   brand="elim"
 >
 
@@ -33,9 +33,31 @@ const compromisos = [
       <h1 class="text-4xl sm:text-5xl font-extrabold text-white leading-tight mb-5">
         Quiero adoptar<br/><span class="text-elim-400">un gato de Elim</span>
       </h1>
-      <p class="text-elim-200 text-lg leading-relaxed max-w-2xl">
-        Adoptar es un compromiso de por vida. Este formulario nos ayuda a entender tu hogar y tu motivación, para encontrar el match perfecto entre tú y un gato de nuestra red.
+      <p class="text-elim-200 text-lg leading-relaxed max-w-2xl mb-6">
+        Aquí empieza la historia de tu próximo compañero. Cuéntanos sobre tu hogar y te ayudamos a encontrar el gato ideal para ti — una adopción responsable, <strong class="text-white">sin costo de compra</strong> y con nuestro acompañamiento en cada paso.
       </p>
+
+      <!-- Tranquilizadores -->
+      <div class="flex flex-wrap gap-x-5 gap-y-2 mb-6 text-sm text-elim-200">
+        <span class="inline-flex items-center gap-1.5">✅ Sin costo de compra</span>
+        <span class="inline-flex items-center gap-1.5">🤝 Te acompañamos en el proceso</span>
+        <span class="inline-flex items-center gap-1.5">⏱️ Te toma ~3 minutos</span>
+        <span class="inline-flex items-center gap-1.5">🔒 Tus datos son confidenciales</span>
+      </div>
+
+      <!-- Prueba social -->
+      <p class="text-elim-300 text-sm mb-6">
+        <strong class="text-white">+90 gatos</strong> ya encontraron hogar con Elim · <strong class="text-white">100%</strong> con seguimiento de por vida.
+      </p>
+
+      <!-- Salida de baja fricción -->
+      <div class="flex flex-wrap items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-4 max-w-2xl">
+        <span class="text-elim-200 text-sm">¿Aún no estás seguro o tienes dudas?</span>
+        <a id="adoptWhatsapp" href="/wa-elim?msg=Hola,%20tengo%20dudas%20sobre%20adoptar%20un%20gato%20con%20Elim"
+           class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors border border-white/20 text-sm">
+          💬 Escríbenos por WhatsApp
+        </a>
+      </div>
     </div>
     <div class="relative -mb-px">
       <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
@@ -43,6 +65,22 @@ const compromisos = [
       </svg>
     </div>
   </section>
+
+  <!-- Tracking de aterrizaje: ViewContent (Meta) + Contact en salida WhatsApp -->
+  <script is:inline>
+    (function () {
+      try {
+        if (typeof window.fbq === 'function') {
+          window.fbq('track', 'ViewContent', { content_name: 'form_adopcion', content_category: 'adopcion' });
+        }
+        var wa = document.getElementById('adoptWhatsapp');
+        if (wa) wa.addEventListener('click', function () {
+          if (typeof window.fbq === 'function') window.fbq('track', 'Contact', { content_category: 'adopcion' });
+          if (typeof window.gtag === 'function') window.gtag('event', 'contact', { event_category: 'adopcion', event_label: 'whatsapp_form_adopcion' });
+        });
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- ── FORMULARIO ────────────────────────────────────── -->
   <section class="bg-white py-16 sm:py-20">

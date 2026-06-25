@@ -3,8 +3,8 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="Apoya la Fundación - Utopía Animal"
-  description="Apoya la Fundación Utopía Animal: financia jornadas de esterilización, sé hogar temporal de Elim o difunde el bienestar animal en Medellín. Cada acción construye una ciudad más consciente."
+  title="Apoya - Utopía Animal"
+  description="Apoya a Utopía Animal: dona por Nequi, apadrina, sé hogar temporal o vuélvete aliado empresarial. Patrocinio de jornadas, convenios y responsabilidad social en Medellín."
   seoType="organization"
 >
 
@@ -13,19 +13,46 @@ import Layout from '../layouts/Layout.astro';
     <div class="absolute top-0 right-0 w-96 h-96 bg-elim-400 opacity-5 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3"></div>
     <div class="relative max-w-3xl mx-auto px-4 sm:px-6 pb-16 text-center">
       <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-xs font-semibold px-4 py-2 rounded-full mb-6">
-        💚 Apoya la Fundación
+        💚 Apoya
       </div>
       <h1 class="text-5xl sm:text-6xl font-extrabold text-white leading-tight mb-5">
         Ser parte<br/><span class="text-elim-400">importa.</span>
       </h1>
       <p class="text-white/70 text-lg leading-relaxed">
-        No necesitas adoptar un gato para hacer una diferencia. Hay muchas formas de apoyar a la Fundación Utopía Animal - y todas cuentan.
+        No necesitas adoptar un gato para hacer una diferencia. Hay muchas formas de apoyar a Utopía Animal - y todas cuentan.
       </p>
     </div>
     <div class="relative -mb-px">
       <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
         <path d="M0 50L1440 50L1440 0Q720 50 0 0Z" fill="white"/>
       </svg>
+    </div>
+  </section>
+
+  <!-- DONA AHORA -->
+  <section class="bg-elim-50 py-16 border-b border-elim-100">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-3">Dona ahora</p>
+      <h2 class="text-3xl font-extrabold text-gray-900 mb-3">Tu aporte sostiene cada rescate</h2>
+      <p class="text-gray-600 mb-8 max-w-xl mx-auto">Adoptar no exige donar, pero cada aporte —del tamaño que sea— mantiene viva la segunda oportunidad de los que siguen esperando.</p>
+      <div class="bg-white rounded-2xl border border-elim-200 p-6 sm:p-8 max-w-md mx-auto shadow-sm">
+        <p class="text-sm text-gray-500 mb-4">Dona en línea o con tu llave Bre-B</p>
+        <a id="donarLink" href="https://checkout.nequi.wompi.co/l/VPOS_2ZWJrH" target="_blank" rel="noopener"
+           class="flex items-center justify-center gap-2 w-full bg-elim-600 hover:bg-elim-500 text-white font-bold px-6 py-3.5 rounded-xl transition-colors mb-4">
+          💚 Donar en línea
+        </a>
+        <div class="flex items-center justify-center gap-3 mb-6 text-sm">
+          <span class="text-gray-500">Llave Bre-B:</span>
+          <span id="brebNum" class="font-extrabold text-gray-900 tracking-wide">0092632218</span>
+          <button id="copyBreb" type="button" class="text-elim-700 hover:text-elim-900 font-semibold border border-elim-200 rounded-lg px-3 py-1.5 transition-colors">Copiar</button>
+        </div>
+        <div class="grid grid-cols-3 gap-3 text-center">
+          <div class="bg-elim-50 rounded-xl p-3"><div class="text-lg mb-1">🐾</div><p class="font-bold text-gray-900 text-sm">$50.000</p><p class="text-xs text-gray-500">Arena</p></div>
+          <div class="bg-elim-50 rounded-xl p-3"><div class="text-lg mb-1">🍽️</div><p class="font-bold text-gray-900 text-sm">$80.000</p><p class="text-xs text-gray-500">Concentrado</p></div>
+          <div class="bg-elim-50 rounded-xl p-3"><div class="text-lg mb-1">✂️</div><p class="font-bold text-gray-900 text-sm">$100.000</p><p class="text-xs text-gray-500">Esterilización</p></div>
+        </div>
+        <p class="text-xs text-gray-500 mt-4">Cualquier valor que te quede cómodo es bienvenido 💚</p>
+      </div>
     </div>
   </section>
 
@@ -80,7 +107,7 @@ import Layout from '../layouts/Layout.astro';
             <p class="text-gray-500 text-sm leading-relaxed mb-5">
               Contribuye con la atención veterinaria, alimentación, transporte y cuidado de los gatos de Elim que están en proceso de recuperación. Cada aporte tiene impacto directo.
             </p>
-            <a href="https://api.whatsapp.com/send?phone=573103603232&text=Hola,%20quiero%20hacer%20una%20donaci%C3%B3n%20a%20la%20Fundaci%C3%B3n%20Utop%C3%ADa%20Animal"
+            <a href="https://api.whatsapp.com/send?phone=573103603232&text=Hola,%20quiero%20hacer%20una%20donaci%C3%B3n%20a%20Utop%C3%ADa%20Animal"
               target="_blank" rel="noopener"
               class="inline-flex items-center gap-2 bg-elim-700 hover:bg-elim-800 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors">
               Consultar formas de donar
@@ -110,7 +137,7 @@ import Layout from '../layouts/Layout.astro';
             <div class="text-4xl mb-4">📣</div>
             <h3 class="font-extrabold text-gray-900 text-lg mb-2">Difusión</h3>
             <p class="text-gray-500 text-sm leading-relaxed mb-5">
-              Comparte nuestras publicaciones, el blog de bienestar animal y el mensaje de la fundación. La conciencia también se construye con alcance - y no cuesta nada.
+              Comparte nuestras publicaciones, el blog de bienestar animal y el mensaje de Utopía Animal. La conciencia también se construye con alcance - y no cuesta nada.
             </p>
             <a href="https://www.instagram.com/utopianimalvet/" target="_blank" rel="noopener"
               class="inline-flex items-center gap-2 bg-utopia-500 hover:bg-utopia-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors">
@@ -125,9 +152,9 @@ import Layout from '../layouts/Layout.astro';
             <div class="text-4xl mb-4">🤝</div>
             <h3 class="font-extrabold text-gray-900 text-lg mb-2">Voluntariado</h3>
             <p class="text-gray-500 text-sm leading-relaxed mb-5">
-              Apoya con tu tiempo y habilidades: diseño, redes, transporte de peludos, apoyo en jornadas. La fundación funciona gracias a personas comprometidas como tú.
+              Apoya con tu tiempo y habilidades: diseño, redes, transporte de peludos, apoyo en jornadas. Utopía Animal funciona gracias a personas comprometidas como tú.
             </p>
-            <a href="https://api.whatsapp.com/send?phone=573103603232&text=Hola,%20quiero%20ser%20voluntario%20en%20la%20Fundaci%C3%B3n%20Utop%C3%ADa%20Animal"
+            <a href="https://api.whatsapp.com/send?phone=573103603232&text=Hola,%20quiero%20ser%20voluntario%20en%20Utop%C3%ADa%20Animal"
               target="_blank" rel="noopener"
               class="inline-flex items-center gap-2 bg-elim-700 hover:bg-elim-800 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors">
               Unirme como voluntario
@@ -135,6 +162,44 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- EMPRESAS Y ALIADOS -->
+  <section class="bg-white py-20 border-t border-gray-100">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold text-utopia-500 uppercase tracking-widest mb-3">Empresas y aliados</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">¿Tu empresa quiere generar impacto?</h2>
+        <p class="text-gray-500 max-w-2xl mx-auto">Sumarte a Utopía Animal es responsabilidad social con impacto medible y visible en Medellín. Construimos una alianza a la medida de tu organización.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {[
+          { icon: '🎯', title: 'Patrocinio de jornadas', desc: 'Financia una jornada de esterilización o adopción con la presencia y el respaldo de tu marca.' },
+          { icon: '📦', title: 'Donación de insumos', desc: 'Alimento, productos veterinarios, transportadoras o premios para rifas. El aporte en especie también suma.' },
+          { icon: '🤝', title: 'Convenios institucionales', desc: 'Alianzas con empresas, universidades, fundaciones y comercios para programas de bienestar animal.' },
+          { icon: '🧾', title: 'Redondeo solidario en caja', desc: 'Para comercios y veterinarias aliadas: tus clientes redondean su compra a favor de los rescatados.' },
+          { icon: '💼', title: 'Responsabilidad social (RSE)', desc: 'Voluntariado corporativo y jornadas con tu equipo. Impacto real que fortalece tu cultura.' },
+          { icon: '📊', title: 'Reporte de impacto', desc: 'Te entregamos evidencia del impacto de tu aporte: animales atendidos, jornadas y resultados.' },
+        ].map(({ icon, title, desc }) => (
+          <div class="border border-gray-100 rounded-2xl p-6 hover:shadow-md transition-shadow">
+            <div class="text-3xl mb-3">{icon}</div>
+            <h3 class="font-bold text-gray-900 mb-1.5">{title}</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">{desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="bg-utopia-950 rounded-2xl p-8 sm:p-10 text-center">
+        <h3 class="text-2xl font-extrabold text-white mb-3">Hablemos de una alianza</h3>
+        <p class="text-utopia-300 max-w-xl mx-auto mb-7 text-sm leading-relaxed">Cuéntanos sobre tu empresa y armamos juntos una propuesta de alianza, patrocinio o convenio a la medida.</p>
+        <a id="aliadosCta" href="https://api.whatsapp.com/send?phone=573103603232&text=Hola,%20represento%20a%20una%20empresa%20y%20me%20interesa%20una%20alianza%20o%20convenio%20con%20Utop%C3%ADa%20Animal"
+           target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 bg-utopia-500 hover:bg-utopia-400 text-white font-bold px-7 py-3.5 rounded-xl transition-colors text-sm">
+          💬 Quiero ser aliado
+        </a>
       </div>
     </div>
   </section>
@@ -154,5 +219,32 @@ import Layout from '../layouts/Layout.astro';
       </a>
     </div>
   </section>
+
+  <!-- Tracking: copiar Nequi (Donate) + clic aliados (Lead) -->
+  <script is:inline>
+    (function () {
+      try {
+        var link = document.getElementById('donarLink');
+        if (link) link.addEventListener('click', function () {
+          if (typeof window.fbq === 'function') window.fbq('track', 'Donate', { content_category: 'donacion_online' });
+          if (typeof window.gtag === 'function') window.gtag('event', 'donate_intent', { event_category: 'donacion', event_label: 'link_pago_wompi' });
+        });
+        var btn = document.getElementById('copyBreb');
+        if (btn) btn.addEventListener('click', function () {
+          var num = (document.getElementById('brebNum') || {}).textContent || '';
+          if (navigator.clipboard) navigator.clipboard.writeText(num.replace(/\s/g, ''));
+          btn.textContent = '¡Copiado!';
+          setTimeout(function () { btn.textContent = 'Copiar'; }, 2000);
+          if (typeof window.fbq === 'function') window.fbq('track', 'Donate', { content_category: 'donacion_breb' });
+          if (typeof window.gtag === 'function') window.gtag('event', 'donate_intent', { event_category: 'donacion', event_label: 'copiar_breb' });
+        });
+        var ali = document.getElementById('aliadosCta');
+        if (ali) ali.addEventListener('click', function () {
+          if (typeof window.fbq === 'function') window.fbq('track', 'Lead', { content_category: 'alianza_empresarial' });
+          if (typeof window.gtag === 'function') window.gtag('event', 'generate_lead', { event_category: 'alianza', event_label: 'empresa_aliada' });
+        });
+      } catch (e) {}
+    })();
+  </script>
 
 </Layout>

@@ -3,8 +3,8 @@ import Layout from '../../layouts/Layout.astro';
 ---
 
 <Layout
-  title="Elim Refugio Animal - Bienestar Felino en Medellín"
-  description="Elim Refugio Animal es un movimiento felino en Medellín. Rescate, hogares temporales, esterilización y comunidad para construir una ciudad más consciente con los gatos callejeros."
+  title="Gatos en adopción en Medellín · Elim Refugio Animal"
+  description="Adopta un gato en Medellín con Elim Refugio Animal: rescate, hogares temporales y adopción responsable. Conoce cómo adoptar y dale una segunda oportunidad a un gato rescatado."
   seoType="organization"
   brand="elim"
 >
@@ -84,6 +84,56 @@ import Layout from '../../layouts/Layout.astro';
       </div>
     </div>
   </section>
+
+  <!-- ── GATOS EN ADOPCIÓN (desde Instagram #AdoptaNoCompres) ─── -->
+  <section class="bg-white pb-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-3">Buscan hogar</p>
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Gatos en adopción</h2>
+        <p class="text-gray-500 max-w-xl mx-auto">Estos gaticos esperan una familia. Conoce sus historias en nuestro Instagram y, si alguno te roba el corazón, postúlate para adoptar.</p>
+      </div>
+
+      <div id="adoptablesGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4" aria-live="polite"></div>
+
+      <div id="adoptablesFallback" class="hidden text-center">
+        <p class="text-gray-500 mb-5">Conoce a los gatos en adopción y su día a día en nuestro Instagram.</p>
+        <a href="https://www.instagram.com/refugioanimalelim/" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 bg-elim-700 hover:bg-elim-800 text-white font-bold px-7 py-3.5 rounded-xl transition-colors text-sm">
+          🐾 Ver gatos en Instagram
+        </a>
+      </div>
+
+      <div class="text-center mt-10">
+        <a href="/refugio/adoptar"
+           class="inline-flex items-center gap-2 bg-elim-600 hover:bg-elim-500 text-white font-bold px-7 py-3.5 rounded-xl transition-colors text-sm shadow-lg shadow-elim-900/20">
+          Quiero adoptar →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var grid = document.getElementById('adoptablesGrid');
+      var fb = document.getElementById('adoptablesFallback');
+      if (!grid) return;
+      function showFallback() { grid.classList.add('hidden'); if (fb) fb.classList.remove('hidden'); }
+      fetch('/api/adoptables').then(function (r) { return r.json(); }).then(function (d) {
+        var items = (d && d.items) || [];
+        if (!items.length) { showFallback(); return; }
+        grid.innerHTML = items.map(function (m) {
+          var cap = (m.caption || 'En adopción').replace(/[<>&]/g, '');
+          return '<a href="' + m.permalink + '" target="_blank" rel="noopener" class="group block rounded-2xl overflow-hidden border border-elim-100 hover:shadow-md transition">'
+            + '<div class="aspect-square overflow-hidden bg-elim-50">'
+            + '<img src="' + m.image + '" alt="Gato en adopción: ' + cap + '" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />'
+            + '</div>'
+            + '<div class="p-3"><p class="text-sm font-semibold text-gray-800 truncate">' + cap + '</p>'
+            + '<p class="text-xs text-elim-600 font-medium mt-0.5">Ver en Instagram →</p></div></a>';
+        }).join('');
+      }).catch(showFallback);
+    })();
+  </script>
 
   <!-- ── CÓMO FUNCIONA ─────────────────────────────────── -->
   <section class="bg-elim-50 py-24">
@@ -210,7 +260,7 @@ import Layout from '../../layouts/Layout.astro';
         Artículos escritos con rigor y cariño sobre nutrición, comportamiento, salud y bienestar felino. Porque cuidar bien a tu gato también es parte del cambio.
       </p>
       <a href="/blog" class="inline-flex items-center gap-2 bg-elim-700 hover:bg-elim-800 text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-sm">
-        Ir a el blog de bienestar animal →
+        Ir al blog de bienestar animal →
       </a>
     </div>
   </section>
