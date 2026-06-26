@@ -52,9 +52,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, params }
 
   let changes = 0;
   try {
-    // Al calificar, la solicitud pasa de inmediato a 'filtro' (filtro inicial:
-    // queda pendiente de que Federico la revise y decida rechazar o contactar).
-    // Solo se mueve si seguía en 'recepcion', para no retroceder etapas humanas.
+    // Al calificar, la solicitud se queda en 'recepcion': ahí vive el panel de
+    // WhatsApp de primer contacto. Quien decide avanzar a 'concepto' es Federico
+    // al contactar y pedir el video (ver buildAcciones/avanzarEtapa en el panel).
     const result = await env.DB.prepare(
       `UPDATE solicitudes
        SET evaluado_at = CURRENT_TIMESTAMP,
@@ -63,9 +63,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, params }
            senales_alerta = ?,
            preguntas_followup = ?,
            recomendacion = ?,
-           notas_ia = ?,
-           etapa = CASE WHEN etapa = 'recepcion' THEN 'filtro' ELSE etapa END,
-           estado = CASE WHEN etapa = 'recepcion' THEN 'proceso' ELSE estado END
+           notas_ia = ?
        WHERE id = ?`
     ).bind(score, senales_buenas, senales_alerta, preguntas_followup, recomendacion, notas_ia, id).run();
     changes = (result as { meta?: { changes?: number } }).meta?.changes ?? 0;
