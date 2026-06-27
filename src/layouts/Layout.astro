@@ -10,6 +10,7 @@ interface Props {
   canonicalURL?: string;
   brand?: 'utopia' | 'elim' | 'parent';
   seoType?: 'website' | 'article' | 'veterinary' | 'organization';
+  pwa?: boolean;
   article?: {
     publishedTime?: string;
     modifiedTime?: string;
@@ -25,6 +26,7 @@ const {
   canonicalURL = Astro.url.href,
   brand = 'parent',
   seoType = 'website',
+  pwa = false,
   article,
 } = Astro.props;
 
@@ -75,6 +77,26 @@ const fullTitle = title === 'Utopia Animal'
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/logo-utopia.png" />
     <link rel="apple-touch-icon" href="/logo-utopia.png" />
+
+    {/* PWA: intranet instalable en móvil */}
+    {pwa && (
+      <>
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <meta name="theme-color" content="#2d0f60" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Adopciones" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon-180.png" />
+        <script is:inline>
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+              navigator.serviceWorker.register('/sw.js').catch(() => {});
+            });
+          }
+        </script>
+      </>
+    )}
 
     <SEO
       title={fullTitle}
@@ -221,6 +243,36 @@ const fullTitle = title === 'Utopia Animal'
 
       /* Divide lines */
       .dark .divide-gray-50 > * + * { border-color: #1f2937 !important; }
+
+      /* ── Prose (blog) en modo oscuro ──────────────────────
+         El plugin typography fija sus colores con variables --tw-prose-*
+         (cuerpo gris-700, títulos elim-900) que en oscuro quedan ilegibles.
+         Las sobreescribimos a tonos claros. */
+      .dark .prose-elim {
+        --tw-prose-body: #d1d5db;
+        --tw-prose-headings: #bbf7d0;
+        --tw-prose-links: #4ade80;
+        --tw-prose-bold: #bbf7d0;
+        --tw-prose-counters: #86efac;
+        --tw-prose-bullets: #4ade80;
+        --tw-prose-hr: #374151;
+        --tw-prose-quotes: #e5e7eb;
+        --tw-prose-quote-borders: #166534;
+        --tw-prose-code: #bbf7d0;
+        --tw-prose-captions: #9ca3af;
+      }
+      .dark .prose-utopia {
+        --tw-prose-body: #d1d5db;
+        --tw-prose-headings: #ddd0ff;
+        --tw-prose-links: #a87dff;
+        --tw-prose-bold: #ddd0ff;
+        --tw-prose-counters: #c4aeff;
+        --tw-prose-bullets: #a87dff;
+        --tw-prose-hr: #374151;
+        --tw-prose-quotes: #e5e7eb;
+        --tw-prose-quote-borders: #5720ae;
+        --tw-prose-captions: #9ca3af;
+      }
     </style>
   </head>
   <body class="bg-white dark:bg-gray-950 text-gray-800 dark:text-gray-200 antialiased transition-colors duration-200">

@@ -1,0 +1,17 @@
+{
+  "name": "Adopciones Elim · Utopía Animal",
+  "short_name": "Adopciones",
+  "description": "Seguimiento de adopciones y hogares temporales del Refugio Animal Elim.",
+  "lang": "es-CO",
+  "start_url": "/intranet/",
+  "scope": "/intranet/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b1220",
+  "theme_color": "#2d0f60",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
