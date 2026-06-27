@@ -1,16 +1,12 @@
+// Disparador manual de evaluación con Workers AI para una solicitud puntual.
+// Útil para reintentar si la evaluación automática (al recibir la solicitud)
+// falló. Requiere sesión/admin. Re-evalúa aunque ya tenga dictamen (force).
 import { isAuthorized, unauthorized, type AuthEnv } from '../_lib/auth';
+import { evaluarYGuardar, type EvalEnv } from '../_lib/evaluar-ia';
 
 interface Env extends AuthEnv {
   DB: D1Database;
-}
-
-interface EvalPayload {
-  score?: number;
-  senales_buenas?: unknown;
-  senales_alerta?: unknown;
-  preguntas_followup?: unknown;
-  recomendacion?: string;
-  notas_ia?: string;
+  AI: Ai;
 }
 
 function jsonResponse(body: unknown, status = 200): Response {
@@ -18,13 +14,6 @@ function jsonResponse(body: unknown, status = 200): Response {
     status,
     headers: { 'Content-Type': 'application/json' },
   });
-}
-
-function stringifyMaybeArray(v: unknown): string | null {
-  if (v === undefined || v === null) return null;
-  if (Array.isArray(v)) return JSON.stringify(v);
-  if (typeof v === 'string') return JSON.stringify([v]);
-  return JSON.stringify(v);
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env, params }) => {
@@ -36,42 +25,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, params }
     return jsonResponse({ ok: false, error: 'invalid_id' }, 400);
   }
 
-  let body: EvalPayload;
-  try {
-    body = await request.json();
-  } catch {
-    return jsonResponse({ ok: false, error: 'invalid_json' }, 400);
-  }
-
-  const score = typeof body.score === 'number' ? body.score : null;
-  const senales_buenas = stringifyMaybeArray(body.senales_buenas);
-  const senales_alerta = stringifyMaybeArray(body.senales_alerta);
-  const preguntas_followup = stringifyMaybeArray(body.preguntas_followup);
-  const recomendacion = typeof body.recomendacion === 'string' ? body.recomendacion : null;
-  const notas_ia = typeof body.notas_ia === 'string' ? body.notas_ia : null;
-
-  let changes = 0;
-  try {
-    // Al calificar, la solicitud se queda en 'recepcion': ahí vive el panel de
-    // WhatsApp de primer contacto. Quien decide avanzar a 'concepto' es Federico
-    // al contactar y pedir el video (ver buildAcciones/avanzarEtapa en el panel).
-    const result = await env.DB.prepare(
-      `UPDATE solicitudes
-       SET evaluado_at = CURRENT_TIMESTAMP,
-           score = ?,
-           senales_buenas = ?,
-           senales_alerta = ?,
-           preguntas_followup = ?,
-           recomendacion = ?,
-           notas_ia = ?
-       WHERE id = ?`
-    ).bind(score, senales_buenas, senales_alerta, preguntas_followup, recomendacion, notas_ia, id).run();
-    changes = (result as { meta?: { changes?: number } }).meta?.changes ?? 0;
-  } catch (err) {
-    return jsonResponse({ ok: false, error: 'db_error', detail: String(err) }, 500);
-  }
-
-  if (changes === 0) return jsonResponse({ ok: false, error: 'not_found' }, 404);
-
+  const ok = await evaluarYGuardar(env as EvalEnv, id, true);
+  if (!ok) return jsonResponse({ ok: false, error: 'eval_failed' }, 502);
   return jsonResponse({ ok: true });
 };

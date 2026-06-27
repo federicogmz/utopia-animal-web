@@ -1,5 +1,8 @@
+import { evaluarYGuardar, type EvalEnv } from './_lib/evaluar-ia';
+
 interface Env {
   DB: D1Database;
+  AI: Ai;
 }
 
 type Payload = Record<string, unknown>;
@@ -197,6 +200,17 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       { ok: false, error: "db_error", detail: String(err) },
       500,
     );
+  }
+
+  // Califica la solicitud con Workers AI y guarda el dictamen en la misma fila.
+  // Si la IA falla, no rompe la recepción: la solicitud queda sin evaluar y se
+  // puede reintentar manualmente desde /api/evaluar/[id].
+  if (insertedId !== null) {
+    try {
+      await evaluarYGuardar(env as EvalEnv, insertedId);
+    } catch (err) {
+      console.error("evaluación IA falló para solicitud", insertedId, String(err));
+    }
   }
 
   return jsonResponse({ ok: true, id: insertedId });
