@@ -115,30 +115,46 @@ function asArray(v: unknown): string[] {
   return [];
 }
 
-// Llama al modelo y devuelve la evaluación parseada, o null si falla.
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Llama al modelo (con reintentos) y devuelve la evaluación parseada, o null si
+// falla tras todos los intentos. Workers AI puede fallar transitoriamente
+// (timeout/rate-limit en ráfaga de solicitudes); sin reintento la solicitud
+// quedaba silenciosamente sin calificar.
 export async function evaluarSolicitud(
   env: EvalEnv,
   solicitud: Record<string, unknown>,
   duplicados: string | null,
 ): Promise<Evaluacion | null> {
   const userPrompt = `Evalúa esta solicitud de adopción:\n\n${describirSolicitud(solicitud, duplicados)}`;
+  const INTENTOS = 3;
+  const ESPERA_MS = 2000;
 
   let raw: unknown;
-  try {
-    const res = await env.AI.run(MODEL, {
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: userPrompt },
-      ],
-      response_format: { type: 'json_schema', json_schema: RESPONSE_SCHEMA },
-      max_tokens: 1200,
-    } as Record<string, unknown>);
-    // En JSON Mode, la respuesta viene en .response (objeto o string JSON).
-    raw = (res as { response?: unknown }).response ?? res;
-  } catch (err) {
-    console.error('evaluarSolicitud AI error', String(err));
-    return null;
+  let lastErr: unknown = null;
+  for (let intento = 1; intento <= INTENTOS; intento++) {
+    try {
+      const res = await env.AI.run(MODEL, {
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: userPrompt },
+        ],
+        response_format: { type: 'json_schema', json_schema: RESPONSE_SCHEMA },
+        max_tokens: 1200,
+      } as Record<string, unknown>);
+      // En JSON Mode, la respuesta viene en .response (objeto o string JSON).
+      raw = (res as { response?: unknown }).response ?? res;
+      lastErr = null;
+      break;
+    } catch (err) {
+      lastErr = err;
+      console.error(`evaluarSolicitud AI error (intento ${intento}/${INTENTOS})`, String(err));
+      if (intento < INTENTOS) await sleep(ESPERA_MS * intento);
+    }
   }
+  if (lastErr) return null;
 
   let parsed: Record<string, unknown>;
   try {
