@@ -2,6 +2,8 @@ import { sha256Hex } from './_lib/crypto';
 
 interface Env {
   DB: D1Database;
+  META_PIXEL_ID: string;
+  META_ACCESS_TOKEN: string;
 }
 
 interface LeadPayload {
@@ -31,9 +33,6 @@ interface LeadPayload {
     currency?: string;
   };
 }
-
-const META_PIXEL_ID = '28070208119234980';
-const META_ACCESS_TOKEN = 'EAAjZCH8yC9KUBR78QzRjO0ZB51UZAVF3ghrXtSZBr1O7iE97hM97LBCYPgTaAoEaz9xIpZCvdBHFrcURvsceO4HhyFOCW2ubP7pWZBFzXAIr8vGa24TieTPXw0A8udVVwUDS17GOUyR2DhVc92aCg8FQWtWtCiqirMTRG5k2qikFgRc6NlYxThswPxHCMzuLeLrwZDZD';
 
 const ALLOWED_ORIGINS = [
   'https://utopianimal.org',
@@ -115,7 +114,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   try {
     const response = await fetch(
-      `https://graph.facebook.com/v22.0/${META_PIXEL_ID}/events?access_token=${META_ACCESS_TOKEN}`,
+      `https://graph.facebook.com/v22.0/${env.META_PIXEL_ID}/events?access_token=${env.META_ACCESS_TOKEN}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
