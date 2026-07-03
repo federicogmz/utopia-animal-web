@@ -80,6 +80,25 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const origin = request.headers.get('Origin') || '';
   const headers = corsHeaders(origin);
 
+  // Debug: check env vars
+  console.log('CAPI Debug - env check:', {
+    hasPixelId: !!env.META_PIXEL_ID,
+    hasAccessToken: !!env.META_ACCESS_TOKEN,
+    hasDB: !!env.DB,
+    pixelIdPreview: env.META_PIXEL_ID?.substring(0, 10),
+  });
+
+  if (!env.META_PIXEL_ID || !env.META_ACCESS_TOKEN) {
+    return new Response(JSON.stringify({ 
+      ok: false, 
+      error: 'missing_env_vars',
+      detail: 'META_PIXEL_ID or META_ACCESS_TOKEN not configured in Cloudflare Dashboard'
+    }), {
+      status: 500,
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    });
+  }
+
   let payload: LeadPayload;
   try {
     payload = await request.json();
@@ -113,6 +132,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   };
 
   try {
+    console.log('CAPI Debug - sending to Meta:', {
+      pixelId: env.META_PIXEL_ID,
+      eventId: payload.event_id,
+      eventName: payload.event_name,
+    });
+
     const response = await fetch(
       `https://graph.facebook.com/v22.0/${env.META_PIXEL_ID}/events?access_token=${env.META_ACCESS_TOKEN}`,
       {
@@ -123,6 +148,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     );
 
     const result = await response.json();
+    console.log('CAPI Debug - Meta response:', { ok: response.ok, status: response.status, result });
 
     if (!response.ok) {
       console.error('Meta CAPI error:', JSON.stringify(result));
@@ -153,7 +179,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     });
   } catch (err) {
     console.error('CAPI fetch failed:', err);
-    return new Response(JSON.stringify({ ok: false, error: 'network_error' }), {
+    return new Response(JSON.stringify({ ok: false, error: 'network_error', detail: String(err) }), {
       status: 502,
       headers: { ...headers, 'Content-Type': 'application/json' },
     });
