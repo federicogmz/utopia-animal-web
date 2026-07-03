@@ -1,4 +1,4 @@
-import { sha256Hex } from './_lib/crypto';
+import { sha256Hex } from '../_lib/crypto';
 
 interface Env {
   DB: D1Database;
