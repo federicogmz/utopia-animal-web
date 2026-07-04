@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Página puente de WhatsApp para quienes YA enviaron el formulario de adopción.
+// Mismo patrón que /wa-elim (mide en GA4 antes de redirigir, wa.me descarta UTMs),
+// pero con mensaje y evento propios para distinguir esta señal de alta intención
+// (post-formulario) del contacto genérico de Instagram.
+const ELIM_WHATSAPP = '573103603232';
+const PREFILL = 'Hola 👋 Ya envié mi solicitud de adopción con Elim. A continuación les comparto un video de mi hogar 🏠🐾';
+const waUrl = `https://wa.me/${ELIM_WHATSAPP}?text=${encodeURIComponent(PREFILL)}`;
+---
+
+<Layout
+  title="Conectando con WhatsApp · Refugio Animal Elim"
+  description="Te estamos conectando con Refugio Animal Elim por WhatsApp para continuar tu postulación de adopción."
+  brand="elim"
+>
+  <section class="bg-white py-24 sm:py-32">
+    <div class="max-w-md mx-auto px-6 text-center">
+      <div class="text-6xl mb-5">💬</div>
+      <h1 class="text-2xl font-extrabold text-gray-900 mb-3">Abriendo WhatsApp…</h1>
+      <p class="text-gray-600 mb-8">
+        Te estamos conectando con el equipo de Elim. Si no se abre solo, toca el botón.
+      </p>
+      <a
+        id="wa-link"
+        href={waUrl}
+        class="inline-block bg-utopia-600 hover:bg-utopia-700 text-white font-bold rounded-xl px-8 py-4 transition-colors"
+      >
+        Abrir WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ waUrl }}>
+    (function () {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var payload = {
+          method: 'whatsapp',
+          event_category: 'adopcion',
+          event_label: 'wa_elim_postulacion',
+          utm_source: params.get('utm_source') || '(direct)',
+          utm_medium: params.get('utm_medium') || '(none)',
+          utm_campaign: params.get('utm_campaign') || '(none)',
+          utm_content: params.get('utm_content') || '(none)',
+        };
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'contact', payload);
+        }
+        if (typeof window.fbq === 'function') {
+          window.fbq('track', 'Contact', { content_category: 'adopcion_postulacion' });
+        }
+      } catch (e) {}
+      // Pequeño margen para que el beacon de GA salga antes de redirigir.
+      setTimeout(function () {
+        window.location.replace(waUrl);
+      }, 800);
+    })();
+  </script>
+</Layout>

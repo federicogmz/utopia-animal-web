@@ -5,10 +5,10 @@ interface Env extends AuthEnv {
 }
 
 const FIELDS = [
-  'solicitud_id', 'nombre_gato', 'sexo', 'descripcion', 'fecha_ingreso',
-  'fecha_nacimiento_estimada', 'fecha_desparasitacion', 'test_sida_leucemia',
+  'solicitud_id', 'nombre_gato', 'sexo', 'descripcion',
+  'fecha_nacimiento_estimada',
   'fecha_esterilizacion_estimada', 'fecha_esterilizacion_real', 'fecha_adopcion',
-  'adoptante', 'adoptante_telefono', 'rescatista', 'donacion_monto',
+  'adoptante', 'adoptante_telefono', 'rescatista',
   'estado', 'notas_seguimiento',
 ] as const;
 
@@ -36,7 +36,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const norm = (k: string) => {
     let v = body[k];
     if (v === '' || v === undefined) v = null;
-    if (k === 'donacion_monto' || k === 'solicitud_id') v = v == null ? null : Number(v);
+    if (k === 'solicitud_id') v = v == null ? null : Number(v);
     return v;
   };
 

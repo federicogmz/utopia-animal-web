@@ -137,6 +137,22 @@ import Layout from '../../layouts/Layout.astro';
       ${opts.map(([v,l])=>`<option value="${v}" ${String(val||'')===v?'selected':''}>${esc(l)}</option>`).join('')}</select></div>`;
   }
 
+  // Esterilización estimada: se calcula, no se digita.
+  // 8 meses desde el nacimiento para machos/desconocido, 4 meses para hembras.
+  function calcEsterilizacion(sexo, fechaNac){
+    if(!fechaNac) return '';
+    const meses = sexo === 'Hembra' ? 4 : 8;
+    const d = new Date(fechaNac + 'T00:00:00');
+    d.setMonth(d.getMonth() + meses);
+    return d.toISOString().slice(0,10);
+  }
+  function refreshEsterilizacionEstimada(){
+    const sexo = document.getElementById('f_sexo')?.value;
+    const nac  = document.getElementById('f_fecha_nacimiento_estimada')?.value;
+    const out  = document.getElementById('f_fecha_esterilizacion_estimada');
+    if(out) out.value = calcEsterilizacion(sexo, nac);
+  }
+
   function openForm(a){
     a = a || {};
     editId = a.id || null;
@@ -152,12 +168,12 @@ import Layout from '../../layouts/Layout.astro';
         ${field('Teléfono adoptante','f_adoptante_telefono',a.adoptante_telefono)}
         ${field('Rescatista (quien dio en adopción)','f_rescatista',a.rescatista)}
         ${field('Fecha estimada de nacimiento','f_fecha_nacimiento_estimada',a.fecha_nacimiento_estimada,'date')}
-        ${field('Fecha de ingreso al refugio','f_fecha_ingreso',a.fecha_ingreso,'date')}
-        ${field('Fecha de desparasitación','f_fecha_desparasitacion',a.fecha_desparasitacion,'date')}
-        ${sel('Test Sida/Leucemia','f_test_sida_leucemia',a.test_sida_leucemia,[['','—'],['Pendiente','Pendiente'],['Negativo','Negativo'],['Positivo','Positivo']])}
-        ${field('Esterilización estimada','f_fecha_esterilizacion_estimada',a.fecha_esterilizacion_estimada,'date')}
+        <div>
+          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Esterilización estimada</label>
+          <input id="f_fecha_esterilizacion_estimada" type="date" value="${esc(calcEsterilizacion(a.sexo, a.fecha_nacimiento_estimada) || a.fecha_esterilizacion_estimada || '')}" readonly class="w-full rounded-xl border-gray-200 bg-gray-50 text-sm text-gray-600"/>
+          <p class="text-[11px] text-gray-400 mt-1">Calculado: 8 meses desde el nacimiento (macho/desconocido) · 4 meses (hembra).</p>
+        </div>
         ${field('Esterilización real','f_fecha_esterilizacion_real',a.fecha_esterilizacion_real,'date')}
-        ${field('Donación (COP)','f_donacion_monto',a.donacion_monto,'number')}
         ${sel('Estado','f_estado',a.estado||'adoptado',[['adoptado','Adoptado'],['en_proceso','En proceso'],['en_refugio','En refugio'],['fallecido','Fallecido']])}
       </div>
       <div class="mt-5"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Descripción</label>
@@ -166,6 +182,8 @@ import Layout from '../../layouts/Layout.astro';
         <textarea id="f_notas_seguimiento" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-elim-500 focus:border-elim-500">${esc(a.notas_seguimiento||'')}</textarea></div>`;
     document.getElementById('modal').classList.remove('hidden');
     document.body.style.overflow='hidden';
+    document.getElementById('f_sexo').onchange = refreshEsterilizacionEstimada;
+    document.getElementById('f_fecha_nacimiento_estimada').onchange = refreshEsterilizacionEstimada;
   }
   window.editar = function(id){ const a = adopciones.find(x=>x.id===id); if(a) openForm(a); };
 
@@ -180,11 +198,11 @@ import Layout from '../../layouts/Layout.astro';
       id: editId,
       solicitud_id: g('f_solicitud_id') || null,
       nombre_gato: g('f_nombre_gato'), sexo: g('f_sexo'), descripcion: g('f_descripcion'),
-      fecha_ingreso: g('f_fecha_ingreso'), fecha_nacimiento_estimada: g('f_fecha_nacimiento_estimada'),
-      fecha_desparasitacion: g('f_fecha_desparasitacion'), test_sida_leucemia: g('f_test_sida_leucemia'),
-      fecha_esterilizacion_estimada: g('f_fecha_esterilizacion_estimada'), fecha_esterilizacion_real: g('f_fecha_esterilizacion_real'),
+      fecha_nacimiento_estimada: g('f_fecha_nacimiento_estimada'),
+      fecha_esterilizacion_estimada: calcEsterilizacion(g('f_sexo'), g('f_fecha_nacimiento_estimada')),
+      fecha_esterilizacion_real: g('f_fecha_esterilizacion_real'),
       fecha_adopcion: g('f_fecha_adopcion'), adoptante: g('f_adoptante'), adoptante_telefono: g('f_adoptante_telefono'),
-      rescatista: g('f_rescatista'), donacion_monto: g('f_donacion_monto'), estado: g('f_estado'), notas_seguimiento: g('f_notas_seguimiento'),
+      rescatista: g('f_rescatista'), estado: g('f_estado'), notas_seguimiento: g('f_notas_seguimiento'),
     };
     const btn = document.getElementById('btnSave'); const st = document.getElementById('saveStatus');
     btn.disabled = true; btn.textContent='Guardando...'; st.textContent='';

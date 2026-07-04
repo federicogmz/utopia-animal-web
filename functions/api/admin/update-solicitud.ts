@@ -5,9 +5,9 @@ interface Env extends AuthEnv {
 }
 
 const ESTADOS_VALIDOS = new Set(['pendiente', 'proceso', 'aprobada', 'rechazada', 'cerrada']);
-// Flujo simplificado: recepcion -> (contacto WhatsApp) concepto -> aprobado | rechazado ;
-//                     aprobado -> adoptado ; cerrada (cierre sin rechazo)
-const ETAPAS_VALIDAS = new Set(['recepcion', 'concepto', 'aprobado', 'rechazado', 'adoptado', 'cerrada']);
+// Flujo consolidado: recepcion (incluye validar video y mi concepto) -> aprobado | rechazado ;
+//                    aprobado -> adoptado ; cerrada (cierre sin rechazo)
+const ETAPAS_VALIDAS = new Set(['recepcion', 'aprobado', 'rechazado', 'adoptado', 'cerrada']);
 const MALLAS_VALIDOS = new Set(['sin_definir', 'acepta_instalar', 'ya_instaladas', 'no_acepta']);
 const VIDEO_VIABLE_VALIDOS = new Set(['sin_revisar', 'si', 'no']);
 
@@ -15,7 +15,6 @@ const VIDEO_VIABLE_VALIDOS = new Set(['sin_revisar', 'si', 'no']);
 function estadoDeEtapa(etapa: string): string {
   switch (etapa) {
     case 'recepcion': return 'pendiente';
-    case 'concepto': return 'proceso';
     case 'aprobado':
     case 'adoptado': return 'aprobada';
     case 'rechazado': return 'rechazada';
@@ -72,11 +71,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   // Si cambia la etapa, sincroniza el estado heredado.
   if (updates.etapa !== undefined) {
     updates.estado = estadoDeEtapa(String(updates.etapa));
-    // Al entrar a "mi concepto" (contacto por WhatsApp para pedir video), marca la
-    // fecha de contacto si aún no existe. Es el inicio del reloj de la alerta (>4 días).
-    if (updates.etapa === 'concepto' && !actual.contacto_at && updates.contacto_at === undefined) {
-      updates.contacto_at = new Date().toISOString();
-    }
   } else if (body.estado !== undefined) {
     updates.estado = body.estado;
   }
