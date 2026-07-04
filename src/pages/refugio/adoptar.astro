@@ -782,6 +782,9 @@ const compromisos = [
       Object.assign(payload, readAttribution());
       payload._website = document.getElementById('_website').value;
 
+      // Generar event_id único para deduplicación pixel + CAPI
+      const eventId = 'adopt_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+
       try {
         const res = await fetch('/api/solicitud', {
           method: 'POST',
@@ -792,6 +795,42 @@ const compromisos = [
         if (!res.ok || !json.ok) {
           throw new Error(json.error || 'submit_failed');
         }
+
+        // ✅ Disparar CAPI Lead (server-side) con el MISMO event_id que el pixel
+        const capiPayload = {
+          event_name: 'Lead',
+          event_time: Math.floor(Date.now() / 1000),
+          event_id: eventId,
+          action_source: 'website',
+          event_source_url: window.location.href,
+          user_data: {
+            em: payload.correo ? [payload.correo.trim().toLowerCase()] : undefined,
+            ph: payload.telefono ? [payload.telefono.replace(/\D/g, '')] : undefined,
+            fn: payload.nombre_completo ? [payload.nombre_completo.trim().split(' ')[0]] : undefined,
+            ln: payload.nombre_completo ? [payload.nombre_completo.trim().split(' ').slice(1).join(' ')] : undefined,
+            ct: payload.ciudad ? [payload.ciudad.trim()] : undefined,
+            st: ['Antioquia'],
+            zp: undefined,
+            country: ['CO'],
+            // fbp y fbc se toman de cookies en el servidor
+            client_user_agent: navigator.userAgent,
+          },
+          custom_data: {
+            content_name: 'form_adopcion',
+            content_category: 'adopcion',
+            value: 0,
+            currency: 'COP',
+          },
+        };
+
+        // Enviar CAPI en background (no bloquea el redirect)
+        fetch('/api/capi-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Event-ID': eventId },
+          body: JSON.stringify(capiPayload),
+          keepalive: true, // asegura que se envíe aunque la página navegue
+        }).catch(() => {}); // silencioso, no rompe UX
+
         localStorage.removeItem(STORAGE_KEY);
         try { sessionStorage.setItem('adopcion_enviada', '1'); } catch (e) {}
         window.location.href = '/refugio/solicitud-enviada';

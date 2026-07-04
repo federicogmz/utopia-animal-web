@@ -10,3 +10,8 @@ database_id = "00323901-9632-41bd-b5b5-a388c432e1c5"
 # Workers AI: evaluación automática de solicitudes de adopción al recibirlas.
 [ai]
 binding = "AI"
+
+# Meta CAPI (Conversion API) - Configuración vía Environment Variables en Cloudflare Dashboard
+# Agregar en Pages → Settings → Environment Variables:
+# META_PIXEL_ID = "28070208119234980"
+# META_ACCESS_TOKEN = "<system_user_token_con_ads_management>"
