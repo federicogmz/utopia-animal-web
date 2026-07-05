@@ -16,12 +16,9 @@ Esta guía es para ti, que amas a tu gato y quieres hacer lo mejor para él. Has
 
 ## ¿Por qué los gatos esconden el dolor?
 
-A diferencia de los perros —que pueden gemir, cojear o buscar contacto cuando se sienten mal—, los gatos hacen lo opuesto: se retiran, se esconden, se vuelven silenciosos.
+A diferencia de los perros, que pueden gemir, cojear o buscar contacto cuando se sienten mal, los gatos hacen lo opuesto: se retiran, se esconden, se vuelven silenciosos.
 
-Esto tiene dos consecuencias importantes:
-
-1. **Cuando notas los síntomas, el problema puede llevar semanas o meses avanzando.** Un gato que hoy deja de comer del todo probablemente llevaba días comiendo mucho menos sin que lo notaras.
-2. **Tú eres su mejor —y a veces único— sistema de alerta.** Nadie conoce a tu gato como tú. Si sientes que "algo cambió", confía en esa intuición.
+Esto tiene dos consecuencias importantes. Cuando notas los síntomas, el problema puede llevar semanas o meses avanzando: un gato que hoy deja de comer del todo probablemente llevaba días comiendo mucho menos sin que lo notaras. Y tú eres su mejor sistema de alerta, a veces el único. Nadie conoce a tu gato como tú. Si sientes que "algo cambió", confía en esa intuición.
 
 ---
 
@@ -63,11 +60,11 @@ La escala de calidad de vida para gatos es similar a la de perros, pero con mati
 
 Si la enfermedad es crónica pero no está en fase terminal inmediata, los cuidados paliativos pueden regalar semanas o meses de calidad:
 
-- **Manejo del dolor:** gabapentina, buprenorfina y otros analgésicos seguros en gatos. El dolor felino es infradiagnosticado; un gato que "solo está viejito" puede en realidad estar sufriendo en silencio.
-- **Fluidoterapia subcutánea en casa:** especialmente útil en enfermedad renal. Se administra suero bajo la piel cada 2-3 días.
-- **Estimulantes del apetito:** mirtazapina tópica (en la oreja) o ciproheptadina oral.
-- **Adaptación del entorno:** arenero con bordes bajos, camas térmicas, rampas para subir al sofá, platos de comida elevados.
-- **Alimentación asistida:** comida húmeda tibia (huele más y estimula el apetito), suplementos calóricos como Nutri-Plus Gel.
+- Manejo del dolor: gabapentina, buprenorfina y otros analgésicos seguros en gatos. El dolor felino es infradiagnosticado; un gato que "solo está viejito" puede en realidad estar sufriendo en silencio.
+- Fluidoterapia subcutánea en casa, especialmente útil en enfermedad renal. Se administra suero bajo la piel cada 2-3 días.
+- Estimulantes del apetito: mirtazapina tópica (en la oreja) o ciproheptadina oral.
+- Adaptación del entorno: arenero con bordes bajos, camas térmicas, rampas para subir al sofá, platos de comida elevados.
+- Alimentación asistida: comida húmeda tibia (huele más y estimula el apetito), suplementos calóricos como Nutri-Plus Gel.
 
 Pero sé honesto contigo mismo: si tu gato pasa los días escondido, no come ni con estimulantes, y ya no busca tu compañía, los paliativos pueden estar prolongando el sufrimiento, no la vida.
 
@@ -88,11 +85,11 @@ La sedación profunda duerme al gato en 5-15 minutos.
 
 ### 2. El procedimiento final
 
-Con el gato completamente dormido, el veterinario administra la solución de pentobarbital. Como las venas de los gatos son más pequeñas y delicadas, puede usarse una vía intravenosa en la pata delantera o, en algunos casos, una inyección intraperitoneal (en el abdomen) que actúa más lentamente pero es igual de pacífica.
+Con el gato completamente dormido, el veterinario administra la solución de pentobarbital. Como las venas de los gatos son más pequeñas y delicadas, puede usarse una vía intravenosa en la pata delantera o, en algunos casos, una inyección intraperitoneal (en el abdomen), que actúa más lentamente pero es igual de pacífica.
 
 ### 3. Particularidades
 
-- Los gatos pueden tener un **reflejo agónico** más notorio (una respiración profunda, un pequeño movimiento). No es dolor ni conciencia; es un reflejo del sistema nervioso.
+- Los gatos pueden tener un reflejo agónico más notorio (una respiración profunda, un pequeño movimiento). No es dolor ni conciencia; es un reflejo del sistema nervioso.
 - Sus ojos suelen quedar abiertos. El veterinario los cerrará suavemente.
 - Algunos tutores notan que el gato "se ve más pequeño" después. Es normal: la relajación muscular total cambia la apariencia.
 
@@ -119,10 +116,10 @@ Tu duelo es real. Ese gato te recibía en la puerta, dormía en tu almohada, ron
 
 ### Lo que ayuda
 
-- **Habla con otros tutores de gatos.** Ellos entienden.
-- **Conserva algo suyo**: un collar, un juguete, una foto en tu escritorio.
-- **Escribe.** Una carta de despedida. Lo que le dirías si pudiera entenderte.
-- **El tiempo no "cura" el duelo, lo transforma.** Un día recordarás a tu gato y, en lugar de llorar, sonreirás.
+- Habla con otros tutores de gatos. Ellos entienden.
+- Conserva algo suyo: un collar, un juguete, una foto en tu escritorio.
+- Escribe una carta de despedida. Lo que le dirías si pudiera entenderte.
+- El tiempo no "cura" el duelo, lo transforma. Un día recordarás a tu gato y, en lugar de llorar, sonreirás.
 
 ### ¿Cuándo adoptar otro gato?
 
@@ -132,7 +129,7 @@ No hay un momento correcto. Algunos tutores sienten que honran la memoria de su 
 
 ## Una nota sobre gatos que comparten hogar
 
-Si tienes otros gatos en casa, ellos también vivirán el duelo. Pueden buscarlo por la casa, maullar más de lo normal, cambiar sus hábitos de comida o sueño durante unos días. 
+Si tienes otros gatos en casa, ellos también vivirán el duelo. Pueden buscarlo por la casa, maullar más de lo normal, cambiar sus hábitos de comida o sueño durante unos días.
 
 Dales tiempo. Mantén sus rutinas. Y si es posible, permíteles ver el cuerpo de su compañero después del procedimiento: los gatos entienden la muerte cuando la ven y la huelen. Esto puede reducir la ansiedad de búsqueda.
 
@@ -145,10 +142,10 @@ Decidir por tu gato cuando él ya no puede decidir es la responsabilidad más pe
 Si tu gato es mayor, está enfermo o simplemente notas que ya no es el mismo, escríbenos. En Utopía Animal Vet podemos hacer una valoración de calidad de vida sin compromiso: te decimos con honestidad qué opciones hay y qué puedes esperar de cada una.
 
 <div class="bg-utopia-50 border border-utopia-200 rounded-2xl p-6 my-8">
-  <p class="font-bold text-utopia-900 text-lg mb-2">📲 ¿Tu gato no está bien?</p>
+  <p class="font-bold text-utopia-900 text-lg mb-2">¿Tu gato no está bien?</p>
   <p class="text-gray-700 mb-4">Podemos orientarte sobre calidad de vida, cuidados paliativos o resolver tus dudas sobre el procedimiento.</p>
   <a href="https://api.whatsapp.com/send?phone=573215308188&text=Hola,%20necesito%20orientación%20sobre%20la%20calidad%20de%20vida%20de%20mi%20gato" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-xl transition-colors">
-    💬 Hablar por WhatsApp · 321 530 8188
+    Hablar por WhatsApp · 321 530 8188
   </a>
 </div>
 

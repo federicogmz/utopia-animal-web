@@ -8,21 +8,21 @@ tags: ["eutanasia perros", "despedida digna", "duelo mascota", "veterinaria Mede
 
 Hay decisiones que ningún tutor quisiera enfrentar. La eutanasia de un perro es, probablemente, la más dura de todas. Y sin embargo, cuando llega el momento, también puede ser el acto de amor más grande que podemos ofrecerle a quien nos dio años de compañía incondicional.
 
-Este artículo no pretende decirte qué hacer. Pretende darte información clara, compasiva y honesta para que, si estás en esta encrucijada, puedas decidir con el corazón y con la cabeza. Y sepas que no estás solo.
+Este artículo no pretende decirte qué hacer. Busca darte información clara, compasiva y honesta para que, si estás en esta encrucijada, puedas decidir con el corazón y con la cabeza, y sepas que no estás solo.
 
 ---
 
-## ¿Qué es la eutanasia veterinaria?
+## Qué es la eutanasia veterinaria
 
-La eutanasia —del griego _eu_ (bueno) y _thanatos_ (muerte)— significa literalmente "buena muerte". En medicina veterinaria, es un procedimiento clínico controlado que permite que un animal deje de sufrir de forma pacífica, sin dolor y sin miedo.
+La eutanasia, del griego _eu_ (bueno) y _thanatos_ (muerte), significa literalmente "buena muerte". En medicina veterinaria es un procedimiento clínico controlado que permite que un animal deje de sufrir de forma pacífica, sin dolor y sin miedo.
 
-Consiste en la administración de una sobredosis de anestésico —generalmente pentobarbital sódico— que induce primero un sueño profundo y luego la detención del corazón y la respiración. El perro no siente dolor: simplemente se duerme y no despierta.
+Consiste en la administración de una sobredosis de anestésico, generalmente pentobarbital sódico, que induce primero un sueño profundo y luego la detención del corazón y la respiración. El perro no siente dolor. Simplemente se duerme y no despierta.
 
 No es abandono. No es rendirse. Es asumir la responsabilidad de evitarle a tu compañero un sufrimiento que ya no tiene remedio.
 
 ---
 
-## ¿Cuándo es el momento? La checklist de calidad de vida
+## Cuándo es el momento: la checklist de calidad de vida
 
 No hay una fórmula única. Pero los veterinarios usamos una herramienta llamada **escala de calidad de vida (HHHHHMM)** que evalúa siete aspectos:
 
@@ -36,35 +36,35 @@ No hay una fórmula única. Pero los veterinarios usamos una herramienta llamada
 | **Mobility (movilidad)** | ¿Puede levantarse, caminar y hacer sus necesidades sin ayuda? |
 | **More good days than bad (más días buenos que malos)** | En una semana típica, ¿hay más días buenos que malos? |
 
-Una regla que ayuda a muchos tutores: cuando los días malos superan a los buenos de forma sostenida —no por un bajón pasajero, sino como tendencia—, es momento de tener la conversación con tu veterinario.
+Una regla que ayuda a muchos tutores: cuando los días malos superan a los buenos de forma sostenida, no por un bajón pasajero sino como tendencia, es momento de tener la conversación con tu veterinario.
 
 ### Señales específicas que indican que la calidad de vida se deteriora
 
-- **Dolor crónico no controlable:** cojera constante, gemidos, incapacidad de encontrar una posición cómoda para dormir.
-- **Inapetencia prolongada:** deja de comer incluso sus alimentos favoritos.
-- **Incontinencia:** no puede controlar esfínteres y esto le genera angustia visible.
-- **Dificultad respiratoria:** jadeo constante incluso en reposo, respiración con esfuerzo.
-- **Aislamiento:** se esconde, no busca contacto, parece "ausente".
-- **Enfermedad terminal diagnosticada:** cáncer avanzado con metástasis, falla renal en etapa final, insuficiencia cardíaca congestiva que no responde a tratamiento.
+- Dolor crónico no controlable: cojera constante, gemidos, incapacidad de encontrar una posición cómoda para dormir.
+- Inapetencia prolongada: deja de comer incluso sus alimentos favoritos.
+- Incontinencia: no puede controlar esfínteres y esto le genera angustia visible.
+- Dificultad respiratoria: jadeo constante incluso en reposo, respiración con esfuerzo.
+- Aislamiento: se esconde, no busca contacto, parece "ausente".
+- Enfermedad terminal diagnosticada: cáncer avanzado con metástasis, falla renal en etapa final, insuficiencia cardíaca congestiva que no responde a tratamiento.
 
 ---
 
 ## Alternativas a la eutanasia: cuidados paliativos
 
-Antes de tomar la decisión, vale la pena explorar si los cuidados paliativos son una opción. Estos no buscan curar, sino **controlar el dolor y mantener la dignidad** del animal durante el tiempo que le quede.
+Antes de tomar la decisión, vale la pena explorar si los cuidados paliativos son una opción. Estos no buscan curar, sino controlar el dolor y mantener la dignidad del animal durante el tiempo que le quede.
 
 Los cuidados paliativos pueden incluir:
-- **Manejo del dolor** con analgésicos, antiinflamatorios y terapias complementarias
-- **Adaptación del hogar**: rampas, camas ortopédicas, alfombras antideslizantes
-- **Alimentación asistida**: dietas blandas, estimulantes del apetito, alimentación con jeringa
-- **Hidratación subcutánea** en casa para animales con enfermedad renal
-- **Control de náuseas y otros síntomas** con medicación específica
+- Manejo del dolor con analgésicos, antiinflamatorios y terapias complementarias
+- Adaptación del hogar: rampas, camas ortopédicas, alfombras antideslizantes
+- Alimentación asistida: dietas blandas, estimulantes del apetito, alimentación con jeringa
+- Hidratación subcutánea en casa para animales con enfermedad renal
+- Control de náuseas y otros síntomas con medicación específica
 
 Pregúntale a tu veterinario: _"¿Qué podemos hacer para que se sienta lo mejor posible el tiempo que le quede?"_. A veces la respuesta es "varios meses con buena calidad". Otras veces, honestamente, es "muy poco".
 
 ---
 
-## ¿Cómo es el procedimiento? Paso a paso
+## Cómo es el procedimiento: paso a paso
 
 Saber qué esperar ayuda a reducir la angustia. Así es el proceso en una clínica veterinaria:
 
@@ -86,7 +86,7 @@ Puedes quedarte con él el tiempo que necesites. Algunos tutores prefieren retir
 
 ---
 
-## ¿Cuánto cuesta la eutanasia de un perro en Medellín?
+## Cuánto cuesta la eutanasia de un perro en Medellín
 
 Los costos varían según el peso del animal, si es a domicilio o en clínica, y si se incluye el servicio de cremación:
 
@@ -98,7 +98,7 @@ Los costos varían según el peso del animal, si es a domicilio o en clínica, y
 | Cremación individual (con devolución de cenizas) | $150.000 – $350.000 |
 | Cremación colectiva (sin devolución) | $50.000 – $120.000 |
 
-En **Utopía Animal Vet** ofrecemos el procedimiento con sedación previa, acompañamiento respetuoso y la opción de que estés con tu compañero todo el tiempo que necesites. Si estás considerando esta decisión, puedes escribirnos para una valoración de calidad de vida sin compromiso.
+En Utopía Animal Vet ofrecemos el procedimiento con sedación previa, acompañamiento respetuoso y la opción de que estés con tu compañero todo el tiempo que necesites. Si estás considerando esta decisión, puedes escribirnos para una valoración de calidad de vida sin compromiso.
 
 ---
 
@@ -108,11 +108,11 @@ Perder a un perro duele. Y está bien que duela. El vínculo con un animal de co
 
 ### Lo que es normal sentir
 
-- **Tristeza intensa** durante semanas o meses
-- **Culpa**: "¿Esperé demasiado? ¿Lo hice muy pronto? ¿Pude haber hecho más?"
-- **Ira**: contra la enfermedad, contra el veterinario, contra uno mismo
-- **Vacío**: la casa se siente extraña, faltan sus sonidos, su presencia
-- **Alivio**: sí, alivio. No es egoísta sentir alivio cuando termina el sufrimiento de quien amas
+- Tristeza intensa durante semanas o meses
+- Culpa: "¿Esperé demasiado? ¿Lo hice muy pronto? ¿Pude haber hecho más?"
+- Ira contra la enfermedad, contra el veterinario, contra uno mismo
+- Vacío: la casa se siente extraña, faltan sus sonidos, su presencia
+- Alivio, sí, alivio. No es egoísta sentir alivio cuando termina el sufrimiento de quien amas
 
 ### Lo que NO es normal (y requiere buscar ayuda)
 
@@ -122,10 +122,10 @@ Perder a un perro duele. Y está bien que duela. El vínculo con un animal de co
 
 ### Cómo transitar el duelo
 
-- **Háblalo.** Con tu familia, con amigos que entiendan, con otros tutores que hayan pasado por lo mismo.
-- **Ritualiza la despedida.** Una carta, un álbum de fotos, plantar algo en su memoria. Lo que te haga sentido a ti.
-- **Date permiso para estar mal.** No hay un plazo. No hay una forma correcta.
-- **No tomes decisiones apresuradas** sobre adoptar otro animal. Cuando estés listo, lo sabrás.
+- Háblalo con tu familia, con amigos que entiendan, con otros tutores que hayan pasado por lo mismo.
+- Ritualiza la despedida: una carta, un álbum de fotos, plantar algo en su memoria. Lo que te haga sentido a ti.
+- Date permiso para estar mal. No hay un plazo. No hay una forma correcta.
+- No tomes decisiones apresuradas sobre adoptar otro animal. Cuando estés listo, lo sabrás.
 
 ---
 
@@ -150,9 +150,9 @@ Esta es la pregunta más difícil. Un veterinario con experiencia en calidad de 
 
 ## No tienes que decidir solo
 
-Si estás leyendo esto porque tu perro está enfermo, es muy mayor o simplemente sientes que algo no está bien, queremos que sepas algo: **no tienes que pasar por esto sin orientación.**
+Si estás leyendo esto porque tu perro está enfermo, es muy mayor o simplemente sientes que algo no está bien, queremos que sepas algo: no tienes que pasar por esto sin orientación.
 
-En Utopía Animal Vet podemos hacer una valoración de calidad de vida. Sin presiones, sin juicios. Te explicamos qué está pasando, qué opciones hay y qué esperar en cada una. A veces la respuesta es "todavía hay tiempo de calidad". Otras veces es "es momento de dejarlo ir con dignidad". En ambos casos, te acompañamos.
+En Utopía Animal Vet podemos hacer una valoración de calidad de vida, sin presiones y sin juicios. Te explicamos qué está pasando, qué opciones hay y qué esperar en cada una. A veces la respuesta es "todavía hay tiempo de calidad". Otras veces es "es momento de dejarlo ir con dignidad". En ambos casos, te acompañamos.
 
 <div class="bg-utopia-50 border border-utopia-200 rounded-2xl p-6 my-8">
   <p class="font-bold text-utopia-900 text-lg mb-2">📲 ¿Necesitas orientación?</p>

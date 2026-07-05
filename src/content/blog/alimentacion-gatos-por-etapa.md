@@ -6,13 +6,13 @@ category: "Salud y Nutrición"
 tags: ["alimentación", "nutrición felina", "gatos", "salud", "gatitos"]
 ---
 
-La alimentación es uno de los pilares más importantes del bienestar felino y, al mismo tiempo, uno de los temas sobre los que más desinformación existe. Un gato bien nutrido tiene mejor sistema inmune, menor riesgo de enfermedades crónicas, pelaje saludable y más años de vida.
+La alimentación es uno de los pilares del bienestar felino y, al mismo tiempo, uno de los temas sobre los que más desinformación existe. Un gato bien nutrido tiene mejor sistema inmune, menor riesgo de enfermedades crónicas, pelaje saludable y más años de vida.
 
 Esta guía te explica qué necesita tu gato según su etapa de vida, qué alimentos debes evitar y cómo leer una etiqueta de comida felina.
 
 ## Los gatos son carnívoros obligados
 
-Antes de hablar de etapas, hay que entender esto: **los gatos no son omnívoros como los perros o los humanos**. Son carnívoros obligados, lo que significa que su cuerpo depende de nutrientes que solo se encuentran en proteína animal: taurina, arginina, ácido araquidónico y vitamina A preformada, entre otros.
+Antes de hablar de etapas, hay que entender esto: los gatos no son omnívoros como los perros o los humanos. Son carnívoros obligados, lo que significa que su cuerpo depende de nutrientes que solo se encuentran en proteína animal: taurina, arginina, ácido araquidónico y vitamina A preformada, entre otros.
 
 Un gato que come solo comida sin proteína animal de alta calidad desarrollará deficiencias a largo plazo, sin importar qué tan "natural" o "balanceada" diga ser la fórmula en la etiqueta.
 
@@ -24,7 +24,7 @@ Los cachorros tienen requerimientos nutricionales mucho más altos que los adult
 
 **Qué necesita:**
 - Proteína: mínimo 30% en base seca
-- Grasa: mínimo 9% — fundamental para el desarrollo cerebral
+- Grasa: mínimo 9%, clave para el desarrollo cerebral
 - Calcio y fósforo en proporciones adecuadas para huesos fuertes
 - DHA (ácido docosahexaenoico) para el desarrollo del cerebro y la visión
 
@@ -47,7 +47,7 @@ Un gato adulto necesita mantenimiento, no crecimiento. El riesgo principal en es
 **Qué necesita:**
 - Proteína: mínimo 26% en base seca (idealmente 35-40%)
 - Grasa moderada: entre 9% y 20%
-- Hidratación adecuada — muchos gatos adultos desarrollan problemas renales por deshidratación crónica
+- Hidratación adecuada: muchos gatos adultos desarrollan problemas renales por deshidratación crónica
 
 **Tip de hidratación:** Los gatos no sienten sed con tanta facilidad como los perros. El alimento húmedo (latas o sobre) contiene 70-80% de agua y es una excelente forma de mantenerlos hidratados. Si tu gato come solo croquetas, considera agregar al menos una porción de alimento húmedo al día.
 
@@ -60,7 +60,7 @@ Un gato adulto necesita mantenimiento, no crecimiento. El riesgo principal en es
 Los gatos senior son más susceptibles a enfermedades renales, artritis, hipertiroidismo y pérdida de masa muscular. Su metabolismo cambia y sus necesidades también.
 
 **Qué necesita:**
-- Proteína de alta calidad y alta digestibilidad — contra lo que se creía antes, los gatos senior NO necesitan menos proteína; al contrario, la necesitan más para mantener masa muscular
+- Proteína de alta calidad y alta digestibilidad: contra lo que se creía antes, los gatos senior no necesitan menos proteína; al contrario, la necesitan más para mantener masa muscular
 - Fósforo moderado si hay señales de enfermedad renal (en este caso, sí se reduce bajo supervisión veterinaria)
 - Antioxidantes: vitamina E, C, zinc, selenio para apoyar el sistema inmune
 - Alimento fácil de masticar si tiene problemas dentales
@@ -93,12 +93,12 @@ Antes de comprar, revisa esto:
 
 | Alimento | Por qué es peligroso |
 |----------|---------------------|
-| Cebolla y ajo | Destruyen los glóbulos rojos — causan anemia |
+| Cebolla y ajo | Destruyen los glóbulos rojos y causan anemia |
 | Uvas y pasas | Pueden causar falla renal aguda |
 | Chocolate | Tóxico para el sistema nervioso |
 | Aguacate | Causa vómitos y diarrea |
 | Alcohol | Extremadamente tóxico en dosis mínimas |
-| Xilitol | Edulcorante presente en chicles y algunos alimentos — muy peligroso |
+| Xilitol | Edulcorante presente en chicles y algunos alimentos, muy peligroso |
 | Hueso cocinado | Se astilla y puede perforar el tracto digestivo |
 
 ---
@@ -107,4 +107,4 @@ Antes de comprar, revisa esto:
 
 La alimentación de tu gato es una inversión, no un gasto. Un alimento de calidad puede costarte más al mes, pero te ahorra consultas veterinarias por enfermedades prevenibles.
 
-Si tienes dudas sobre qué alimento es el más adecuado para tu gato, escríbenos o agenda una consulta en **Utopía Animal Vet** — nuestros veterinarios pueden orientarte según la condición específica de tu mascota.
+Si tienes dudas sobre qué alimento es el más adecuado para tu gato, escríbenos o agenda una consulta en **Utopía Animal Vet**: nuestros veterinarios pueden orientarte según la condición específica de tu animal de compañía.

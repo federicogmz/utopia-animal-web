@@ -48,7 +48,7 @@ Son las dos enfermedades más letales en cachorros. El parvovirus ataca el siste
 ### Tercera dosis (14–16 semanas)
 
 - **Refuerzo de la vacuna múltiple**
-- **Antirrábica** — obligatoria por ley en Colombia (Ley 9 de 1979 y normas del ICA)
+- **Antirrábica**, obligatoria por ley en Colombia (Ley 9 de 1979 y normas del ICA)
 
 > **Importante:** La vacuna antirrábica es un requisito legal en Colombia. Si tu perro muerde a una persona sin estar vacunado, puede ser sometido a cuarentena y el tutor puede enfrentar sanciones.
 

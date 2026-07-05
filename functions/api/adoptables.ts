@@ -53,9 +53,14 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
       .filter((m) => m.image)
       .slice(0, MAX);
 
-    const res = json({ items }, 1800); // cache 30 min en el edge
-    await cache.put(cacheKey, res.clone());
-    return res;
+    // Solo cachea cuando sí hay resultados: un fallo temporal o un token
+    // vencido no debe quedar "pegado" en items:[] durante 30 minutos.
+    if (items.length > 0) {
+      const res = json({ items }, 1800);
+      await cache.put(cacheKey, res.clone());
+      return res;
+    }
+    return json({ items: [] });
   } catch {
     return json({ items: [] });
   }

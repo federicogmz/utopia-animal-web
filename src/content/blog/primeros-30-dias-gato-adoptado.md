@@ -1,16 +1,16 @@
 ---
 title: "Cómo cuidar un gato recién adoptado: los primeros 30 días"
-description: "Acabas de adoptar un gato y quieres hacerlo bien — pero entre tanta información, ¿por dónde empezar? Esta guía te explica los **primeros 30 días en casa** con tu nuevo compañero fe"
+description: "Acabas de adoptar un gato y quieres hacerlo bien, pero entre tanta información no sabes por dónde empezar. Esta guía te explica los primeros 30 días en casa con tu nuevo compañero felino."
 date: 2026-05-25
 category: "Adopción"
 tags: ["gato adoptado", "primeros días gato", "adaptación gato", "cuidado felino", "adopción responsable"]
 ---
 
-Acabas de adoptar un gato y quieres hacerlo bien — pero entre tanta información, ¿por dónde empezar? Esta guía te explica los **primeros 30 días en casa** con tu nuevo compañero felino, desde la preparación inicial hasta la consolidación del vínculo.
+Acabas de adoptar un gato y quieres hacerlo bien, pero entre tanta información, ¿por dónde empezar? Esta guía te explica los **primeros 30 días en casa** con tu nuevo compañero felino, desde la preparación inicial hasta la consolidación del vínculo.
 
 ## Antes de la llegada: prepara el espacio
 
-Lo ideal es destinar un cuarto cerrado para los primeros días — el gato se siente más seguro en un espacio acotado:
+Lo ideal es destinar un cuarto cerrado para los primeros días: el gato se siente más seguro en un espacio acotado.
 
 - **Arenero limpio** con arena similar a la que usaba antes
 
@@ -28,11 +28,11 @@ Lo ideal es destinar un cuarto cerrado para los primeros días — el gato se si
 
 ## Día 1: la llegada
 
-Lleva al gato directamente a su cuarto en el guacal. **Ábrelo y aléjate** — déjalo salir cuando quiera. No intentes cargarlo, abrazarlo ni forzar contacto. La mayoría se esconde las primeras horas. Es normal.
+Lleva al gato directamente a su cuarto en el guacal. **Ábrelo y aléjate**: déjalo salir cuando quiera. No intentes cargarlo, abrazarlo ni forzar contacto. La mayoría se esconde las primeras horas. Es normal.
 
 ## Primera semana: adaptación
 
-El gato necesita reconocer olores, sonidos, rutinas. **Visita su cuarto con calma**, habla suave, ofrece comida a horas regulares. No insistas con caricias — deja que él se acerque.
+El gato necesita reconocer olores, sonidos, rutinas. **Visita su cuarto con calma**, habla suave, ofrece comida a horas regulares. No insistas con caricias: deja que él se acerque.
 
 Señales positivas: come, usa el arenero, explora cuando estás cerca, te observa.
 
@@ -40,11 +40,11 @@ Señales de preocupación: no come en 24-48h, diarrea o vómito repetido, escond
 
 ## Semanas 2-4: expansión y rutina
 
-Cuando el gato ya esté usando bien el arenero y comiendo regular, abre la puerta del cuarto para que explore el resto de la casa **a su ritmo**. No lo empujes a salir.
+Cuando el gato ya esté usando bien el arenero y comiendo regular, abre la puerta del cuarto para que explore el resto de la casa a su ritmo. No lo empujes a salir.
 
 Establece rutinas: alimentación a la misma hora, juego diario (15 min con varita), horas de descanso respetadas.
 
-💚 **Los gatos detestan los cambios bruscos.** Mantén constante todo lo posible al inicio: misma comida que usaba antes, mismo tipo de arena, horarios predecibles. Cambios graduales después.
+**Los gatos detestan los cambios bruscos.** Mantén constante todo lo posible al inicio: misma comida que usaba antes, mismo tipo de arena, horarios predecibles. Los cambios graduales pueden llegar después.
 
 ## Si tienes otros animales
 
@@ -90,12 +90,14 @@ Aunque el refugio te haya entregado el gato con vacunas y revisado, agenda **una
 
 - Mantiene buen pelaje y energía
 
-Primera consulta de bienvenida
+## Primera consulta de bienvenida
 
 ### Utopía Animal Vet · Av Guayabal
 
 Una consulta inicial completa para tu gato recién adoptado: revisión, plan de vacunas si aplica y orientación específica para su caso.
 
-[💬 Agendar primera consulta](https://api.whatsapp.com/send?phone=573215308188&text=Hola%2C%20adopt%C3%A9%20un%20gato%20y%20quiero%20agendar%20su%20primera%20consulta) **Más recursos para tutores nuevos** en el blog de Utopía Animal.
+[Agendar primera consulta](https://api.whatsapp.com/send?phone=573215308188&text=Hola%2C%20adopt%C3%A9%20un%20gato%20y%20quiero%20agendar%20su%20primera%20consulta)
+
+**Más recursos para tutores nuevos** en el blog de Utopía Animal.
 
 [Leer "Preparar el hogar para un gato" →](https://utopianimal.org/blog/preparar-hogar-para-gato)

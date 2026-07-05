@@ -6,7 +6,7 @@ category: "Bienestar"
 tags: ["esterilización perros", "castración perros", "ovariohisterectomía", "bienestar canino", "veterinaria Medellín", "salud perros"]
 ---
 
-La esterilización es uno de los temas que más genera preguntas —y mitos— entre los tutores de perros. Algunos creen que le quitan algo natural al animal. Otros temen que engorde o cambie de carácter. Y muchos simplemente no saben cuándo es el momento correcto.
+La esterilización es uno de los temas que más genera preguntas (y mitos) entre los tutores de perros. Algunos creen que le quitan algo natural al animal. Otros temen que engorde o cambie de carácter. Y muchos simplemente no saben cuándo es el momento correcto.
 
 En este artículo te explicamos todo lo que necesitas saber para tomar una decisión informada: qué es exactamente la esterilización, qué beneficios tiene respaldados por la ciencia, qué mitos debes ignorar y cómo es el proceso antes y después de la cirugía.
 
@@ -31,7 +31,7 @@ Este es el argumento más sólido a favor de la esterilización:
 
 **En hembras:**
 - Elimina el riesgo de **piometra** (infección uterina), una emergencia médica con mortalidad alta si no se trata a tiempo
-- Reduce drásticamente el riesgo de **tumores mamarios** — hasta un 99.5% si se esteriliza antes del primer celo
+- Reduce drásticamente el riesgo de **tumores mamarios**, hasta un 99.5% si se esteriliza antes del primer celo
 - Elimina el riesgo de **tumores ováricos y uterinos**
 
 **En machos:**
@@ -51,7 +51,7 @@ En hembras, se elimina el período de celo, con todos los cambios de comportamie
 
 ### 3. Controla la superpoblación
 
-En Colombia hay millones de perros y gatos sin hogar. Cada camada no planificada puede resultar en más animales en situación de calle. Esterilizar es también un acto de responsabilidad social.
+En Colombia hay millones de perros y gatos sin hogar. Cada camada no planificada puede resultar en más animales en situación de calle. Esterilizar es también un gesto de responsabilidad con la comunidad.
 
 ---
 
@@ -67,7 +67,7 @@ En Colombia hay millones de perros y gatos sin hogar. Cada camada no planificada
 
 ### "Le va a cambiar la personalidad"
 
-**No en el sentido negativo.** La personalidad fundamental de un perro no cambia con la esterilización. Lo que sí puede cambiar es la reducción de comportamientos impulsivos ligados a las hormonas sexuales. Los perros esterilizados suelen ser más tranquilos y fáciles de entrenar.
+**No en el sentido negativo.** La personalidad de base de un perro no cambia con la esterilización. Lo que sí puede cambiar es la reducción de comportamientos impulsivos ligados a las hormonas sexuales. Los perros esterilizados suelen ser más tranquilos y fáciles de entrenar.
 
 ### "Es una cirugía muy peligrosa"
 
@@ -124,7 +124,7 @@ El costo varía según el sexo del animal, su peso, la clínica y los exámenes 
 - **Machos:** entre $150.000 y $350.000 COP
 - **Hembras:** entre $250.000 y $600.000 COP (mayor complejidad quirúrgica)
 
-En **Utopía Animal Vet** realizamos esterilizaciones con protocolo anestésico completo, monitoreo durante la cirugía y acompañamiento postoperatorio. Te explicamos cada paso del proceso y resolvemos todas tus dudas antes de proceder.
+En **Utopía Animal Vet** realizamos esterilizaciones con protocolo anestésico completo, monitoreo durante la cirugía y acompañamiento postoperatorio. Te explicamos cada paso del proceso y resolvemos tus dudas antes de proceder.
 
 ---
 

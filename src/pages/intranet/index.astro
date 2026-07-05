@@ -37,10 +37,6 @@ import Layout from '../../layouts/Layout.astro';
 
       <!-- Filters -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-4 mb-5 flex flex-col lg:flex-row gap-2 lg:items-center">
-        <label id="misPendientesWrap" class="hidden items-center gap-2 cursor-pointer select-none bg-utopia-50 border border-utopia-200 rounded-xl px-3 py-2">
-          <input type="checkbox" id="filterMine" class="rounded text-utopia-600 focus:ring-utopia-500" />
-          <span class="text-sm font-bold text-utopia-800" id="filterMineLabel">Solo mis pendientes</span>
-        </label>
         <input id="searchInput" type="text" placeholder="Buscar nombre, teléfono o ciudad..."
           class="flex-1 rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
         <select id="filterEtapa" class="rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500">
@@ -71,11 +67,12 @@ import Layout from '../../layouts/Layout.astro';
                 <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 hidden lg:table-cell">Zona</th>
                 <th class="px-3 sm:px-5 py-3 font-bold text-gray-700">IA</th>
                 <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 hidden sm:table-cell">Etapa</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 hidden md:table-cell w-56">Observaciones</th>
                 <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 text-right w-16"></th>
               </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-50">
-              <tr><td colspan="6" class="px-6 py-12 text-center text-gray-500"><div class="animate-pulse">Cargando solicitudes...</div></td></tr>
+              <tr><td colspan="7" class="px-6 py-12 text-center text-gray-500"><div class="animate-pulse">Cargando solicitudes...</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -164,13 +161,6 @@ import Layout from '../../layouts/Layout.astro';
     const b = norm(barrio);
     for (const z of ZONAS_RIESGO) for (const k of z.kw) if (b.includes(k)) return z.comuna;
     return null;
-  }
-
-  function esMiPendiente(s) {
-    const e = etapaOf(s);
-    if (esFederico()) return e === 'recepcion';
-    if (esLaura())    return e === 'aprobado';
-    return !TERMINALES.includes(e);
   }
 
   // ── Utils ──
@@ -390,12 +380,6 @@ import Layout from '../../layouts/Layout.astro';
       if (j.ok) {
         me = j;
         document.getElementById('userBanner').innerHTML = `Hola <b class="text-gray-900">${esc(me.nombre)}</b> · <span class="text-utopia-700 font-semibold">${esc(roleLabel())}</span>`;
-        if (esFederico() || esLaura()) {
-          const wrap = document.getElementById('misPendientesWrap');
-          wrap.classList.remove('hidden'); wrap.classList.add('flex');
-          document.getElementById('filterMine').checked = true;
-          document.getElementById('filterMineLabel').textContent = esFederico() ? 'Solo mis pendientes (revisión)' : 'Solo mis pendientes';
-        }
       }
     } catch (e) { console.error(e); }
   }
@@ -424,7 +408,6 @@ import Layout from '../../layouts/Layout.astro';
     document.getElementById('pipelineStats').innerHTML = cards;
     document.querySelectorAll('.statCard').forEach(b => b.onclick = () => {
       document.getElementById('filterEtapa').value = b.dataset.etapa;
-      document.getElementById('filterMine').checked = false;
       renderTable();
     });
   }
@@ -433,9 +416,7 @@ import Layout from '../../layouts/Layout.astro';
     const q      = (document.getElementById('searchInput').value || '').toLowerCase().trim();
     const fEtapa = document.getElementById('filterEtapa').value;
     const fr     = document.getElementById('filterReco').value;
-    const mine   = document.getElementById('filterMine').checked;
     return solicitudes.filter(s => {
-      if (mine && !esMiPendiente(s)) return false;
       if (fEtapa && etapaOf(s) !== fEtapa) return false;
       if (fr === '__none__' && s.evaluado_at) return false;
       else if (fr && fr !== '__none__' && s.recomendacion !== fr) return false;
@@ -454,26 +435,23 @@ import Layout from '../../layouts/Layout.astro';
     updateNavArrows();
 
     if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">No hay solicitudes que coincidan.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-gray-500">No hay solicitudes que coincidan.</td></tr>';
       return;
     }
     tbody.innerHTML = rows.map(s => {
       const rm       = recoMeta(s.recomendacion);
       const em       = etapaMeta(etapaOf(s));
-      const mine     = esMiPendiente(s);
       const zonaAuto = zonaRiesgo(s.barrio, s.ciudad);
       const flagged  = zonaAuto || !!s.zona_riesgo_manual;
       const scoreTxt = (s.score === null || s.score === undefined || s.score === '') ? '—' : Math.round(Number(s.score));
       return `
-      <tr class="hover:bg-gray-50 transition-colors ${mine ? 'bg-utopia-50/40' : ''}">
+      <tr class="hover:bg-gray-50 transition-colors">
         <td class="px-3 sm:px-5 py-3 sm:py-4 align-top hidden sm:table-cell">
-          ${mine ? '<span class="inline-block w-1.5 h-1.5 rounded-full bg-utopia-500 mr-1 align-middle"></span>' : ''}
           <span class="font-bold text-gray-900">#${esc(s.id)}</span>
           <div class="text-xs text-gray-500">${esc(new Date(s.fecha_envio).toLocaleDateString('es-CO'))}</div>
         </td>
         <td class="px-3 sm:px-5 py-3 sm:py-4 align-top">
           <div class="flex items-center gap-1 font-medium text-gray-900">
-            ${mine ? '<span class="w-1.5 h-1.5 rounded-full bg-utopia-500 flex-shrink-0 sm:hidden"></span>' : ''}
             <span>${esc(s.nombre_completo)}</span>
             ${flagged ? '<span class="text-red-500 text-xs" title="Zona de alto abandono">🚩</span>' : ''}
           </div>
@@ -496,6 +474,13 @@ import Layout from '../../layouts/Layout.astro';
         <td class="px-3 sm:px-5 py-3 sm:py-4 align-top hidden sm:table-cell">
           <span class="px-2.5 py-1 rounded-full text-xs font-bold ${em.badge}">${em.icon} ${em.short}</span>
         </td>
+        <td class="px-3 sm:px-5 py-3 sm:py-4 align-top hidden md:table-cell">
+          <textarea rows="2" placeholder="Notas de seguimiento..."
+            class="w-full rounded-lg border-gray-200 text-xs focus:ring-utopia-500 focus:border-utopia-500 resize-y"
+            onblur="guardarObservacionInline(${Number(s.id)}, this)"
+          >${esc(s.notas_humanas || '')}</textarea>
+          <span class="text-[10px] text-gray-300" id="obsStatus-${Number(s.id)}"></span>
+        </td>
         <td class="px-3 sm:px-5 py-3 sm:py-4 align-top text-right">
           <button onclick="openDetail(${Number(s.id)})" class="text-utopia-600 font-bold hover:text-utopia-800 transition-colors p-1">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
@@ -504,6 +489,26 @@ import Layout from '../../layouts/Layout.astro';
       </tr>`;
     }).join('');
   }
+
+  // Guarda la observación directamente desde la fila de la tabla, sin abrir el modal.
+  window.guardarObservacionInline = async function(id, el) {
+    const value = el.value;
+    const s = solicitudes.find(x => x.id === id);
+    if (s && s.notas_humanas === value) return; // sin cambios, no dispara guardado
+    const status = document.getElementById('obsStatus-' + id);
+    if (status) status.textContent = 'Guardando...';
+    try {
+      const res = await fetch('/api/admin/update-solicitud', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, notas_humanas: value }),
+      });
+      if (res.ok) {
+        if (s) s.notas_humanas = value;
+        if (status) { status.textContent = 'Guardado ✓'; setTimeout(() => { status.textContent = ''; }, 1500); }
+      } else if (status) { status.textContent = 'Error al guardar'; }
+    } catch (e) { if (status) status.textContent = 'Error de conexión'; }
+  };
 
   // ── Navigation arrows ──
   function updateNavArrows() {
@@ -829,7 +834,6 @@ import Layout from '../../layouts/Layout.astro';
   document.getElementById('searchInput').oninput      = renderTable;
   document.getElementById('filterEtapa').onchange     = renderTable;
   document.getElementById('filterReco').onchange      = renderTable;
-  document.getElementById('filterMine').onchange      = renderTable;
   document.getElementById('btnLogout').onclick        = () => {
     document.cookie = 'session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     window.location.href = '/intranet/login';

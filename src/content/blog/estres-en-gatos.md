@@ -6,9 +6,9 @@ category: "Comportamiento"
 tags: ["estrés felino", "comportamiento", "bienestar", "ansiedad", "gatos"]
 ---
 
-Los gatos son expertos en esconder cómo se sienten. A diferencia de los perros, que expresan sus emociones de manera bastante evidente, los gatos suelen ocultar el malestar hasta que se vuelve crónico. Esta característica —que viene de su instinto de no mostrarse vulnerables ante posibles depredadores— hace que el estrés felino sea uno de los problemas más subestimados por los dueños.
+Los gatos son expertos en esconder cómo se sienten. A diferencia de los perros, que expresan sus emociones de manera bastante evidente, los gatos suelen ocultar el malestar hasta que se vuelve crónico. Esta característica viene de su instinto de no mostrarse vulnerables ante posibles depredadores, y hace que el estrés felino sea uno de los problemas más subestimados por los tutores.
 
-La buena noticia: hay señales concretas que aprender a reconocer, y la mayoría del estrés felino tiene solución.
+Hay señales concretas que aprender a reconocer, y la mayoría del estrés felino tiene solución.
 
 ---
 
@@ -16,13 +16,13 @@ La buena noticia: hay señales concretas que aprender a reconocer, y la mayoría
 
 Los gatos son animales de hábito y territorio. Cualquier cambio en su entorno puede generarles estrés. Las causas más comunes son:
 
-- **Cambios en el hogar:** mudanzas, remodelaciones, llegada de un bebé o nueva mascota
-- **Conflictos con otros gatos** en casa o en el vecindario
-- **Visitantes frecuentes** que alteran la rutina
-- **Falta de recursos:** no tener suficientes comederos, bebederos o areneros para el número de gatos en casa
-- **Aburrimiento y falta de estimulación**
-- **Visitas al veterinario o al groomer**
-- **Cambios en la rutina de sus dueños**
+- Cambios en el hogar: mudanzas, remodelaciones, llegada de un bebé o de un nuevo animal
+- Conflictos con otros gatos en casa o en el vecindario
+- Visitantes frecuentes que alteran la rutina
+- Falta de recursos: no tener suficientes comederos, bebederos o areneros para el número de gatos en casa
+- Aburrimiento y falta de estimulación
+- Visitas al veterinario o al groomer
+- Cambios en la rutina de sus tutores
 
 ---
 
@@ -35,7 +35,7 @@ Un gato estresado puede lamer, rascar o morder zonas específicas de su cuerpo h
 Comer menos o dejar de comer completamente es una señal de alerta. En sentido contrario, algunos gatos estresados comen de manera compulsiva. Cualquier cambio brusco en el apetito merece atención.
 
 ### Problemas urinarios
-El estrés es la principal causa de **cistitis idiopática felina** (inflamación de la vejiga sin infección bacteriana). Se manifiesta como visitas frecuentes al arenero, intentos fallidos de orinar, vocalización al orinar, o incluso orinar fuera del arenero. En machos, puede generar obstrucción urinaria —una emergencia médica.
+El estrés es la principal causa de cistitis idiopática felina (inflamación de la vejiga sin infección bacteriana). Se manifiesta como visitas frecuentes al arenero, intentos fallidos de orinar, vocalización al orinar, o incluso orinar fuera del arenero. En machos, puede generar obstrucción urinaria, que es una emergencia médica.
 
 ### Vómitos frecuentes
 Aunque los gatos vomitan ocasionalmente (bolas de pelo, comer muy rápido), los vómitos frecuentes sin causa digestiva aparente pueden estar relacionados con el estrés crónico.
@@ -54,7 +54,7 @@ Mordidas o arañazos hacia personas o animales con los que antes convivía bien,
 Maullar mucho más de lo habitual, especialmente de noche, puede ser estrés (aunque también puede indicar dolor o problemas de tiroides en gatos mayores, por eso vale descartarlo con el veterinario).
 
 ### Marcar territorio con orina
-Los gatos estresados a veces refuerzan su sentido de seguridad marcando con orina superficies verticales (paredes, muebles). Esto es distinto a orinar fuera del arenero por problema urinario — aquí la cantidad de orina es pequeña y se deposita en altura.
+Los gatos estresados a veces refuerzan su sentido de seguridad marcando con orina superficies verticales (paredes, muebles). Esto es distinto a orinar fuera del arenero por un problema urinario: aquí la cantidad de orina es pequeña y se deposita en altura.
 
 ### Cambios en el sueño
 Dormir mucho más de lo habitual o, al contrario, mostrarse inquieto e incapaz de relajarse.
@@ -85,13 +85,13 @@ El primer paso siempre es entender qué cambió. Si puedes identificar la causa,
 
 ### 2. Enriquecimiento ambiental
 Un gato aburrido y sin estimulación es un gato estresado. Provee:
-- **Rascadores** en lugares estratégicos (junto a donde duerme, cerca de ventanas)
-- **Niveles de altura:** estantes, árboles para gatos — los gatos se sienten seguros en alto
-- **Juego interactivo** al menos 15-20 minutos al día con cañas, láser o juguetes de pluma
-- **Ventanas con vista** — "televisión para gatos" que los estimula sin riesgo
+- Rascadores en lugares estratégicos (junto a donde duerme, cerca de ventanas)
+- Niveles de altura, como estantes o árboles para gatos: se sienten seguros en alto
+- Juego interactivo al menos 15-20 minutos al día con cañas, láser o juguetes de pluma
+- Ventanas con vista, una especie de "televisión para gatos" que los estimula sin riesgo
 
 ### 3. Múltiples recursos si hay varios gatos
-La regla es: **un recurso más que el número de gatos**. Si tienes 2 gatos, necesitas mínimo 3 areneros, 3 comederos y 3 bebederos en lugares separados. La competencia por recursos es una de las causas más comunes de estrés en hogares multifelinos.
+La regla es un recurso más que el número de gatos. Si tienes 2 gatos, necesitas mínimo 3 areneros, 3 comederos y 3 bebederos en lugares separados. La competencia por recursos es una de las causas más comunes de estrés en hogares multifelinos.
 
 ### 4. Feromonas sintéticas
 Los difusores de feromonas felinas (como Feliway Classic) imitan las feromonas de marcaje facial que producen los gatos cuando están relajados. No funcionan en todos los casos, pero son seguros y pueden ayudar en períodos de cambio o estrés moderado.
@@ -116,6 +116,6 @@ Ve al veterinario **de inmediato** si tu gato:
 
 ## Conclusión
 
-El estrés felino no es "capricho" ni "mala educación". Es una respuesta real de un sistema nervioso que se siente amenazado. Identificarlo a tiempo y actuar previene problemas de salud serios y mejora enormemente la calidad de vida de tu gato.
+El estrés felino no es "capricho" ni "mala educación". Es una respuesta real de un sistema nervioso que se siente amenazado. Identificarlo a tiempo y actuar previene problemas de salud serios y mejora la calidad de vida de tu gato.
 
 Si tienes dudas sobre el comportamiento de tu gato, puedes escribirnos o agendar una consulta con nuestros aliados en **Utopía Animal Vet**.
