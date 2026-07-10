@@ -36,7 +36,6 @@ export default {
           orange: '#f9854f',
           'orange-light': '#fdd4bc',
           'orange-dark': '#d95f25',
-          gold:  '#fdd268',
           blue:  '#3a83ee',
           'blue-light': '#e0f2fe',
         },

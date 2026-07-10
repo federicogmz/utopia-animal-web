@@ -16,8 +16,8 @@ const compromisos = [
 ---
 
 <Layout
-  title="Quiero ser hogar temporal · Elim Refugio Animal"
-  description="Postúlate para ser hogar temporal de un gato de Elim. Una acogida da el tiempo y el cuidado que un gato necesita antes de su adopción definitiva."
+  title="Quiero ser voluntario · Elim Refugio Animal"
+  description="Súmate a Elim como voluntario: hogar temporal, rescate, jornadas, redes o apoyo administrativo. Cuéntanos cómo quieres ayudar y te contactamos."
   brand="elim"
 >
   <section class="bg-gradient-to-br from-elim-950 via-elim-900 to-gray-950 pt-24 pb-0 relative overflow-hidden">
@@ -25,13 +25,13 @@ const compromisos = [
     <div class="max-w-4xl mx-auto px-4 sm:px-6 relative pb-16">
       <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-xs font-semibold px-4 py-2 rounded-full mb-6">
         <span class="w-1.5 h-1.5 bg-elim-300 rounded-full animate-pulse"></span>
-        Hogar temporal · Elim Refugio
+        Voluntariado · Elim Refugio
       </div>
       <h1 class="text-4xl sm:text-5xl font-extrabold text-white leading-tight mb-5">
-        Quiero ser<br/><span class="text-elim-400">hogar temporal</span>
+        Quiero ser<br/><span class="text-elim-400">voluntario</span>
       </h1>
       <p class="text-elim-200 text-lg leading-relaxed max-w-2xl">
-        Un hogar temporal le da a un gato el tiempo, el espacio y el cuidado que necesita antes de su adopción definitiva. Evaluamos cada acogida con el mismo rigor que una adopción.
+        Hay muchas formas de sumar a Elim: acoger un gato en hogar temporal, apoyar rescates, sumar manos en jornadas, ayudar con redes o con la gestión. Cuéntanos cómo quieres ayudar y ajustamos el proceso a ti.
       </p>
     </div>
     <div class="relative -mb-px">
@@ -62,10 +62,33 @@ const compromisos = [
 
         <input type="text" name="_website" id="_website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" />
 
-        <!-- STEP 1: Datos personales -->
-        <fieldset data-step="1" class="space-y-6">
+        <!-- STEP: Cómo quieres ayudar (filtro) -->
+        <fieldset data-key="interes" class="space-y-6">
           <div>
-            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 1</p>
+            <h2 class={sectionTitleClass}>¿Cómo te gustaría ayudar?</h2>
+            <p class={sectionDescClass}>Hay muchas formas de sumar a Elim. Elige una o varias y ajustamos el proceso a lo que quieres hacer.</p>
+          </div>
+          <div class="space-y-3">
+            {[
+              ['hogar_temporal', '🏠 Hogar temporal', 'Acoger un gato en tu casa hasta que encuentre familia. Requiere una evaluación como la de una adopción.'],
+              ['rescate', '🚑 Rescate y transporte', 'Ayudar a recoger y trasladar gatos en situación de calle o riesgo.'],
+              ['jornadas', '🎪 Jornadas y eventos', 'Sumar manos en jornadas de esterilización, adopción y eventos.'],
+              ['redes', '📣 Redes y difusión', 'Ayudar con contenido, fotos, difusión y comunidad.'],
+              ['admin', '🗂️ Apoyo administrativo', 'Gestión, logística, llamadas, organización.'],
+              ['otro', '✨ Otra forma', 'Cuéntanos cómo quieres ayudar.'],
+            ].map(([value, titulo, desc]) => (
+              <label class="flex items-start gap-3 px-4 py-3 rounded-xl border border-gray-200 bg-white cursor-pointer hover:bg-elim-50 hover:border-elim-200 transition">
+                <input type="checkbox" name="areas_interes" value={value} class="mt-1 accent-elim-600" />
+                <span class="text-sm"><span class="font-semibold text-gray-900">{titulo}</span><br/><span class="text-gray-500 text-xs">{desc}</span></span>
+              </label>
+            ))}
+          </div>
+          <p class="text-xs text-gray-400">Si eliges <strong>hogar temporal</strong>, el formulario incluye unos pasos adicionales de evaluación. Para las demás formas de ayudar, es más corto.</p>
+        </fieldset>
+
+        <!-- STEP: Datos personales -->
+        <fieldset data-key="personales" class="space-y-6 hidden">
+          <div>
             <h2 class={sectionTitleClass}>Datos personales</h2>
             <p class={sectionDescClass}>Cuéntanos quién eres.</p>
           </div>
@@ -97,10 +120,9 @@ const compromisos = [
           </div>
         </fieldset>
 
-        <!-- STEP 2: Vivienda -->
-        <fieldset data-step="2" class="space-y-6 hidden">
+        <!-- STEP: Vivienda (solo hogar temporal) -->
+        <fieldset data-key="vivienda" class="space-y-6 hidden">
           <div>
-            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 2</p>
             <h2 class={sectionTitleClass}>Tu vivienda</h2>
             <p class={sectionDescClass}>El espacio donde acogerías al gato.</p>
           </div>
@@ -121,10 +143,9 @@ const compromisos = [
             </div></div>
         </fieldset>
 
-        <!-- STEP 3: Redes y referencias -->
-        <fieldset data-step="3" class="space-y-6 hidden">
+        <!-- STEP: Redes y referencias (solo hogar temporal) -->
+        <fieldset data-key="redes" class="space-y-6 hidden">
           <div>
-            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 3</p>
             <h2 class={sectionTitleClass}>Redes y referencias</h2>
             <p class={sectionDescClass}>Nos ayuda a conocerte mejor.</p>
           </div>
@@ -150,10 +171,9 @@ const compromisos = [
           </div>
         </fieldset>
 
-        <!-- STEP 4: Disponibilidad para acoger -->
-        <fieldset data-step="4" class="space-y-6 hidden">
+        <!-- STEP: Disponibilidad para acoger (solo hogar temporal) -->
+        <fieldset data-key="disponibilidad" class="space-y-6 hidden">
           <div>
-            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 4</p>
             <h2 class={sectionTitleClass}>Tu disponibilidad para acoger</h2>
             <p class={sectionDescClass}>Lo más importante de un hogar temporal.</p>
           </div>
@@ -190,10 +210,9 @@ const compromisos = [
           </div>
         </fieldset>
 
-        <!-- STEP 5: Hogar y familia -->
-        <fieldset data-step="5" class="space-y-6 hidden">
+        <!-- STEP: Hogar y familia (solo hogar temporal) -->
+        <fieldset data-key="hogar" class="space-y-6 hidden">
           <div>
-            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 5</p>
             <h2 class={sectionTitleClass}>Tu hogar y familia</h2>
             <p class={sectionDescClass}>El entorno donde vivirá el gato.</p>
           </div>
@@ -244,10 +263,31 @@ const compromisos = [
             </div></div>
         </fieldset>
 
-        <!-- STEP 6: Compromiso -->
-        <fieldset data-step="6" class="space-y-6 hidden">
+        <!-- STEP: Voluntariado (ruta corta, cuando NO es hogar temporal) -->
+        <fieldset data-key="voluntariado" class="space-y-6 hidden">
           <div>
-            <p class="text-xs font-bold text-elim-600 uppercase tracking-widest mb-2">Paso 6</p>
+            <h2 class={sectionTitleClass}>Tu disponibilidad</h2>
+            <p class={sectionDescClass}>Cuéntanos un poco más y te contactamos para coordinar.</p>
+          </div>
+          <div><label class={labelClass}>¿Por qué quieres ser voluntario de Elim?</label>
+            <textarea class={inputClass} id="por_que_voluntario" name="por_que_voluntario" rows="3" placeholder="Cuéntanos tu motivación..."></textarea></div>
+          <div><label class={labelClass}>¿Qué días y horarios sueles tener disponibles?</label>
+            <input class={inputClass} type="text" id="disponibilidad_voluntario" name="disponibilidad_voluntario" placeholder="Ej: fines de semana, tardes entre semana..." /></div>
+          <div><label class={labelClass}>¿Tienes alguna experiencia o habilidad que quieras contarnos?</label>
+            <textarea class={inputClass} id="experiencia_voluntario" name="experiencia_voluntario" rows="3" placeholder="Fotografía, redes, manejo de animales, transporte, etc. (opcional)"></textarea></div>
+          <div class="border-t border-gray-100 pt-6">
+            <label class="flex items-start gap-3 px-4 py-4 rounded-xl border border-elim-200 bg-elim-50 cursor-pointer">
+              <input type="checkbox" name="declaracion_final" value="1" class="mt-0.5 accent-elim-600" required />
+              <span class="text-sm text-gray-800 font-medium">
+                Confirmo que la información es verdadera y que quiero apoyar a Elim como voluntario. *
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- STEP: Compromiso (solo hogar temporal) -->
+        <fieldset data-key="compromiso" class="space-y-6 hidden">
+          <div>
             <h2 class={sectionTitleClass}>Tu compromiso</h2>
             <p class={sectionDescClass}>Cómo actuarías ante distintos escenarios.</p>
           </div>
@@ -302,19 +342,25 @@ const compromisos = [
 <script is:inline>
   (function () {
     const STORAGE_KEY = 'elim-hogar-draft';
-    const TOTAL_STEPS = 6;
-    const STEP_LABELS = {
-      1: 'Datos personales',
-      2: 'Tu vivienda',
-      3: 'Redes y referencias',
-      4: 'Disponibilidad para acoger',
-      5: 'Tu hogar y familia',
-      6: 'Compromiso',
+
+    const FLOWS = {
+      hogar_temporal: ['interes', 'personales', 'vivienda', 'redes', 'disponibilidad', 'hogar', 'compromiso'],
+      voluntariado:   ['interes', 'personales', 'voluntariado'],
     };
-    const REQUIRED_BY_STEP = {
-      1: ['nombre_completo', 'telefono', 'correo', 'direccion'],
-      2: [], 3: [], 4: [], 5: [],
-      6: ['declaracion_final'],
+    const STEP_TITLES = {
+      interes: 'Cómo quieres ayudar',
+      personales: 'Datos personales',
+      vivienda: 'Tu vivienda',
+      redes: 'Redes y referencias',
+      disponibilidad: 'Disponibilidad para acoger',
+      hogar: 'Tu hogar y familia',
+      compromiso: 'Compromiso',
+      voluntariado: 'Tu disponibilidad',
+    };
+    const REQUIRED_BY_KEY = {
+      personales: ['nombre_completo', 'telefono', 'correo', 'direccion'],
+      compromiso: ['declaracion_final'],
+      voluntariado: ['declaracion_final'],
     };
 
     const form = document.getElementById('hogarForm');
@@ -329,18 +375,30 @@ const compromisos = [
     const errorBanner = document.getElementById('errorBanner');
     const errorMsg = document.getElementById('errorMsg');
 
-    let currentStep = 1;
+    let flow = FLOWS.voluntariado;   // se recalcula tras elegir el interés
+    let idx = 0;
+
+    function isFoster() {
+      return !!form.querySelector('input[name="areas_interes"][value="hogar_temporal"]:checked');
+    }
+    function recomputeFlow() {
+      flow = isFoster() ? FLOWS.hogar_temporal : FLOWS.voluntariado;
+    }
+    function activeFieldset() {
+      return form.querySelector(`fieldset[data-key="${flow[idx]}"]`);
+    }
 
     function setStep(n) {
-      currentStep = Math.max(1, Math.min(TOTAL_STEPS, n));
-      form.querySelectorAll('fieldset[data-step]').forEach(fs => {
-        fs.classList.toggle('hidden', Number(fs.dataset.step) !== currentStep);
+      idx = Math.max(0, Math.min(flow.length - 1, n));
+      const key = flow[idx];
+      form.querySelectorAll('fieldset[data-key]').forEach(fs => {
+        fs.classList.toggle('hidden', fs.dataset.key !== key);
       });
-      stepLabel.textContent = `Paso ${currentStep} de ${TOTAL_STEPS} · ${STEP_LABELS[currentStep]}`;
-      stepCount.textContent = `${currentStep} / ${TOTAL_STEPS}`;
-      progressBar.style.width = `${(currentStep / TOTAL_STEPS) * 100}%`;
-      btnPrev.disabled = currentStep === 1;
-      if (currentStep === TOTAL_STEPS) {
+      stepLabel.textContent = `Paso ${idx + 1} de ${flow.length} · ${STEP_TITLES[key]}`;
+      stepCount.textContent = `${idx + 1} / ${flow.length}`;
+      progressBar.style.width = `${((idx + 1) / flow.length) * 100}%`;
+      btnPrev.disabled = idx === 0;
+      if (idx === flow.length - 1) {
         btnNext.classList.add('hidden');
         btnSubmit.classList.remove('hidden');
         btnSubmit.classList.add('inline-flex');
@@ -362,22 +420,31 @@ const compromisos = [
     function validateEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || '').trim()); }
     function validatePhoneCO(v) { return String(v || '').replace(/\D/g, '').length === 10; }
 
-    function validateStep(step) {
-      const required = REQUIRED_BY_STEP[step] || [];
+    function validateKey(key) {
+      if (key === 'interes') {
+        if (!form.querySelector('input[name="areas_interes"]:checked')) {
+          showError('Elige al menos una forma de ayudar para continuar.');
+          return false;
+        }
+        clearError();
+        return true;
+      }
+      const fs = form.querySelector(`fieldset[data-key="${key}"]`);
+      const required = REQUIRED_BY_KEY[key] || [];
       for (const name of required) {
         if (name === 'declaracion_final') {
-          const cb = form.querySelector('input[name="declaracion_final"]');
-          if (!cb || !cb.checked) { showError('Debes aceptar la declaración final para continuar.'); return false; }
+          const cb = fs.querySelector('input[name="declaracion_final"]');
+          if (!cb || !cb.checked) { showError('Debes aceptar la declaración para continuar.'); return false; }
           continue;
         }
-        const el = form.querySelector(`[name="${name}"]`);
+        const el = fs.querySelector(`[name="${name}"]`);
         if (!el || !String(el.value || '').trim()) {
           showError('Por favor completa los campos obligatorios marcados con *.');
           if (el) el.focus();
           return false;
         }
       }
-      if (step === 1) {
+      if (key === 'personales') {
         if (!validateEmail(form.querySelector('[name="correo"]').value)) { showError('Por favor ingresa un correo electrónico válido.'); return false; }
         if (!validatePhoneCO(form.querySelector('[name="telefono"]').value)) { showError('El teléfono debe tener 10 dígitos (formato Colombia).'); return false; }
       }
@@ -385,8 +452,14 @@ const compromisos = [
       return true;
     }
 
-    btnNext.addEventListener('click', () => { if (!validateStep(currentStep)) return; saveDraft(); setStep(currentStep + 1); });
-    btnPrev.addEventListener('click', () => { saveDraft(); setStep(currentStep - 1); });
+    btnNext.addEventListener('click', () => {
+      const key = flow[idx];
+      if (!validateKey(key)) return;
+      if (key === 'interes') recomputeFlow();
+      saveDraft();
+      setStep(idx + 1);
+    });
+    btnPrev.addEventListener('click', () => { saveDraft(); setStep(idx - 1); });
 
     form.querySelectorAll('input[data-toggles]').forEach(input => {
       input.addEventListener('change', () => {
@@ -409,7 +482,8 @@ const compromisos = [
         } else { data[key] = value; }
       }
       if (!data.compromisos_aceptados) data.compromisos_aceptados = [];
-      data.declaracion_final = form.querySelector('input[name="declaracion_final"]').checked ? 1 : 0;
+      if (data.areas_interes && !Array.isArray(data.areas_interes)) data.areas_interes = [data.areas_interes];
+      data.declaracion_final = form.querySelector('input[name="declaracion_final"]:checked') ? 1 : 0;
       ['mallas_seguridad', 'todos_de_acuerdo', 'planes_mudanza', 'alguien_alergico', 'tiene_otras_mascotas', 'otras_esterilizadas',
        'espacio_aislamiento', 'disponibilidad_transporte_vet', 'acepta_visitas_seguimiento', 'cuantos_puede_acoger'].forEach(k => {
         if (data[k] !== undefined && data[k] !== '') data[k] = Number(data[k]);
@@ -421,7 +495,7 @@ const compromisos = [
       try {
         const data = collectFormData();
         delete data._website;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ step: currentStep, data }));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ idx, data }));
       } catch (e) {}
     }
 
@@ -445,7 +519,9 @@ const compromisos = [
             inputs[0].value = val; inputs[0].dispatchEvent(new Event('change'));
           } else { inputs[0].value = val; }
         });
-        if (parsed.step) setStep(parsed.step);
+        recomputeFlow();
+        const savedIdx = Number(parsed.idx);
+        setStep(Number.isFinite(savedIdx) ? savedIdx : 0);
       } catch (e) {}
     }
 
@@ -454,9 +530,11 @@ const compromisos = [
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!validateStep(TOTAL_STEPS)) return;
-      const compromisos = Array.from(form.querySelectorAll('input[name="compromisos_aceptados"]:checked')).map(i => i.value);
-      if (compromisos.length === 0) { showError('Por favor marca al menos un compromiso de hogar temporal.'); return; }
+      if (!validateKey(flow[idx])) return;
+      if (isFoster()) {
+        const compromisos = Array.from(form.querySelectorAll('fieldset[data-key="compromiso"] input[name="compromisos_aceptados"]:checked')).map(i => i.value);
+        if (compromisos.length === 0) { showError('Por favor marca al menos un compromiso de hogar temporal.'); return; }
+      }
       clearError();
       btnSubmit.disabled = true;
       btnSubmit.textContent = 'Enviando...';
@@ -482,8 +560,8 @@ const compromisos = [
       }
     });
 
+    recomputeFlow();
+    setStep(0);
     restoreDraft();
-    if (currentStep < 1 || currentStep > TOTAL_STEPS) setStep(1);
-    else setStep(currentStep);
   })();
 </script>

@@ -4,6 +4,10 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://utopianimal.org',
+  redirects: {
+    // La página de hogar temporal se amplió a voluntariado (lo engloba).
+    '/refugio/hogar-temporal': '/refugio/voluntariado',
+  },
   integrations: [
     tailwind(),
     sitemap({

@@ -7,6 +7,8 @@ type Payload = Record<string, unknown>;
 const REQUIRED_FIELDS = ['nombre_completo', 'telefono', 'correo', 'direccion', 'declaracion_final'] as const;
 
 const FIELD_KEYS = [
+  // Áreas de interés del voluntariado (una o varias)
+  'areas_interes',
   'nombre_completo', 'cedula', 'edad', 'ocupacion', 'telefono', 'direccion',
   'correo', 'ciudad', 'barrio', 'estrato',
   'tipo_vivienda', 'situacion_habitacional', 'mallas_seguridad',
@@ -21,6 +23,8 @@ const FIELD_KEYS = [
   'adultos_casa', 'ninos_edades', 'todos_de_acuerdo', 'quien_no_de_acuerdo',
   'planes_mudanza', 'cuando_mudanza', 'alguien_alergico', 'quien_alergico',
   'compromisos_aceptados', 'declaracion_final',
+  // Ruta corta de voluntariado (cuando no es hogar temporal)
+  'por_que_voluntario', 'disponibilidad_voluntario', 'experiencia_voluntario',
 ] as const;
 
 const INT_FIELDS = new Set([
@@ -30,7 +34,7 @@ const INT_FIELDS = new Set([
   'adultos_casa', 'todos_de_acuerdo', 'planes_mudanza', 'alguien_alergico', 'declaracion_final',
 ]);
 
-const TEXT_AS_JSON = new Set(['compromisos_aceptados']);
+const TEXT_AS_JSON = new Set(['compromisos_aceptados', 'areas_interes']);
 
 async function sha256Hex(input: string): Promise<string> {
   const buf = new TextEncoder().encode(input);
