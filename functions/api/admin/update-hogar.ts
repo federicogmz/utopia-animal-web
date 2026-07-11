@@ -5,15 +5,14 @@ interface Env extends AuthEnv {
 }
 
 const ESTADOS_VALIDOS = new Set(['pendiente', 'proceso', 'aprobada', 'rechazada', 'cerrada']);
-// recepcion -> (contacto WhatsApp) concepto -> aprobado | rechazado ; aprobado -> activo (acogiendo) ; cerrada
-const ETAPAS_VALIDAS = new Set(['recepcion', 'concepto', 'aprobado', 'rechazado', 'adoptado', 'cerrada']);
+// recepcion (incluye validar video/mallas y decidir) -> aprobado | rechazado ; aprobado -> adoptado ; cerrada
+const ETAPAS_VALIDAS = new Set(['recepcion', 'aprobado', 'rechazado', 'adoptado', 'cerrada']);
 const MALLAS_VALIDOS = new Set(['sin_definir', 'acepta_instalar', 'ya_instaladas', 'no_acepta']);
 const VIDEO_VIABLE_VALIDOS = new Set(['sin_revisar', 'si', 'no']);
 
 function estadoDeEtapa(etapa: string): string {
   switch (etapa) {
     case 'recepcion': return 'pendiente';
-    case 'concepto': return 'proceso';
     case 'aprobado':
     case 'adoptado': return 'aprobada';
     case 'rechazado': return 'rechazada';
@@ -26,12 +25,10 @@ const CAMPOS: Record<string, (v: unknown) => unknown> = {
   etapa: v => v,
   contacto_at: v => v,
   notas_humanas: v => v,
-  asignado_a: v => v,
   mallas_estado: v => v,
   video_recibido: v => (v ? 1 : 0),
   video_viable: v => v,
   video_notas: v => v,
-  observaciones_contacto: v => v,
   rescatista_asignado: v => v,
   motivo_rechazo: v => v,
   motivo_cierre: v => v,

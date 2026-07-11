@@ -15,20 +15,20 @@ import Layout from '../../layouts/Layout.astro';
   }
 </style>
 
-  <section class="bg-gray-50 min-h-screen py-5 sm:py-10">
+  <section class="bg-gray-50 dark:bg-gray-950/60 min-h-screen py-5 sm:py-10">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
 
       <!-- Header -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-5 gap-3">
         <div>
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900">Centro de Control · Adopciones</h1>
-          <p class="text-gray-500 mt-1 text-sm" id="userBanner">Cargando sesión…</p>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">Centro de Control · Adopciones</h1>
+          <p class="text-gray-500 dark:text-gray-400 mt-1 text-sm" id="userBanner">Cargando sesión…</p>
         </div>
         <div class="flex items-center gap-2 flex-wrap">
           <a href="/intranet/adopciones" class="inline-flex items-center gap-1.5 bg-elim-600 text-white px-3 py-2 rounded-xl text-sm font-semibold hover:bg-elim-500 transition-colors">🐱 Adopciones</a>
-          <a href="/intranet/hogares" class="inline-flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors">🏠 Hogares temporales</a>
-          <button id="btnRefresh" class="inline-flex items-center gap-1.5 bg-white border border-gray-200 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">🔄 Actualizar</button>
-          <button id="btnLogout" class="inline-flex items-center gap-1.5 bg-red-50 text-red-700 border border-red-100 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-red-100 transition-colors">Salir</button>
+          <a href="/intranet/hogares" class="inline-flex items-center gap-1.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">🙋 Voluntariado</a>
+          <button id="btnRefresh" class="inline-flex items-center gap-1.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">🔄 Actualizar</button>
+          <button id="btnLogout" class="inline-flex items-center gap-1.5 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border border-red-100 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors">Salir</button>
         </div>
       </div>
 
@@ -36,10 +36,10 @@ import Layout from '../../layouts/Layout.astro';
       <div class="grid grid-cols-3 md:grid-cols-7 gap-2 sm:gap-3 mb-5" id="pipelineStats"></div>
 
       <!-- Filters -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-4 mb-5 flex flex-col lg:flex-row gap-2 lg:items-center">
+      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-3 sm:p-4 mb-5 flex flex-col lg:flex-row gap-2 lg:items-center">
         <input id="searchInput" type="text" placeholder="Buscar nombre, teléfono o ciudad..."
-          class="flex-1 rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
-        <select id="filterEtapa" class="rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500">
+          class="flex-1 rounded-xl border border-gray-200 dark:border-gray-700 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
+        <select id="filterEtapa" class="rounded-xl border border-gray-200 dark:border-gray-700 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500">
           <option value="">Todas las etapas</option>
           <option value="recepcion">📋 Revisión</option>
           <option value="aprobado">✅ Aprobado</option>
@@ -47,7 +47,7 @@ import Layout from '../../layouts/Layout.astro';
           <option value="rechazado">⛔ Rechazado</option>
           <option value="cerrada">🔒 Cerrada</option>
         </select>
-        <select id="filterReco" class="rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500">
+        <select id="filterReco" class="rounded-xl border border-gray-200 dark:border-gray-700 px-3 py-2 text-sm focus:ring-utopia-500 focus:border-utopia-500">
           <option value="">Toda recomendación IA</option>
           <option value="avanzar">✅ Avanzar</option>
           <option value="revisar">🟡 Revisar</option>
@@ -57,22 +57,22 @@ import Layout from '../../layouts/Layout.astro';
       </div>
 
       <!-- Table -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
-            <thead class="bg-gray-50 border-b border-gray-100">
+            <thead class="bg-gray-50 dark:bg-gray-950/60 border-b border-gray-100 dark:border-gray-800">
               <tr>
-                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 hidden sm:table-cell w-24">ID / Fecha</th>
-                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700">Solicitante</th>
-                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 hidden lg:table-cell">Zona</th>
-                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700">IA</th>
-                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 hidden sm:table-cell">Etapa</th>
-                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 hidden md:table-cell w-56">Observaciones</th>
-                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 text-right w-16"></th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 dark:text-gray-300 hidden sm:table-cell w-24">ID / Fecha</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 dark:text-gray-300">Solicitante</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 dark:text-gray-300 hidden lg:table-cell">Zona</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 dark:text-gray-300">IA</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 dark:text-gray-300 hidden sm:table-cell">Etapa</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 dark:text-gray-300 hidden md:table-cell w-56">Observaciones</th>
+                <th class="px-3 sm:px-5 py-3 font-bold text-gray-700 dark:text-gray-300 text-right w-16"></th>
               </tr>
             </thead>
-            <tbody id="tableBody" class="divide-y divide-gray-50">
-              <tr><td colspan="7" class="px-6 py-12 text-center text-gray-500"><div class="animate-pulse">Cargando solicitudes...</div></td></tr>
+            <tbody id="tableBody" class="divide-y divide-gray-50 dark:divide-gray-800">
+              <tr><td colspan="7" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400"><div class="animate-pulse">Cargando solicitudes...</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -83,26 +83,26 @@ import Layout from '../../layouts/Layout.astro';
 
   <!-- Detail Modal -->
   <div id="modalDetail" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center sm:p-4">
-    <div class="bg-white w-full sm:max-w-5xl sm:max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col" style="max-height:95dvh">
+    <div class="bg-white dark:bg-gray-900 w-full sm:max-w-5xl sm:max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col" style="max-height:95dvh">
 
       <!-- Modal header with nav arrows -->
-      <div class="px-4 sm:px-8 py-4 border-b border-gray-100 flex items-center gap-2 bg-white flex-shrink-0">
-        <button id="btnPrevModal" title="Solicitud anterior" class="p-2 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors flex-shrink-0 disabled:opacity-30 disabled:cursor-not-allowed">
+      <div class="px-4 sm:px-8 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center gap-2 bg-white dark:bg-gray-900 flex-shrink-0">
+        <button id="btnPrevModal" title="Solicitud anterior" class="p-2 rounded-xl text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex-shrink-0 disabled:opacity-30 disabled:cursor-not-allowed">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
         </button>
-        <h2 class="flex-1 text-sm sm:text-lg font-bold text-gray-900 truncate min-w-0" id="modalTitle">Detalle de Solicitud</h2>
-        <button id="btnNextModal" title="Siguiente solicitud" class="p-2 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors flex-shrink-0 disabled:opacity-30 disabled:cursor-not-allowed">
+        <h2 class="flex-1 text-sm sm:text-lg font-bold text-gray-900 dark:text-white truncate min-w-0" id="modalTitle">Detalle de Solicitud</h2>
+        <button id="btnNextModal" title="Siguiente solicitud" class="p-2 rounded-xl text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex-shrink-0 disabled:opacity-30 disabled:cursor-not-allowed">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
         </button>
-        <button id="btnCloseModal" title="Cerrar" class="p-2 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0 ml-1">
+        <button id="btnCloseModal" title="Cerrar" class="p-2 rounded-xl text-gray-400 dark:text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex-shrink-0 ml-1">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
-      <div class="p-4 sm:p-8 overflow-y-auto flex-1 bg-gray-50" id="modalContent"></div>
+      <div class="p-4 sm:p-8 overflow-y-auto flex-1 bg-gray-50 dark:bg-gray-950/60" id="modalContent"></div>
 
-      <div class="px-4 sm:px-8 py-4 border-t border-gray-100 bg-white flex justify-between items-center gap-3 flex-shrink-0">
-        <span id="modalSaveStatus" class="text-sm text-gray-400"></span>
+      <div class="px-4 sm:px-8 py-4 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 flex justify-between items-center gap-3 flex-shrink-0">
+        <span id="modalSaveStatus" class="text-sm text-gray-400 dark:text-gray-500"></span>
         <button id="btnSaveModal" class="px-5 sm:px-6 py-2.5 rounded-xl bg-utopia-600 text-white font-bold hover:bg-utopia-700 transition-colors shadow-lg shadow-utopia-900/20 text-sm">Guardar y cerrar</button>
       </div>
     </div>
@@ -118,13 +118,13 @@ import Layout from '../../layouts/Layout.astro';
   let me = { user: '', nombre: '', rol: 'admin', etapa_responsable: null };
 
   // ── Etapas del flujo (consolidado) ──
-  // recepcion (incluye validar el video enviado y registrar mi concepto) -> aprobado | rechazado ; aprobado -> adoptado ; cerrada
+  // recepcion (incluye validar video y mallas) -> aprobado | rechazado ; aprobado -> adoptado ; cerrada
   const ETAPAS = {
-    recepcion: { label: 'Revisión',          short: 'Revisión',    icon: '📋', badge: 'bg-gray-100 text-gray-700',  bar: 'bg-gray-400',  owner: 'Federico Gómez' },
-    aprobado:  { label: 'Aprobado',           short: 'Aprobado',    icon: '✅', badge: 'bg-green-100 text-green-700', bar: 'bg-green-500', owner: '—' },
-    adoptado:  { label: 'Adoptado',           short: 'Adoptado',    icon: '🏠', badge: 'bg-teal-100 text-teal-700',  bar: 'bg-teal-500',  owner: '—' },
-    rechazado: { label: 'Rechazado',          short: 'Rechazado',   icon: '⛔', badge: 'bg-red-100 text-red-700',    bar: 'bg-red-500',   owner: '—' },
-    cerrada:   { label: 'Cerrada (sin rechazo)', short: 'Cerrada',  icon: '🔒', badge: 'bg-gray-200 text-gray-600',  bar: 'bg-gray-400',  owner: '—' },
+    recepcion: { label: 'Revisión',          short: 'Revisión',    icon: '📋', badge: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',  bar: 'bg-gray-400',  owner: 'Federico Gómez' },
+    aprobado:  { label: 'Aprobado',           short: 'Aprobado',    icon: '✅', badge: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300', bar: 'bg-green-500', owner: '—' },
+    adoptado:  { label: 'Adoptado',           short: 'Adoptado',    icon: '🏠', badge: 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300',  bar: 'bg-teal-500',  owner: '—' },
+    rechazado: { label: 'Rechazado',          short: 'Rechazado',   icon: '⛔', badge: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',    bar: 'bg-red-500',   owner: '—' },
+    cerrada:   { label: 'Cerrada (sin rechazo)', short: 'Cerrada',  icon: '🔒', badge: 'bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400',  bar: 'bg-gray-400',  owner: '—' },
   };
   const PIPELINE = ['recepcion', 'aprobado', 'adoptado'];
   const ORDER    = { recepcion: 0, aprobado: 1, adoptado: 2 };
@@ -184,13 +184,13 @@ import Layout from '../../layouts/Layout.astro';
   }
   function recoMeta(reco) {
     return {
-      avanzar:   { label: 'Avanzar',   icon: '✅', badge: 'bg-green-100 text-green-800', bar: 'bg-green-500' },
-      revisar:   { label: 'Revisar',   icon: '🟡', badge: 'bg-amber-100 text-amber-800', bar: 'bg-amber-500' },
-      descartar: { label: 'Descartar', icon: '⛔', badge: 'bg-red-100 text-red-800',     bar: 'bg-red-500'   },
-    }[reco] || { label: 'Sin evaluar', icon: '⏳', badge: 'bg-gray-100 text-gray-600',   bar: 'bg-gray-300'  };
+      avanzar:   { label: 'Avanzar',   icon: '✅', badge: 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300', bar: 'bg-green-500' },
+      revisar:   { label: 'Revisar',   icon: '🟡', badge: 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300', bar: 'bg-amber-500' },
+      descartar: { label: 'Descartar', icon: '⛔', badge: 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300',     bar: 'bg-red-500'   },
+    }[reco] || { label: 'Sin evaluar', icon: '⏳', badge: 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400',   bar: 'bg-gray-300'  };
   }
   function scoreColor(score) {
-    if (score === null || score === undefined || score === '') return 'text-gray-400';
+    if (score === null || score === undefined || score === '') return 'text-gray-400 dark:text-gray-500';
     const n = Number(score);
     if (n >= 80) return 'text-green-600';
     if (n >= 60) return 'text-amber-600';
@@ -238,9 +238,9 @@ import Layout from '../../layouts/Layout.astro';
     if (!s) return;
     if (mode === 'continuar') {
       btnC.className = 'flex-1 py-2 rounded-xl text-sm font-bold bg-green-600 text-white transition-colors';
-      btnR.className = 'flex-1 py-2 rounded-xl text-sm font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors';
+      btnR.className = 'flex-1 py-2 rounded-xl text-sm font-bold bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
     } else {
-      btnC.className = 'flex-1 py-2 rounded-xl text-sm font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors';
+      btnC.className = 'flex-1 py-2 rounded-xl text-sm font-bold bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
       btnR.className = 'flex-1 py-2 rounded-xl text-sm font-bold bg-red-600 text-white transition-colors';
     }
     const ta = document.getElementById('waMessage');
@@ -275,12 +275,12 @@ import Layout from '../../layouts/Layout.astro';
     const box = document.getElementById('accionesBox');
     if (!box) return;
     box.innerHTML = `
-      <div class="w-full bg-red-50 border border-red-200 rounded-xl p-4">
-        <label class="text-xs font-bold text-red-700 uppercase mb-1 block">Motivo del rechazo (obligatorio)</label>
+      <div class="w-full bg-red-50 dark:bg-red-900/20 border border-red-200 rounded-xl p-4">
+        <label class="text-xs font-bold text-red-700 dark:text-red-300 uppercase mb-1 block">Motivo del rechazo (obligatorio)</label>
         <textarea id="motivoRechazoInput" rows="2" class="w-full rounded-xl border-red-200 text-sm focus:ring-red-500 focus:border-red-500" placeholder="Explica brevemente por qué se rechaza esta solicitud..."></textarea>
         <div class="flex gap-3 mt-3">
           <button onclick="confirmarRechazo()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm">Confirmar rechazo</button>
-          <button onclick="openDetail(currentId)" class="border border-gray-200 text-gray-700 font-semibold px-5 py-2.5 rounded-xl text-sm">Cancelar</button>
+          <button onclick="openDetail(currentId)" class="border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold px-5 py-2.5 rounded-xl text-sm">Cancelar</button>
         </div>
       </div>`;
     const t = document.getElementById('motivoRechazoInput'); if (t) t.focus();
@@ -302,13 +302,13 @@ import Layout from '../../layouts/Layout.astro';
     const box = document.getElementById('accionesBox');
     if (!box) return;
     box.innerHTML = `
-      <div class="w-full bg-gray-100 border border-gray-300 rounded-xl p-4">
-        <label class="text-xs font-bold text-gray-600 uppercase mb-1 block">Motivo del cierre (obligatorio)</label>
-        <p class="text-xs text-gray-500 mb-2">Para casos donde el proceso se cierra sin que sea un rechazo: ya adoptó en otro lugar, desistió, cambiaron sus circunstancias, etc.</p>
-        <textarea id="motivoCierreInput" rows="2" class="w-full rounded-xl border-gray-300 text-sm focus:ring-gray-500 focus:border-gray-500" placeholder="Explica brevemente por qué se cierra esta solicitud..."></textarea>
+      <div class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl p-4">
+        <label class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1 block">Motivo del cierre (obligatorio)</label>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Para casos donde el proceso se cierra sin que sea un rechazo: ya adoptó en otro lugar, desistió, cambiaron sus circunstancias, etc.</p>
+        <textarea id="motivoCierreInput" rows="2" class="w-full rounded-xl border-gray-300 dark:border-gray-600 text-sm focus:ring-gray-500 focus:border-gray-500" placeholder="Explica brevemente por qué se cierra esta solicitud..."></textarea>
         <div class="flex gap-3 mt-3">
           <button onclick="confirmarCierre()" class="bg-gray-700 hover:bg-gray-800 text-white font-bold px-5 py-2.5 rounded-xl text-sm">Confirmar cierre</button>
-          <button onclick="openDetail(currentId)" class="border border-gray-200 text-gray-700 font-semibold px-5 py-2.5 rounded-xl text-sm">Cancelar</button>
+          <button onclick="openDetail(currentId)" class="border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold px-5 py-2.5 rounded-xl text-sm">Cancelar</button>
         </div>
       </div>`;
     const t = document.getElementById('motivoCierreInput'); if (t) t.focus();
@@ -359,7 +359,7 @@ import Layout from '../../layouts/Layout.astro';
       <h2>Datos personales</h2><table>${f('Cédula',s.cedula)}${f('Edad',s.edad)}${f('Ocupación',s.ocupacion)}${f('Teléfono',s.telefono)}${f('Correo',s.correo)}${f('Dirección',s.direccion)}${f('Ciudad/Barrio',(s.ciudad||'—')+' / '+(s.barrio||'—'))}${f('Estrato',s.estrato)}</table>
       <h2>Vivienda y hogar</h2><table>${f('Tipo de vivienda',s.tipo_vivienda)}${f('Situación',s.situacion_habitacional)}${fb('Mallas de seguridad',s.mallas_seguridad)}${f('Adultos en casa',s.adultos_casa)}${f('Niños',s.ninos_edades)}${fb('Todos de acuerdo',s.todos_de_acuerdo)}${fb('Otras mascotas',s.tiene_otras_mascotas)}${f('Detalle mascotas',s.otras_mascotas_tipo)}</table>
       <h2>Motivación y planes</h2><table>${f('¿Por qué adoptar?',s.por_que_adoptar)}${f('Género preferido',s.genero_preferido)}${f('Edad del gato',s.edad_estimada_gatito)}${f('Responsable gastos',s.responsable_gastos)}${f('Plan dificultad económica',s.plan_dificultad_economica)}${f('Plan comportamiento',s.plan_comportamiento)}${f('Plan enfermedad',s.plan_enfermedad)}${f('Plan vacaciones',s.plan_vacaciones)}</table>
-      <h2>Gestión por etapas</h2><table>${f('Etapa actual',em.label)}${f('Mallas (gestión)',s.mallas_estado)}${fb('Video recibido',s.video_recibido)}${f('Video viable',s.video_viable)}${f('Notas video',s.video_notas)}${f('Mi concepto (Federico)',s.observaciones_contacto)}${f('Concepto entrevista (Laura)',s.entrevista_notas)}${f('Rescatista asignado',s.rescatista_asignado)}${f('Motivo de rechazo',s.motivo_rechazo)}${f('Motivo de cierre',s.motivo_cierre)}${f('Notas humanas',s.notas_humanas)}</table>
+      <h2>Gestión por etapas</h2><table>${f('Etapa actual',em.label)}${f('Mallas (gestión)',s.mallas_estado)}${fb('Video recibido',s.video_recibido)}${f('Video viable',s.video_viable)}${f('Notas video',s.video_notas)}${f('Rescatista asignado',s.rescatista_asignado)}${f('Motivo de rechazo',s.motivo_rechazo)}${f('Motivo de cierre',s.motivo_cierre)}${f('Notas humanas',s.notas_humanas)}</table>
       <script>window.onload=function(){window.print()}<\/script></body></html>`;
     const w = window.open('', '_blank');
     if (w) { w.document.write(html); w.document.close(); }
@@ -379,7 +379,7 @@ import Layout from '../../layouts/Layout.astro';
       const j = await res.json();
       if (j.ok) {
         me = j;
-        document.getElementById('userBanner').innerHTML = `Hola <b class="text-gray-900">${esc(me.nombre)}</b> · <span class="text-utopia-700 font-semibold">${esc(roleLabel())}</span>`;
+        document.getElementById('userBanner').innerHTML = `Hola <b class="text-gray-900 dark:text-white">${esc(me.nombre)}</b> · <span class="text-utopia-700 dark:text-utopia-400 font-semibold">${esc(roleLabel())}</span>`;
       }
     } catch (e) { console.error(e); }
   }
@@ -401,9 +401,9 @@ import Layout from '../../layouts/Layout.astro';
     const cards = order.map(e => {
       const m = ETAPAS[e];
       const mine = mineStages.includes(e);
-      return `<button data-etapa="${e}" class="statCard text-left bg-white p-3 sm:p-4 rounded-2xl shadow-sm border ${mine ? 'border-utopia-300 ring-1 ring-utopia-200' : 'border-gray-100'} hover:shadow-md transition-shadow">
-        <p class="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1 leading-tight">${m.icon} ${m.short}</p>
-        <p class="text-xl sm:text-2xl font-black text-gray-900">${counts[e] || 0}</p></button>`;
+      return `<button data-etapa="${e}" class="statCard text-left bg-white dark:bg-gray-900 p-3 sm:p-4 rounded-2xl shadow-sm border ${mine ? 'border-utopia-300 dark:border-utopia-700 ring-1 ring-utopia-200 dark:ring-utopia-800' : 'border-gray-100 dark:border-gray-800'} hover:shadow-md transition-shadow">
+        <p class="text-[10px] sm:text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 leading-tight">${m.icon} ${m.short}</p>
+        <p class="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">${counts[e] || 0}</p></button>`;
     }).join('');
     document.getElementById('pipelineStats').innerHTML = cards;
     document.querySelectorAll('.statCard').forEach(b => b.onclick = () => {
@@ -435,7 +435,7 @@ import Layout from '../../layouts/Layout.astro';
     updateNavArrows();
 
     if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-gray-500">No hay solicitudes que coincidan.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">No hay solicitudes que coincidan.</td></tr>';
       return;
     }
     tbody.innerHTML = rows.map(s => {
@@ -445,24 +445,24 @@ import Layout from '../../layouts/Layout.astro';
       const flagged  = zonaAuto || !!s.zona_riesgo_manual;
       const scoreTxt = (s.score === null || s.score === undefined || s.score === '') ? '—' : Math.round(Number(s.score));
       return `
-      <tr class="hover:bg-gray-50 transition-colors">
+      <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
         <td class="px-3 sm:px-5 py-3 sm:py-4 align-top hidden sm:table-cell">
-          <span class="font-bold text-gray-900">#${esc(s.id)}</span>
-          <div class="text-xs text-gray-500">${esc(new Date(s.fecha_envio).toLocaleDateString('es-CO'))}</div>
+          <span class="font-bold text-gray-900 dark:text-white">#${esc(s.id)}</span>
+          <div class="text-xs text-gray-500 dark:text-gray-400">${esc(new Date(s.fecha_envio).toLocaleDateString('es-CO'))}</div>
         </td>
         <td class="px-3 sm:px-5 py-3 sm:py-4 align-top">
-          <div class="flex items-center gap-1 font-medium text-gray-900">
+          <div class="flex items-center gap-1 font-medium text-gray-900 dark:text-white">
             <span>${esc(s.nombre_completo)}</span>
             ${flagged ? '<span class="text-red-500 text-xs" title="Zona de alto abandono">🚩</span>' : ''}
           </div>
-          <div class="text-xs text-gray-400">${esc(s.telefono)}</div>
-          ${necesitaSeguimiento(s) ? `<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800" title="Más de 4 días desde que se envió la solicitud. Da seguimiento o cierra el proceso.">⚠️ Seguimiento · ${diasEnEspera(s)}d</span></div>` : ''}
-          <div class="text-xs text-gray-400 sm:hidden">#${esc(s.id)} · ${esc(new Date(s.fecha_envio).toLocaleDateString('es-CO'))}</div>
+          <div class="text-xs text-gray-400 dark:text-gray-500">${esc(s.telefono)}</div>
+          ${necesitaSeguimiento(s) ? `<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300" title="Más de 4 días desde que se envió la solicitud. Da seguimiento o cierra el proceso.">⚠️ Seguimiento · ${diasEnEspera(s)}d</span></div>` : ''}
+          <div class="text-xs text-gray-400 dark:text-gray-500 sm:hidden">#${esc(s.id)} · ${esc(new Date(s.fecha_envio).toLocaleDateString('es-CO'))}</div>
           <div class="sm:hidden mt-0.5"><span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${em.badge}">${em.icon} ${em.short}</span></div>
         </td>
-        <td class="px-3 sm:px-5 py-3 sm:py-4 align-top text-gray-600 hidden lg:table-cell">
+        <td class="px-3 sm:px-5 py-3 sm:py-4 align-top text-gray-600 dark:text-gray-400 hidden lg:table-cell">
           ${esc(s.ciudad || '—')}<br/><span class="text-xs">${esc(s.barrio || '—')}</span>
-          ${flagged ? '<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700">🚩 Alto abandono</span></div>' : ''}
+          ${flagged ? '<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300">🚩 Alto abandono</span></div>' : ''}
         </td>
         <td class="px-3 sm:px-5 py-3 sm:py-4 align-top">
           <div class="flex items-center gap-1.5">
@@ -476,13 +476,13 @@ import Layout from '../../layouts/Layout.astro';
         </td>
         <td class="px-3 sm:px-5 py-3 sm:py-4 align-top hidden md:table-cell">
           <textarea rows="2" placeholder="Notas de seguimiento..."
-            class="w-full rounded-lg border-gray-200 text-xs focus:ring-utopia-500 focus:border-utopia-500 resize-y"
+            class="w-full rounded-lg border-gray-200 dark:border-gray-700 text-xs focus:ring-utopia-500 focus:border-utopia-500 resize-y"
             onblur="guardarObservacionInline(${Number(s.id)}, this)"
           >${esc(s.notas_humanas || '')}</textarea>
           <span class="text-[10px] text-gray-300" id="obsStatus-${Number(s.id)}"></span>
         </td>
         <td class="px-3 sm:px-5 py-3 sm:py-4 align-top text-right">
-          <button onclick="openDetail(${Number(s.id)})" class="text-utopia-600 font-bold hover:text-utopia-800 transition-colors p-1">
+          <button onclick="openDetail(${Number(s.id)})" class="text-utopia-600 font-bold hover:text-utopia-800 dark:hover:text-utopia-300 transition-colors p-1">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
           </button>
         </td>
@@ -529,24 +529,24 @@ import Layout from '../../layouts/Layout.astro';
   };
 
   // ── Detail view helpers ──
-  function row(label, value)     { return `<dt class="text-gray-500">${esc(label)}:</dt><dd class="text-gray-900 break-words">${esc(value === null || value === undefined || value === '' ? '—' : value)}</dd>`; }
-  function boolRow(label, value) { return `<dt class="text-gray-500">${esc(label)}:</dt><dd class="text-gray-900 font-medium">${fmtBool(value)}</dd>`; }
-  function longField(label, value) { return `<div><p class="text-gray-500 mb-1 text-sm">${esc(label)}</p><p class="text-gray-900 p-3 bg-white rounded-lg border border-gray-200 whitespace-pre-wrap text-sm">${esc(value || '—')}</p></div>`; }
-  function section(title, inner) { return `<div class="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 mb-4 sm:mb-5"><h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-100 pb-2 mb-4">${esc(title)}</h3>${inner}</div>`; }
+  function row(label, value)     { return `<dt class="text-gray-500 dark:text-gray-400">${esc(label)}:</dt><dd class="text-gray-900 dark:text-white break-words">${esc(value === null || value === undefined || value === '' ? '—' : value)}</dd>`; }
+  function boolRow(label, value) { return `<dt class="text-gray-500 dark:text-gray-400">${esc(label)}:</dt><dd class="text-gray-900 dark:text-white font-medium">${fmtBool(value)}</dd>`; }
+  function longField(label, value) { return `<div><p class="text-gray-500 dark:text-gray-400 mb-1 text-sm">${esc(label)}</p><p class="text-gray-900 dark:text-white p-3 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 whitespace-pre-wrap text-sm">${esc(value || '—')}</p></div>`; }
+  function section(title, inner) { return `<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-5 mb-4 sm:mb-5"><h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide border-b border-gray-100 dark:border-gray-800 pb-2 mb-4">${esc(title)}</h3>${inner}</div>`; }
   function dl(inner)             { return `<dl class="grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm">${inner}</dl>`; }
-  function chips(arr, cls)       { if (!arr.length) return '<span class="text-gray-400 text-sm">—</span>'; return arr.map(x => `<li class="flex gap-2 text-sm"><span>${cls.icon}</span><span>${esc(x)}</span></li>`).join(''); }
-  function roRow(label, value)   { return `<div class="flex justify-between gap-3 py-1.5 border-b border-gray-50 last:border-0"><span class="text-gray-500 text-sm">${esc(label)}</span><span class="text-gray-900 text-sm font-medium text-right">${esc(value === null || value === undefined || value === '' ? '—' : value)}</span></div>`; }
+  function chips(arr, cls)       { if (!arr.length) return '<span class="text-gray-400 dark:text-gray-500 text-sm">—</span>'; return arr.map(x => `<li class="flex gap-2 text-sm"><span>${cls.icon}</span><span>${esc(x)}</span></li>`).join(''); }
+  function roRow(label, value)   { return `<div class="flex justify-between gap-3 py-1.5 border-b border-gray-50 last:border-0"><span class="text-gray-500 dark:text-gray-400 text-sm">${esc(label)}</span><span class="text-gray-900 dark:text-white text-sm font-medium text-right">${esc(value === null || value === undefined || value === '' ? '—' : value)}</span></div>`; }
 
   function buildStepper(cur, motivo) {
-    if (cur === 'rechazado') return `<div class="mb-5 p-4 bg-red-50 border border-red-200 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">⛔</span><span class="font-bold text-red-700">Solicitud rechazada</span></div>${motivo ? `<p class="text-sm text-red-700 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
-    if (cur === 'cerrada') return `<div class="mb-5 p-4 bg-gray-100 border border-gray-300 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">🔒</span><span class="font-bold text-gray-700">Proceso cerrado (sin rechazo)</span></div>${motivo ? `<p class="text-sm text-gray-600 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
+    if (cur === 'rechazado') return `<div class="mb-5 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">⛔</span><span class="font-bold text-red-700 dark:text-red-300">Solicitud rechazada</span></div>${motivo ? `<p class="text-sm text-red-700 dark:text-red-300 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
+    if (cur === 'cerrada') return `<div class="mb-5 p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-2xl"><div class="flex items-center gap-2"><span class="text-lg">🔒</span><span class="font-bold text-gray-700 dark:text-gray-300">Proceso cerrado (sin rechazo)</span></div>${motivo ? `<p class="text-sm text-gray-600 dark:text-gray-400 mt-1 pl-7"><b>Motivo:</b> ${esc(motivo)}</p>` : ''}</div>`;
     const curStep = ORDER[cur];
     const items = PIPELINE.map((e, i) => {
       const m = ETAPAS[e];
       const done = i < curStep, active = i === curStep;
-      const dot = active ? `${m.bar} text-white ring-4 ring-offset-1 ring-gray-100` : done ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-400';
-      return `<div class="flex-1 flex flex-col items-center text-center min-w-0"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${dot}">${done ? '✓' : i + 1}</div><span class="text-[9px] sm:text-[10px] mt-1 font-semibold leading-tight ${active ? 'text-gray-900' : done ? 'text-green-600' : 'text-gray-400'}">${m.short}</span></div>`;
-    }).join('<div class="flex-1 h-0.5 bg-gray-200 mt-3.5 flex-shrink"></div>');
+      const dot = active ? `${m.bar} text-white ring-4 ring-offset-1 ring-gray-100 dark:ring-gray-700` : done ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500';
+      return `<div class="flex-1 flex flex-col items-center text-center min-w-0"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${dot}">${done ? '✓' : i + 1}</div><span class="text-[9px] sm:text-[10px] mt-1 font-semibold leading-tight ${active ? 'text-gray-900 dark:text-white' : done ? 'text-green-600' : 'text-gray-400 dark:text-gray-500'}">${m.short}</span></div>`;
+    }).join('<div class="flex-1 h-0.5 bg-gray-200 dark:bg-gray-800 mt-3.5 flex-shrink"></div>');
     return `<div class="flex items-start mb-5 px-1">${items}</div>`;
   }
 
@@ -557,30 +557,30 @@ import Layout from '../../layouts/Layout.astro';
     const flagged    = zonaAuto || zonaManual;
     if (!flagged) {
       return `<div class="flex justify-end mb-3">
-        <button onclick="toggleZonaRiesgo()" class="text-xs text-gray-400 hover:text-red-600 border border-gray-200 hover:border-red-300 px-3 py-1.5 rounded-lg transition-colors">
+        <button onclick="toggleZonaRiesgo()" class="text-xs text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 border border-gray-200 dark:border-gray-700 hover:border-red-300 px-3 py-1.5 rounded-lg transition-colors">
           🚩 Marcar como zona de alto abandono
         </button>
       </div>`;
     }
     const autoLabel  = zonaAuto ? ` — ${esc(zonaAuto)}` : '';
     const manualTag  = zonaManual && !zonaAuto ? ' <span class="font-normal">(marcada manualmente)</span>' : '';
-    return `<div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 mb-5 flex items-start gap-3">
+    return `<div class="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 rounded-2xl p-4 mb-5 flex items-start gap-3">
       <span class="text-xl flex-shrink-0">🚩</span>
       <div class="flex-1 min-w-0">
-        <p class="font-bold text-red-800 text-sm">Zona de alto abandono${autoLabel}${manualTag}</p>
-        <p class="text-xs text-red-700 mt-0.5">Red flag: exige verificación domiciliaria estricta antes de cualquier entrega.</p>
+        <p class="font-bold text-red-800 dark:text-red-300 text-sm">Zona de alto abandono${autoLabel}${manualTag}</p>
+        <p class="text-xs text-red-700 dark:text-red-300 mt-0.5">Red flag: exige verificación domiciliaria estricta antes de cualquier entrega.</p>
       </div>
-      ${!zonaAuto ? `<button onclick="toggleZonaRiesgo()" title="Quitar bandera" class="text-xs text-red-400 hover:text-red-700 px-2 py-1 rounded-lg border border-red-200 hover:bg-red-100 transition-colors flex-shrink-0">Quitar</button>` : ''}
+      ${!zonaAuto ? `<button onclick="toggleZonaRiesgo()" title="Quitar bandera" class="text-xs text-red-400 hover:text-red-700 dark:hover:text-red-300 px-2 py-1 rounded-lg border border-red-200 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex-shrink-0">Quitar</button>` : ''}
     </div>`;
   }
 
   function buildAcciones(s) {
     const e = etapaOf(s);
     const btn = (label, fn, cls) => `<button onclick="${fn}" class="inline-flex items-center gap-2 ${cls} font-bold px-4 sm:px-5 py-2.5 rounded-xl text-sm transition-colors">${label}</button>`;
-    const reject = btn('⛔ Rechazar', `pedirMotivo()`, 'bg-red-50 text-red-700 border border-red-200 hover:bg-red-100');
-    const close  = btn('🔒 Cerrar sin rechazar', `pedirMotivoCierre()`, 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200');
-    if (e === 'adoptado')  return `<div class="flex items-center gap-2 text-teal-700 font-bold"><span>🏠</span> Adopción completada</div>`;
-    if (e === 'cerrada')   return `<div class="flex items-center gap-2 text-gray-600 font-bold"><span>🔒</span> Proceso cerrado</div>`;
+    const reject = btn('⛔ Rechazar', `pedirMotivo()`, 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border border-red-200 hover:bg-red-100 dark:hover:bg-red-900/40');
+    const close  = btn('🔒 Cerrar sin rechazar', `pedirMotivoCierre()`, 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700');
+    if (e === 'adoptado')  return `<div class="flex items-center gap-2 text-teal-700 dark:text-teal-300 font-bold"><span>🏠</span> Adopción completada</div>`;
+    if (e === 'cerrada')   return `<div class="flex items-center gap-2 text-gray-600 dark:text-gray-400 font-bold"><span>🔒</span> Proceso cerrado</div>`;
     let primary = '';
     if (e === 'recepcion')      primary = btn('✅ Aprobar', `avanzarEtapa('aprobado')`, 'bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-900/20');
     else if (e === 'aprobado')  return `<div class="flex flex-wrap items-center gap-3">${btn('🐱 Concretar adopción', `concretarAdopcion()`, 'bg-elim-600 hover:bg-elim-500 text-white shadow-lg shadow-elim-900/20')}${close}</div>`;
@@ -614,23 +614,23 @@ import Layout from '../../layouts/Layout.astro';
     const zonaBanner = `<div id="zonaBannerWrap">${makeZonaBanner(s)}</div>`;
 
     const iaPanel = !evaluada
-      ? `<div class="bg-gray-50 rounded-2xl border border-gray-200 p-5 mb-5 text-sm text-gray-500">⏳ Esta solicitud aún no ha sido evaluada por la IA.</div>`
-      : `<div class="bg-gradient-to-br from-utopia-50 to-white rounded-2xl border border-utopia-100 p-5 mb-5">
+      ? `<div class="bg-gray-50 dark:bg-gray-950/60 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 mb-5 text-sm text-gray-500 dark:text-gray-400">⏳ Esta solicitud aún no ha sido evaluada por la IA.</div>`
+      : `<div class="bg-gradient-to-br from-utopia-50 dark:from-utopia-950/40 to-white rounded-2xl border border-utopia-100 dark:border-utopia-800 p-5 mb-5">
           <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
             <div class="flex items-center gap-3">
-              <span class="text-xs font-bold text-utopia-700 uppercase tracking-widest">Evaluación IA</span>
+              <span class="text-xs font-bold text-utopia-700 dark:text-utopia-400 uppercase tracking-widest">Evaluación IA</span>
               <span class="px-3 py-1 rounded-full text-xs font-bold ${rm.badge}">${rm.icon} ${rm.label}</span>
             </div>
-            <div class="text-right"><span class="text-3xl font-black ${scoreColor(s.score)}">${scoreTxt}</span><span class="text-gray-400 text-sm font-semibold">/100</span></div>
+            <div class="text-right"><span class="text-3xl font-black ${scoreColor(s.score)}">${scoreTxt}</span><span class="text-gray-400 dark:text-gray-500 text-sm font-semibold">/100</span></div>
           </div>
-          <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-4"><div class="h-full ${rm.bar}" style="width:${Math.max(0,Math.min(100,Number(s.score)||0))}%"></div></div>
+          <div class="w-full h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden mb-4"><div class="h-full ${rm.bar}" style="width:${Math.max(0,Math.min(100,Number(s.score)||0))}%"></div></div>
           <div class="grid md:grid-cols-2 gap-4">
-            <div><p class="text-xs font-bold text-green-700 uppercase mb-2">Señales buenas</p><ul class="space-y-1">${chips(buenas,{icon:'✅'})}</ul></div>
-            <div><p class="text-xs font-bold text-red-700 uppercase mb-2">Señales de alerta</p><ul class="space-y-1">${chips(alertas,{icon:'⚠️'})}</ul></div>
+            <div><p class="text-xs font-bold text-green-700 dark:text-green-300 uppercase mb-2">Señales buenas</p><ul class="space-y-1">${chips(buenas,{icon:'✅'})}</ul></div>
+            <div><p class="text-xs font-bold text-red-700 dark:text-red-300 uppercase mb-2">Señales de alerta</p><ul class="space-y-1">${chips(alertas,{icon:'⚠️'})}</ul></div>
           </div>
-          <div class="mt-4"><p class="text-xs font-bold text-blue-700 uppercase mb-2">Preguntas de seguimiento</p><ul class="space-y-1">${chips(followups,{icon:'❓'})}</ul></div>
-          ${s.notas_ia ? `<div class="mt-4 bg-white rounded-lg border border-gray-200 p-4"><p class="text-xs font-bold text-gray-500 uppercase mb-1">Notas IA</p><p class="text-sm text-gray-700 whitespace-pre-wrap">${esc(s.notas_ia)}</p></div>` : ''}
-          <p class="text-xs text-gray-400 mt-3">Evaluado: ${fmtDate(s.evaluado_at)}</p>
+          <div class="mt-4"><p class="text-xs font-bold text-blue-700 dark:text-blue-300 uppercase mb-2">Preguntas de seguimiento</p><ul class="space-y-1">${chips(followups,{icon:'❓'})}</ul></div>
+          ${s.notas_ia ? `<div class="mt-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4"><p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Notas IA</p><p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">${esc(s.notas_ia)}</p></div>` : ''}
+          <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">Evaluado: ${fmtDate(s.evaluado_at)}</p>
         </div>`;
 
     // WhatsApp section — only in filtro, with toggle
@@ -639,24 +639,24 @@ import Layout from '../../layouts/Layout.astro';
     const defMode   = iaRechazo ? 'rechazar' : 'continuar';
     const contCls   = !iaRechazo
       ? 'flex-1 py-2 rounded-xl text-sm font-bold bg-green-600 text-white transition-colors'
-      : 'flex-1 py-2 rounded-xl text-sm font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors';
+      : 'flex-1 py-2 rounded-xl text-sm font-bold bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
     const rechCls   = iaRechazo
       ? 'flex-1 py-2 rounded-xl text-sm font-bold bg-red-600 text-white transition-colors'
-      : 'flex-1 py-2 rounded-xl text-sm font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors';
+      : 'flex-1 py-2 rounded-xl text-sm font-bold bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
 
     const whatsapp = (cur === 'recepcion') ? `
-      <div class="bg-white rounded-2xl border-2 border-utopia-200 p-5 mb-5">
-        <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wide mb-2">📲 Mensaje de WhatsApp</h3>
-        <p class="text-xs text-gray-500 mb-3">La IA recomienda <b>${rm.label}</b>. Puedes cambiar la decisión antes de enviar.</p>
+      <div class="bg-white dark:bg-gray-900 rounded-2xl border-2 border-utopia-200 dark:border-utopia-800 p-5 mb-5">
+        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-2">📲 Mensaje de WhatsApp</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">La IA recomienda <b>${rm.label}</b>. Puedes cambiar la decisión antes de enviar.</p>
         <div class="flex gap-2 mb-3">
           <button id="waToggleContinuar" onclick="setWaToggle('continuar')" class="${contCls}">✅ Continuar proceso</button>
           <button id="waToggleRechazar"  onclick="setWaToggle('rechazar')"  class="${rechCls}">⛔ Rechazar</button>
         </div>
         <div class="flex items-center justify-between mb-1">
-          <span class="text-xs text-gray-400">${phoneFmt ? '+' + esc(phoneFmt) : '⚠️ sin teléfono válido'}</span>
+          <span class="text-xs text-gray-400 dark:text-gray-500">${phoneFmt ? '+' + esc(phoneFmt) : '⚠️ sin teléfono válido'}</span>
         </div>
-        <textarea id="waMessage" rows="9" class="w-full rounded-xl border-gray-200 text-sm focus:ring-green-500 focus:border-green-500">${esc(buildWaMessage(s, defMode))}</textarea>
-        <p class="text-xs text-gray-400 mt-2">Uso opcional: la mayoría ya envía el video desde la página de confirmación. Úsalo para reforzar o pedirlo de nuevo si no ha llegado.</p>
+        <textarea id="waMessage" rows="9" class="w-full rounded-xl border-gray-200 dark:border-gray-700 text-sm focus:ring-green-500 focus:border-green-500">${esc(buildWaMessage(s, defMode))}</textarea>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Uso opcional: la mayoría ya envía el video desde la página de confirmación. Úsalo para reforzar o pedirlo de nuevo si no ha llegado.</p>
         <div class="flex justify-end mt-3">
           <button onclick="sendWhatsApp()" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-2.5 rounded-xl transition-colors shadow-lg">
             Abrir WhatsApp →
@@ -668,73 +668,60 @@ import Layout from '../../layouts/Layout.astro';
 
     // ── Acciones + gestión general ──
     const gestion = `
-      <div class="bg-white rounded-2xl border-2 border-utopia-200 p-5 mb-5">
+      <div class="bg-white dark:bg-gray-900 rounded-2xl border-2 border-utopia-200 dark:border-utopia-800 p-5 mb-5">
         <div id="accionesBox" class="mb-5">${buildAcciones(s)}</div>
-        <div class="border-t border-gray-100 pt-4">
-          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Asignado a</label>
-          <input id="editAsignado" type="text" value="${esc(s.asignado_a||'')}" placeholder="Responsable" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
+        <div class="border-t border-gray-100 dark:border-gray-800 pt-4">
+          <label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1 block">Notas generales</label>
+          <textarea id="editNotas" rows="3" class="w-full rounded-xl border-gray-200 dark:border-gray-700 text-sm focus:ring-utopia-500 focus:border-utopia-500" placeholder="Seguimiento general...">${esc(s.notas_humanas||'')}</textarea>
         </div>
         <div class="mt-4">
-          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas generales del equipo</label>
-          <textarea id="editNotas" rows="2" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" placeholder="Seguimiento general...">${esc(s.notas_humanas||'')}</textarea>
-        </div>
-        <div class="mt-4">
-          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Agregar nota al historial (opcional)</label>
-          <input id="editNotaHist" type="text" placeholder="Quedará registrada con tu nombre y la fecha" class="w-full rounded-xl border-gray-200 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
+          <label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1 block">Agregar nota al historial (opcional)</label>
+          <input id="editNotaHist" type="text" placeholder="Quedará registrada con tu nombre y la fecha" class="w-full rounded-xl border-gray-200 dark:border-gray-700 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
         </div>
         <input type="hidden" id="editEtapa" value="${esc(cur)}" />
         <input type="hidden" id="editZonaRiesgo" value="${s.zona_riesgo_manual ? '1' : '0'}" />
         <div class="mt-4">
-          <button onclick="exportarPdf()" class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-4 py-2 rounded-xl text-sm">📄 Exportar PDF</button>
+          <button onclick="exportarPdf()" class="inline-flex items-center gap-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold px-4 py-2 rounded-xl text-sm">📄 Exportar PDF</button>
         </div>
       </div>`;
 
-    // ── Bloque «Mi concepto» (Federico) — disponible durante toda la revisión ──
-    let conceptoBlock;
-    if (cur === 'recepcion') {
-      conceptoBlock = `
-      <div class="bg-white rounded-2xl border-2 border-blue-300 ring-1 ring-blue-200 p-5 mb-5">
-        <h3 class="text-sm font-bold text-blue-800 uppercase tracking-wide mb-1">📝 Mi concepto <span class="text-blue-500 font-normal normal-case">(Federico)</span></h3>
-        <p class="text-xs text-gray-500 mb-4">Valida el video enviado y las mallas, registra tu concepto y decide: <b>Aprobar</b> o <b>Rechazar</b>.</p>
+    // Bloque de mallas/video: solo tiene sentido mientras la solicitud está en revisión.
+    const conceptoBlock = (cur === 'recepcion') ? `
+      <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 mb-5">
+        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1">Video y mallas</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Valida el video enviado y las mallas antes de decidir: <b>Aprobar</b> o <b>Rechazar</b>.</p>
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mallas de seguridad</label>
-            <select id="editMallas" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">
+            <label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1 block">Mallas de seguridad</label>
+            <select id="editMallas" class="w-full rounded-xl border-gray-200 dark:border-gray-700 text-sm focus:ring-utopia-500 focus:border-utopia-500">
               ${selOpt('sin_definir','Sin definir',s.mallas_estado)}${selOpt('acepta_instalar','Aceptó instalar',s.mallas_estado)}${selOpt('ya_instaladas','Ya instaladas',s.mallas_estado)}${selOpt('no_acepta','No acepta',s.mallas_estado)}
             </select>
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Envió video?</label>
-              <select id="editVideoRec" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">
+              <label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1 block">¿Envió video?</label>
+              <select id="editVideoRec" class="w-full rounded-xl border-gray-200 dark:border-gray-700 text-sm focus:ring-utopia-500 focus:border-utopia-500">
                 ${selOpt('0','No',String(s.video_recibido||0))}${selOpt('1','Sí',String(s.video_recibido||0))}
               </select>
             </div>
             <div>
-              <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Video viable?</label>
-              <select id="editVideoViable" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500">
+              <label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1 block">¿Video viable?</label>
+              <select id="editVideoViable" class="w-full rounded-xl border-gray-200 dark:border-gray-700 text-sm focus:ring-utopia-500 focus:border-utopia-500">
                 ${selOpt('sin_revisar','Sin revisar',s.video_viable)}${selOpt('si','Sí, viable',s.video_viable)}${selOpt('no','No viable',s.video_viable)}
               </select>
             </div>
           </div>
         </div>
         <div class="mt-4">
-          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas del video</label>
-          <input id="editVideoNotas" type="text" value="${esc(s.video_notas||'')}" placeholder="Observaciones del video del hogar..." class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500" />
+          <label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1 block">Notas del video</label>
+          <input id="editVideoNotas" type="text" value="${esc(s.video_notas||'')}" placeholder="Observaciones del video del hogar..." class="w-full rounded-xl border-gray-200 dark:border-gray-700 text-sm focus:ring-utopia-500 focus:border-utopia-500" />
         </div>
-        <div class="mt-4">
-          <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mi concepto (Federico)</label>
-          <textarea id="editObsContacto" rows="3" class="w-full rounded-xl border-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Concepto tras revisar video, mallas y el contacto...">${esc(s.observaciones_contacto||'')}</textarea>
-        </div>
-      </div>`;
-    } else {
-      conceptoBlock = `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-5 mb-5"><h3 class="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">✓ Mi concepto <span class="text-green-600 font-normal normal-case">— superado</span></h3>${roRow('Mallas de seguridad',s.mallas_estado)}${roRow('¿Envió video?',fmtBool(s.video_recibido))}${roRow('¿Video viable?',s.video_viable)}${roRow('Notas del video',s.video_notas)}${roRow('Concepto (Federico)',s.observaciones_contacto)}</div>`;
-    }
+      </div>` : `<div class="bg-green-50/40 rounded-2xl border border-green-200 p-5 mb-5"><h3 class="text-sm font-bold text-green-800 dark:text-green-300 uppercase tracking-wide mb-3">✓ Video y mallas <span class="text-green-600 font-normal normal-case">— superado</span></h3>${roRow('Mallas de seguridad',s.mallas_estado)}${roRow('¿Envió video?',fmtBool(s.video_recibido))}${roRow('¿Video viable?',s.video_viable)}${roRow('Notas del video',s.video_notas)}</div>`;
 
     // Etapa de entrevista eliminada en el flujo simplificado.
     const entrevistaBlock = '';
 
-    const timeline = `<div id="timelineBox" class="bg-white rounded-2xl border border-gray-200 p-5 mb-5"><h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">🕘 Historial de cambios</h3><p class="text-sm text-gray-400" id="timelineContent">Cargando…</p></div>`;
+    const timeline = `<div id="timelineBox" class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 mb-5"><h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-4">🕘 Historial de cambios</h3><p class="text-sm text-gray-400 dark:text-gray-500" id="timelineContent">Cargando…</p></div>`;
 
     const personal    = section('Datos personales',     dl(row('Nombre',s.nombre_completo)+row('Cédula',s.cedula)+row('Edad',s.edad)+row('Ocupación',s.ocupacion)+row('Teléfono',s.telefono)+row('Correo',s.correo)+row('Dirección',s.direccion)+row('Ciudad',s.ciudad)+row('Barrio',s.barrio)+row('Estrato',s.estrato)));
     const vivienda    = section('Vivienda',              dl(row('Tipo de vivienda',s.tipo_vivienda)+row('Situación habitacional',s.situacion_habitacional)+boolRow('Mallas (declarado)',s.mallas_seguridad)));
@@ -743,12 +730,12 @@ import Layout from '../../layouts/Layout.astro';
     const planes      = section('Planes ante escenarios',`${longField('Dificultad económica',s.plan_dificultad_economica)}<div class="mt-3">${longField('Comportamiento',s.plan_comportamiento)}</div><div class="mt-3">${longField('Enfermedad',s.plan_enfermedad)}</div><div class="mt-3">${longField('Vacaciones',s.plan_vacaciones)}</div>`);
     const mascotas    = section('Otras mascotas',        dl(boolRow('Tiene otras mascotas',s.tiene_otras_mascotas)+row('Tipo y cantidad',s.otras_mascotas_tipo)+boolRow('Esterilizadas',s.otras_esterilizadas)+row('Alimento',s.otras_alimento))+(s.otras_anteriores?`<div class="mt-3">${longField('Mascotas anteriores',s.otras_anteriores)}</div>`:''));
     const hogar       = section('Hogar y familia',       dl(row('Adultos en casa',s.adultos_casa)+row('Edades de niños',s.ninos_edades)+boolRow('Todos de acuerdo',s.todos_de_acuerdo)+row('Quién no está de acuerdo',s.quien_no_de_acuerdo)+boolRow('Planes de mudanza',s.planes_mudanza)+row('Cuándo / a dónde',s.cuando_mudanza)+boolRow('Alguien alérgico',s.alguien_alergico)+row('Quién / severidad',s.quien_alergico)));
-    const compromiso  = section('Compromiso y donación', dl(row('Tipo de donación',s.donacion_tipo)+row('Monto (COP)',s.donacion_monto)+boolRow('Declaración final aceptada',s.declaracion_final))+`<div class="mt-4"><p class="text-gray-500 text-sm mb-2">Compromisos aceptados:</p><ul class="space-y-1">${chips(compromisos,{icon:'✔️'})}</ul></div>`);
+    const compromiso  = section('Compromiso y donación', dl(row('Tipo de donación',s.donacion_tipo)+row('Monto (COP)',s.donacion_monto)+boolRow('Declaración final aceptada',s.declaracion_final))+`<div class="mt-4"><p class="text-gray-500 dark:text-gray-400 text-sm mb-2">Compromisos aceptados:</p><ul class="space-y-1">${chips(compromisos,{icon:'✔️'})}</ul></div>`);
     const mapQuery    = [s.direccion, s.barrio, s.ciudad, 'Colombia'].filter(Boolean).join(', ');
-    const mapa        = mapQuery ? section('Ubicación', `<p class="text-sm text-gray-700 mb-2">${esc([s.direccion,s.barrio,s.ciudad].filter(Boolean).join(' · ')||'—')}</p><iframe width="100%" height="220" style="border:0;border-radius:12px" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&z=14&output=embed"></iframe>`) : '';
+    const mapa        = mapQuery ? section('Ubicación', `<p class="text-sm text-gray-700 dark:text-gray-300 mb-2">${esc([s.direccion,s.barrio,s.ciudad].filter(Boolean).join(' · ')||'—')}</p><iframe width="100%" height="220" style="border:0;border-radius:12px" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&z=14&output=embed"></iframe>`) : '';
 
     const segBanner = necesitaSeguimiento(s)
-      ? `<div class="mb-5 p-4 bg-amber-50 border border-amber-300 rounded-2xl flex items-start gap-3"><span class="text-lg">⚠️</span><div><p class="font-bold text-amber-800">Seguimiento pendiente · ${diasEnEspera(s)} días desde el envío</p><p class="text-sm text-amber-700">Han pasado más de 4 días desde que se envió la solicitud. Da seguimiento o cierra el proceso.</p></div></div>`
+      ? `<div class="mb-5 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-300 rounded-2xl flex items-start gap-3"><span class="text-lg">⚠️</span><div><p class="font-bold text-amber-800 dark:text-amber-300">Seguimiento pendiente · ${diasEnEspera(s)} días desde el envío</p><p class="text-sm text-amber-700 dark:text-amber-300">Han pasado más de 4 días desde que se envió la solicitud. Da seguimiento o cierra el proceso.</p></div></div>`
       : '';
 
     document.getElementById('modalContent').innerHTML =
@@ -767,18 +754,18 @@ import Layout from '../../layouts/Layout.astro';
       const j   = await res.json();
       const box = document.getElementById('timelineContent');
       if (!box) return;
-      if (!j.ok || !j.historial.length) { box.innerHTML = '<span class="text-gray-400">Sin movimientos registrados todavía.</span>'; return; }
+      if (!j.ok || !j.historial.length) { box.innerHTML = '<span class="text-gray-400 dark:text-gray-500">Sin movimientos registrados todavía.</span>'; return; }
       const items = j.historial.map(h => {
         let desc;
         if (h.accion === 'etapa')            desc = `cambió la <b>etapa</b> a <b>${esc((ETAPAS[h.valor_nuevo]||{}).label||h.valor_nuevo)}</b>`;
-        else if (h.accion === 'nota')        desc = `dejó una nota: <span class="text-gray-700">"${esc(h.valor_nuevo)}"</span>`;
-        else if (h.campo === 'motivo_rechazo') desc = `registró el <b>motivo de rechazo</b>: <span class="text-gray-700">"${esc(h.valor_nuevo)}"</span>`;
-        else if (h.campo === 'motivo_cierre') desc = `registró el <b>motivo de cierre</b>: <span class="text-gray-700">"${esc(h.valor_nuevo)}"</span>`;
-        else                                 desc = `actualizó <b>${esc(h.campo)}</b>${h.valor_nuevo?` → <span class="text-gray-700">${esc(h.valor_nuevo)}</span>`:''}`;
+        else if (h.accion === 'nota')        desc = `dejó una nota: <span class="text-gray-700 dark:text-gray-300">"${esc(h.valor_nuevo)}"</span>`;
+        else if (h.campo === 'motivo_rechazo') desc = `registró el <b>motivo de rechazo</b>: <span class="text-gray-700 dark:text-gray-300">"${esc(h.valor_nuevo)}"</span>`;
+        else if (h.campo === 'motivo_cierre') desc = `registró el <b>motivo de cierre</b>: <span class="text-gray-700 dark:text-gray-300">"${esc(h.valor_nuevo)}"</span>`;
+        else                                 desc = `actualizó <b>${esc(h.campo)}</b>${h.valor_nuevo?` → <span class="text-gray-700 dark:text-gray-300">${esc(h.valor_nuevo)}</span>`:''}`;
         const who = h.usuario === 'ia' ? '🤖 IA' : '👤 ' + esc(h.usuario_nombre || h.usuario);
-        return `<li class="flex gap-3 pb-3 border-b border-gray-50 last:border-0"><div class="text-xs text-gray-400 whitespace-nowrap w-28 sm:w-32 shrink-0">${fmtDate(h.created_at)}</div><div class="text-sm text-gray-600"><b class="text-gray-800">${who}</b> ${desc}</div></li>`;
+        return `<li class="flex gap-3 pb-3 border-b border-gray-50 last:border-0"><div class="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap w-28 sm:w-32 shrink-0">${fmtDate(h.created_at)}</div><div class="text-sm text-gray-600 dark:text-gray-400"><b class="text-gray-800 dark:text-gray-200">${who}</b> ${desc}</div></li>`;
       }).join('');
-      document.getElementById('timelineBox').innerHTML = `<h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">🕘 Historial de cambios</h3><ul class="space-y-3">${items}</ul>`;
+      document.getElementById('timelineBox').innerHTML = `<h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-4">🕘 Historial de cambios</h3><ul class="space-y-3">${items}</ul>`;
     } catch (e) { /* noop */ }
   }
 
@@ -803,13 +790,11 @@ import Layout from '../../layouts/Layout.astro';
 
     const payload   = { id: currentId };
     const etapa     = window.__overrideEtapa || val('editEtapa'); if (etapa     !== undefined) payload.etapa                = etapa;
-    const asign     = val('editAsignado');   if (asign     !== undefined) payload.asignado_a             = asign;
     const notas     = val('editNotas');      if (notas     !== undefined) payload.notas_humanas           = notas;
     const mallas    = val('editMallas');     if (mallas    !== undefined) payload.mallas_estado           = mallas;
     const vrec      = val('editVideoRec');   if (vrec      !== undefined) payload.video_recibido          = Number(vrec);
     const vvia      = val('editVideoViable');if (vvia      !== undefined) payload.video_viable            = vvia;
     const vnot      = val('editVideoNotas'); if (vnot      !== undefined) payload.video_notas             = vnot;
-    const obs       = val('editObsContacto');if (obs       !== undefined) payload.observaciones_contacto  = obs;
     const entr      = val('editEntrevista'); if (entr      !== undefined) payload.entrevista_notas        = entr;
     const resc      = val('editRescatista'); if (resc      !== undefined) payload.rescatista_asignado     = resc;
     const nh        = val('editNotaHist');   if (nh)                      payload.nota_historial          = nh;

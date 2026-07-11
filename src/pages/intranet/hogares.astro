@@ -2,33 +2,33 @@
 import Layout from '../../layouts/Layout.astro';
 ---
 
-<Layout title="Hogares temporales · Intranet" brand="parent" pwa>
-  <section class="bg-gray-50 min-h-screen py-10">
+<Layout title="Voluntariado · Intranet" brand="parent" pwa>
+  <section class="bg-gray-50 dark:bg-gray-950 min-h-screen py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <div>
-          <h1 class="text-3xl font-extrabold text-gray-900">Hogares temporales</h1>
-          <p class="text-gray-500 mt-1">Postulaciones para acoger gatos en hogar temporal.</p>
+          <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Voluntariado</h1>
+          <p class="text-gray-500 dark:text-gray-400 mt-1">Postulaciones de voluntariado: hogar temporal, rescate, jornadas, redes y apoyo administrativo.</p>
         </div>
-        <a href="/intranet" class="inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">← Adopciones</a>
+        <a href="/intranet" class="inline-flex items-center gap-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">← Adopciones</a>
       </div>
 
-      <div id="stats" class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-8"></div>
+      <div id="stats" class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8"></div>
 
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
-            <thead class="bg-gray-50 border-b border-gray-100">
+            <thead class="bg-gray-50 dark:bg-gray-950/60 border-b border-gray-100 dark:border-gray-800">
               <tr>
-                <th class="px-5 py-4 font-bold text-gray-700">Postulante</th>
-                <th class="px-5 py-4 font-bold text-gray-700 hidden lg:table-cell">Ubicación</th>
-                <th class="px-5 py-4 font-bold text-gray-700">Capacidad</th>
-                <th class="px-5 py-4 font-bold text-gray-700">Etapa</th>
-                <th class="px-5 py-4 font-bold text-gray-700 text-right">Acción</th>
+                <th class="px-5 py-4 font-bold text-gray-700 dark:text-gray-300">Postulante</th>
+                <th class="px-5 py-4 font-bold text-gray-700 dark:text-gray-300 hidden lg:table-cell">Ubicación</th>
+                <th class="px-5 py-4 font-bold text-gray-700 dark:text-gray-300">Interés</th>
+                <th class="px-5 py-4 font-bold text-gray-700 dark:text-gray-300">Etapa</th>
+                <th class="px-5 py-4 font-bold text-gray-700 dark:text-gray-300 text-right">Acción</th>
               </tr>
             </thead>
-            <tbody id="tableBody" class="divide-y divide-gray-50">
-              <tr><td colspan="5" class="px-6 py-12 text-center text-gray-500"><div class="animate-pulse">Cargando...</div></td></tr>
+            <tbody id="tableBody" class="divide-y divide-gray-50 dark:divide-gray-800">
+              <tr><td colspan="5" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400"><div class="animate-pulse">Cargando...</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -37,16 +37,16 @@ import Layout from '../../layouts/Layout.astro';
   </section>
 
   <div id="modal" class="hidden fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto">
-    <div class="bg-white w-full max-w-3xl my-8 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="px-8 py-5 border-b border-gray-100 flex items-center justify-between">
-        <h2 class="text-xl font-bold text-gray-900" id="modalTitle">Detalle</h2>
-        <button id="btnClose" class="text-gray-400 hover:text-gray-600 p-2">✕</button>
+    <div class="bg-white dark:bg-gray-900 w-full max-w-3xl my-8 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="px-8 py-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white" id="modalTitle">Detalle</h2>
+        <button id="btnClose" class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 p-2">✕</button>
       </div>
-      <div class="p-8 overflow-y-auto flex-1 bg-gray-50" id="modalBody"></div>
-      <div class="px-8 py-5 border-t border-gray-100 flex justify-between items-center">
-        <span id="saveStatus" class="text-sm text-gray-400"></span>
+      <div class="p-8 overflow-y-auto flex-1 bg-gray-50 dark:bg-gray-950/40" id="modalBody"></div>
+      <div class="px-8 py-5 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center">
+        <span id="saveStatus" class="text-sm text-gray-400 dark:text-gray-500"></span>
         <div class="flex gap-3">
-          <button id="btnCancel" class="px-6 py-2.5 rounded-xl border border-gray-200 font-semibold text-gray-700 hover:bg-gray-50">Cerrar</button>
+          <button id="btnCancel" class="px-6 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Cerrar</button>
           <button id="btnSave" class="px-6 py-2.5 rounded-xl bg-elim-600 text-white font-bold hover:bg-elim-500">Guardar</button>
         </div>
       </div>
@@ -58,21 +58,41 @@ import Layout from '../../layouts/Layout.astro';
   let solicitudes = [];
   let editId = null;
 
-  const ETAPAS = {
-    recepcion: { label: 'Recepción',  icon: '📥', badge: 'bg-gray-100 text-gray-700' },
-    concepto:  { label: 'Mi concepto', icon: '📝', badge: 'bg-blue-100 text-blue-700' },
-    aprobado:  { label: 'Aprobado',    icon: '✅', badge: 'bg-green-100 text-green-700' },
-    adoptado:  { label: 'Acogiendo',   icon: '🏠', badge: 'bg-teal-100 text-teal-700' },
-    rechazado: { label: 'Rechazado',   icon: '⛔', badge: 'bg-red-100 text-red-700' },
-    cerrada:   { label: 'Cerrada',     icon: '🔒', badge: 'bg-gray-200 text-gray-600' },
+  const AREAS = {
+    hogar_temporal: { label: 'Hogar temporal',        icon: '🏠' },
+    rescate:        { label: 'Rescate y transporte',   icon: '🚑' },
+    jornadas:       { label: 'Jornadas y eventos',     icon: '🎪' },
+    redes:          { label: 'Redes y difusión',       icon: '📣' },
+    admin:          { label: 'Apoyo administrativo',   icon: '🗂️' },
+    otro:           { label: 'Otra forma',             icon: '✨' },
   };
-  const ORDER = ['recepcion','concepto','aprobado','adoptado','rechazado','cerrada'];
+
+  const ETAPAS = {
+    recepcion: { label: 'Recepción', icon: '📥', badge: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300' },
+    aprobado:  { label: 'Aprobado',  icon: '✅', badge: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300' },
+    adoptado:  { label: 'Activo',    icon: '🏠', badge: 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300' },
+    rechazado: { label: 'Rechazado', icon: '⛔', badge: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' },
+    cerrada:   { label: 'Cerrada',   icon: '🔒', badge: 'bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400' },
+  };
+  const ORDER = ['recepcion','aprobado','adoptado','rechazado','cerrada'];
 
   function esc(v){ if(v==null) return ''; return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function parseArr(v){ if(Array.isArray(v)) return v; if(!v) return []; try{ const p=JSON.parse(v); return Array.isArray(p)?p:[p]; }catch(e){ return [String(v)]; } }
+  function areasOf(s){ return parseArr(s.areas_interes); }
+  function isFoster(s){ return areasOf(s).includes('hogar_temporal'); }
   function etapaOf(s){ return ETAPAS[s.etapa] ? s.etapa : 'recepcion'; }
-  function diasConcepto(s){ if(etapaOf(s)!=='concepto'||!s.contacto_at) return null; return Math.floor((Date.now()-new Date(s.contacto_at).getTime())/86400000); }
-  function seguimiento(s){ const d=diasConcepto(s); return d!==null && d>4; }
+  function diasEnEspera(s){ if(etapaOf(s)!=='recepcion'||!s.fecha_envio) return null; return Math.floor((Date.now()-new Date(s.fecha_envio).getTime())/86400000); }
+  function necesitaSeguimiento(s){ const d=diasEnEspera(s); return d!==null && d>4; }
   function fmtBool(v){ return v===1||v==='1' ? 'Sí' : (v===0||v==='0' ? 'No' : '—'); }
+
+  function areaChips(s){
+    const areas = areasOf(s);
+    if(!areas.length) return '<span class="text-gray-400 dark:text-gray-500 text-xs">—</span>';
+    return areas.map(a=>{
+      const m = AREAS[a] || { label: a, icon: '•' };
+      return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-elim-50 text-elim-700 dark:bg-elim-900/30 dark:text-elim-300 mr-1 mb-1">${m.icon} ${esc(m.label)}</span>`;
+    }).join('');
+  }
 
   async function loadData(){
     try{
@@ -80,7 +100,7 @@ import Layout from '../../layouts/Layout.astro';
       if(res.status===401){ window.location.href='/intranet/login'; return; }
       const j = await res.json();
       if(j.ok){ solicitudes = j.solicitudes||[]; renderStats(); renderTable(); }
-    }catch(e){ console.error(e); alert('Error cargando hogares temporales'); }
+    }catch(e){ console.error(e); alert('Error cargando voluntariado'); }
   }
 
   function renderStats(){
@@ -88,7 +108,7 @@ import Layout from '../../layouts/Layout.astro';
     solicitudes.forEach(s=>{ const e=etapaOf(s); counts[e]=(counts[e]||0)+1; });
     document.getElementById('stats').innerHTML = ORDER.map(e=>{
       const m=ETAPAS[e];
-      return `<div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100"><p class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">${m.icon} ${esc(m.label)}</p><p class="text-2xl font-black text-gray-900">${counts[e]}</p></div>`;
+      return `<div class="bg-white dark:bg-gray-900 p-3 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><p class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">${m.icon} ${esc(m.label)}</p><p class="text-2xl font-black text-gray-900 dark:text-white">${counts[e]}</p></div>`;
     }).join('');
   }
 
@@ -96,59 +116,80 @@ import Layout from '../../layouts/Layout.astro';
 
   function renderTable(){
     const tb = document.getElementById('tableBody');
-    if(!solicitudes.length){ tb.innerHTML='<tr><td colspan="5" class="px-6 py-12 text-center text-gray-500">Aún no hay postulaciones de hogar temporal.</td></tr>'; return; }
+    if(!solicitudes.length){ tb.innerHTML='<tr><td colspan="5" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">Aún no hay postulaciones de voluntariado.</td></tr>'; return; }
     tb.innerHTML = solicitudes.map(s=>{
       const e = etapaOf(s);
-      const seg = seguimiento(s) ? `<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800" title="Más de 4 días desde el contacto. Da seguimiento o cierra.">⚠️ Seguimiento · ${diasConcepto(s)}d</span></div>` : '';
-      return `<tr class="hover:bg-gray-50">
-        <td class="px-5 py-4"><div class="font-medium text-gray-900">${esc(s.nombre_completo||'—')}</div><div class="text-xs text-gray-400">${esc(s.telefono||'')}</div>${seg}</td>
-        <td class="px-5 py-4 text-gray-600 hidden lg:table-cell">${esc(s.ciudad||'—')}<br/><span class="text-xs">${esc(s.barrio||'')}</span></td>
-        <td class="px-5 py-4 text-gray-600">${esc(s.cuantos_puede_acoger||'—')} gato(s)<div class="text-xs text-gray-400">${esc(s.tiempo_disponible||'')}</div></td>
+      const seg = necesitaSeguimiento(s) ? `<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300" title="Más de 4 días desde el envío. Da seguimiento o cierra.">⚠️ Seguimiento · ${diasEnEspera(s)}d</span></div>` : '';
+      const capacidad = isFoster(s) ? `<div class="text-xs text-gray-400 dark:text-gray-500 mt-1">${esc(s.cuantos_puede_acoger||'—')} gato(s) · ${esc(s.tiempo_disponible||'—')}</div>` : '';
+      return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/60">
+        <td class="px-5 py-4"><div class="font-medium text-gray-900 dark:text-gray-100">${esc(s.nombre_completo||'—')}</div><div class="text-xs text-gray-400 dark:text-gray-500">${esc(s.telefono||'')}</div>${seg}</td>
+        <td class="px-5 py-4 text-gray-600 dark:text-gray-400 hidden lg:table-cell">${esc(s.ciudad||'—')}<br/><span class="text-xs">${esc(s.barrio||'')}</span></td>
+        <td class="px-5 py-4">${areaChips(s)}${capacidad}</td>
         <td class="px-5 py-4">${badge(e)}</td>
-        <td class="px-5 py-4 text-right"><button onclick="ver(${Number(s.id)})" class="text-elim-700 font-bold hover:text-elim-900">Ver →</button></td>
+        <td class="px-5 py-4 text-right"><button onclick="ver(${Number(s.id)})" class="text-elim-700 dark:text-elim-400 font-bold hover:text-elim-900 dark:hover:text-elim-300">Ver →</button></td>
       </tr>`;
     }).join('');
   }
 
-  function ro(label,val){ return `<div class="py-1.5 grid grid-cols-3 gap-2 border-b border-gray-100 last:border-0"><dt class="text-xs font-bold text-gray-500 uppercase">${esc(label)}</dt><dd class="col-span-2 text-sm text-gray-800">${esc(val||'—')}</dd></div>`; }
+  function ro(label,val){ return `<div class="py-1.5 grid grid-cols-3 gap-2 border-b border-gray-100 dark:border-gray-800 last:border-0"><dt class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">${esc(label)}</dt><dd class="col-span-2 text-sm text-gray-800 dark:text-gray-200">${esc(val||'—')}</dd></div>`; }
   function selOpt(v,l,cur){ return `<option value="${v}" ${String(cur||'')===v?'selected':''}>${esc(l)}</option>`; }
 
   window.ver = function(id){
     const s = solicitudes.find(x=>x.id===id); if(!s) return;
     editId = id;
     const e = etapaOf(s);
+    const foster = isFoster(s);
     document.getElementById('modalTitle').innerHTML = `#${esc(s.id)} · ${esc(s.nombre_completo)} ${badge(e)}`;
     document.getElementById('saveStatus').textContent = '';
     const phone = String(s.telefono||'').replace(/\D/g,''); const waPhone = phone.length===10 ? '57'+phone : phone;
-    const segBanner = seguimiento(s) ? `<div class="mb-5 p-4 bg-amber-50 border border-amber-300 rounded-2xl"><p class="font-bold text-amber-800">⚠️ Seguimiento pendiente · ${diasConcepto(s)} días desde el contacto</p><p class="text-sm text-amber-700">Han pasado más de 4 días. Da seguimiento o cierra el proceso.</p></div>` : '';
+    const segBanner = necesitaSeguimiento(s) ? `<div class="mb-5 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-300 dark:border-amber-800 rounded-2xl"><p class="font-bold text-amber-800 dark:text-amber-300">⚠️ Seguimiento pendiente · ${diasEnEspera(s)} días desde el envío</p><p class="text-sm text-amber-700 dark:text-amber-400">Han pasado más de 4 días. Da seguimiento o cierra el proceso.</p></div>` : '';
+
+    const waMsg = foster
+      ? `¡Hola ${String(s.nombre_completo||'').split(' ')[0]}! 🐱 Somos Elim. Recibimos tu postulación para ser hogar temporal. Para continuar, ¿nos envías un video corto del espacio donde acogerías al gato?`
+      : `¡Hola ${String(s.nombre_completo||'').split(' ')[0]}! 🐱 Somos Elim. Recibimos tu postulación de voluntariado. ¡Gracias por sumarte! Te contactamos para coordinar según tu disponibilidad.`;
+
+    const gestionVideo = foster ? `
+      <div class="grid sm:grid-cols-2 gap-4 mt-4">
+        <div><label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1 block">Mallas de seguridad</label>
+          <select id="g_mallas" class="w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 text-sm">${selOpt('sin_definir','Sin definir',s.mallas_estado)}${selOpt('acepta_instalar','Aceptó instalar',s.mallas_estado)}${selOpt('ya_instaladas','Ya instaladas',s.mallas_estado)}${selOpt('no_acepta','No acepta',s.mallas_estado)}</select></div>
+        <div><label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1 block">¿Video viable?</label>
+          <select id="g_video" class="w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 text-sm">${selOpt('sin_revisar','Sin revisar',s.video_viable)}${selOpt('si','Sí',s.video_viable)}${selOpt('no','No',s.video_viable)}</select></div>
+      </div>` : '';
+
+    const acogidaBlock = foster
+      ? `<div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 mb-5"><h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase mb-3">Acogida</h3><dl>${ro('Por qué',s.por_que_hogar_temporal)}${ro('Cuántos puede acoger',s.cuantos_puede_acoger)}${ro('Tiempo disponible',s.tiempo_disponible)}${ro('Experiencia',s.experiencia_acogida)}${ro('Puede aislar (cuarentena)',fmtBool(s.espacio_aislamiento))}${ro('Transporte al vet',fmtBool(s.disponibilidad_transporte_vet))}${ro('Acepta visitas seguimiento',fmtBool(s.acepta_visitas_seguimiento))}${ro('Cuidador principal',s.cuidador_principal)}${ro('Responsable de gastos',s.responsable_gastos)}</dl></div>`
+      : `<div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 mb-5"><h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase mb-3">Motivación y disponibilidad</h3><dl>${ro('Por qué quiere ser voluntario',s.por_que_voluntario)}${ro('Disponibilidad',s.disponibilidad_voluntario)}${ro('Experiencia / habilidades',s.experiencia_voluntario)}</dl></div>`;
+
+    const viviendaBlock = foster
+      ? `<div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5"><h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase mb-3">Vivienda y familia</h3><dl>${ro('Tipo vivienda',s.tipo_vivienda)}${ro('Situación',s.situacion_habitacional)}${ro('Mallas',fmtBool(s.mallas_seguridad))}${ro('Adultos en casa',s.adultos_casa)}${ro('Niños',s.ninos_edades)}${ro('Todos de acuerdo',fmtBool(s.todos_de_acuerdo))}${ro('Otras mascotas',fmtBool(s.tiene_otras_mascotas))}${ro('Tipo otras',s.otras_mascotas_tipo)}${ro('Alérgicos',fmtBool(s.alguien_alergico))}</dl></div>`
+      : '';
+
+    const planesBlock = foster
+      ? `<div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 mt-5"><h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase mb-3">Planes</h3><dl>${ro('Dificultad económica',s.plan_dificultad_economica)}${ro('Comportamiento',s.plan_comportamiento)}${ro('Enfermedad',s.plan_enfermedad)}${ro('Vacaciones',s.plan_vacaciones)}</dl></div>`
+      : '';
+
     document.getElementById('modalBody').innerHTML = `
       ${segBanner}
-      <div class="bg-white rounded-2xl border-2 border-utopia-200 p-5 mb-5">
-        <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wide mb-3">Gestión</h3>
+      <div class="mb-5">${areaChips(s)}</div>
+      <div class="bg-white dark:bg-gray-900 rounded-2xl border-2 border-utopia-200 dark:border-utopia-800 p-5 mb-5">
+        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-3">Gestión</h3>
         <div class="grid sm:grid-cols-2 gap-4">
-          <div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Etapa</label>
-            <select id="g_etapa" class="w-full rounded-xl border-gray-200 text-sm">${ORDER.map(o=>selOpt(o,ETAPAS[o].label,e)).join('')}</select></div>
-          <div><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">¿Video viable?</label>
-            <select id="g_video" class="w-full rounded-xl border-gray-200 text-sm">${selOpt('sin_revisar','Sin revisar',s.video_viable)}${selOpt('si','Sí',s.video_viable)}${selOpt('no','No',s.video_viable)}</select></div>
+          <div><label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1 block">Etapa</label>
+            <select id="g_etapa" class="w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 text-sm">${ORDER.map(o=>selOpt(o,ETAPAS[o].label,e)).join('')}</select></div>
         </div>
-        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mi concepto / observaciones</label>
-          <textarea id="g_obs" rows="3" class="w-full rounded-xl border-gray-200 text-sm">${esc(s.observaciones_contacto||'')}</textarea></div>
-        <div class="mt-4"><label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Notas internas</label>
-          <textarea id="g_notas" rows="2" class="w-full rounded-xl border-gray-200 text-sm">${esc(s.notas_humanas||'')}</textarea></div>
-        ${e==='recepcion' && waPhone ? `<div class="mt-4"><a href="https://wa.me/${waPhone}?text=${encodeURIComponent('¡Hola '+String(s.nombre_completo||'').split(' ')[0]+'! 🐱 Somos Elim. Recibimos tu postulación para ser hogar temporal. Para continuar, ¿nos envías un video corto del espacio donde acogerías al gato?')}" target="_blank" rel="noopener" onclick="marcarContacto()" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm">📲 Contactar y pedir video</a><p class="text-xs text-gray-400 mt-1">Esto inicia "mi concepto" y el reloj de seguimiento.</p></div>` : ''}
+        ${gestionVideo}
+        <div class="mt-4"><label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1 block">Notas generales</label>
+          <textarea id="g_notas" rows="3" class="w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 text-sm">${esc(s.notas_humanas||'')}</textarea></div>
+        ${e==='recepcion' && waPhone ? `<div class="mt-4"><a href="https://wa.me/${waPhone}?text=${encodeURIComponent(waMsg)}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm">📲 Contactar por WhatsApp</a></div>` : ''}
       </div>
-      <div class="bg-white rounded-2xl border border-gray-100 p-5 mb-5"><h3 class="text-sm font-bold text-gray-900 uppercase mb-3">Acogida</h3><dl>${ro('Por qué',s.por_que_hogar_temporal)}${ro('Cuántos puede acoger',s.cuantos_puede_acoger)}${ro('Tiempo disponible',s.tiempo_disponible)}${ro('Experiencia',s.experiencia_acogida)}${ro('Puede aislar (cuarentena)',fmtBool(s.espacio_aislamiento))}${ro('Transporte al vet',fmtBool(s.disponibilidad_transporte_vet))}${ro('Acepta visitas seguimiento',fmtBool(s.acepta_visitas_seguimiento))}${ro('Cuidador principal',s.cuidador_principal)}${ro('Responsable de gastos',s.responsable_gastos)}</dl></div>
+      ${acogidaBlock}
       <div class="grid md:grid-cols-2 gap-5">
-        <div class="bg-white rounded-2xl border border-gray-100 p-5"><h3 class="text-sm font-bold text-gray-900 uppercase mb-3">Personales</h3><dl>${ro('Cédula',s.cedula)}${ro('Edad',s.edad)}${ro('Ocupación',s.ocupacion)}${ro('Correo',s.correo)}${ro('Dirección',s.direccion)}${ro('Ciudad',s.ciudad)}${ro('Barrio',s.barrio)}${ro('Estrato',s.estrato)}</dl></div>
-        <div class="bg-white rounded-2xl border border-gray-100 p-5"><h3 class="text-sm font-bold text-gray-900 uppercase mb-3">Vivienda y familia</h3><dl>${ro('Tipo vivienda',s.tipo_vivienda)}${ro('Situación',s.situacion_habitacional)}${ro('Mallas',fmtBool(s.mallas_seguridad))}${ro('Adultos en casa',s.adultos_casa)}${ro('Niños',s.ninos_edades)}${ro('Todos de acuerdo',fmtBool(s.todos_de_acuerdo))}${ro('Otras mascotas',fmtBool(s.tiene_otras_mascotas))}${ro('Tipo otras',s.otras_mascotas_tipo)}${ro('Alérgicos',fmtBool(s.alguien_alergico))}</dl></div>
+        <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5"><h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase mb-3">Personales</h3><dl>${ro('Cédula',s.cedula)}${ro('Edad',s.edad)}${ro('Ocupación',s.ocupacion)}${ro('Correo',s.correo)}${ro('Dirección',s.direccion)}${ro('Ciudad',s.ciudad)}${ro('Barrio',s.barrio)}${ro('Estrato',s.estrato)}</dl></div>
+        ${viviendaBlock}
       </div>
-      <div class="bg-white rounded-2xl border border-gray-100 p-5 mt-5"><h3 class="text-sm font-bold text-gray-900 uppercase mb-3">Planes</h3><dl>${ro('Dificultad económica',s.plan_dificultad_economica)}${ro('Comportamiento',s.plan_comportamiento)}${ro('Enfermedad',s.plan_enfermedad)}${ro('Vacaciones',s.plan_vacaciones)}</dl></div>`;
+      ${planesBlock}`;
     document.getElementById('modal').classList.remove('hidden');
     document.body.style.overflow='hidden';
-  };
-
-  window.marcarContacto = async function(){
-    try{ await fetch('/api/admin/update-hogar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:editId,etapa:'concepto',nota_historial:'Contactado por WhatsApp · video pedido'})}); setTimeout(loadData,500); }catch(e){}
   };
 
   function closeModal(){ document.getElementById('modal').classList.add('hidden'); document.body.style.overflow='auto'; }
@@ -157,7 +198,9 @@ import Layout from '../../layouts/Layout.astro';
 
   document.getElementById('btnSave').onclick = async ()=>{
     const g = id => { const el=document.getElementById(id); return el?el.value:undefined; };
-    const payload = { id: editId, etapa: g('g_etapa'), video_viable: g('g_video'), observaciones_contacto: g('g_obs'), notas_humanas: g('g_notas') };
+    const payload = { id: editId, etapa: g('g_etapa'), notas_humanas: g('g_notas') };
+    const mallas = g('g_mallas'); if (mallas !== undefined) payload.mallas_estado = mallas;
+    const video  = g('g_video');  if (video  !== undefined) payload.video_viable  = video;
     const st = document.getElementById('saveStatus'); const btn = document.getElementById('btnSave');
     btn.disabled = true; st.textContent = '';
     try{
