@@ -126,9 +126,18 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (clientIp) payload.user_data.client_ip_address = clientIp;
   if (userAgent) payload.user_data.client_user_agent = userAgent;
 
+  // Meta exige SHA-256 para los campos de PII (em, ph, fn, ln, ct, st, zp, country).
+  // fbp/fbc/client_ip_address/client_user_agent van sin hashear.
+  const hashableFields = ['em', 'ph', 'fn', 'ln', 'ct', 'st', 'zp', 'country'] as const;
+  for (const field of hashableFields) {
+    const values = payload.user_data[field];
+    if (Array.isArray(values)) {
+      payload.user_data[field] = await Promise.all(values.map((v) => hashPII(v)));
+    }
+  }
+
   const metaBody = {
     data: [payload],
-    test_event_code: 'TEST_' + Date.now(),
   };
 
   try {

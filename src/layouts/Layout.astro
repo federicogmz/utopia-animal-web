@@ -46,6 +46,17 @@ const fullTitle = title === 'Utopia Animal'
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      // Consent Mode V2 se declara antes de cargar gtag.js (recomendado por Google).
+      // La audiencia es ~96% Colombia (sin obligación tipo GDPR),
+      // así que el consentimiento por defecto queda concedido. Esto solo declara
+      // la señal de Consent Mode para que Google la reciba correctamente si el
+      // sitio llega a operar en regiones con requisito de consentimiento.
+      gtag('consent', 'default', {
+        'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
+        'analytics_storage': 'granted'
+      });
       gtag('js', new Date());
       // Medición entre dominios (cross-domain) con la landing puente:
       // decora los enlaces salientes hacia fundsumate.org con el parámetro _gl
