@@ -7,6 +7,8 @@ export default defineConfig({
   redirects: {
     // La página de hogar temporal se amplió a voluntariado (lo engloba).
     '/refugio/hogar-temporal': '/refugio/voluntariado',
+    // La jornada de junio 2026 venció; el blog evergreen la reemplaza.
+    '/veterinaria/jornada-esterilizacion': '/blog/jornada-esterilizacion-bajo-costo',
   },
   integrations: [
     tailwind(),

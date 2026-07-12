@@ -1,8 +1,0 @@
-name = "utopia-animal-web"
-compatibility_date = "2026-05-01"
-pages_build_output_dir = "dist"
-
-[[d1_databases]]
-binding = "DB"
-database_name = "elim-solicitudes"
-database_id = "00323901-9632-41bd-b5b5-a388c432e1c5"

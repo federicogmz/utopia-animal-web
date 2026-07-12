@@ -81,7 +81,7 @@ const posts = (await getCollection('blog'))
         {[
           { icon: '🩺', label: 'Veterinaria humanizada', sub: 'Perros, gatos y más', color: 'text-utopia-600', href: '/veterinaria' },
           { icon: '🐱', label: 'Adopta un gato', sub: 'Gatos en adopción en Medellín', color: 'text-elim-600', href: '/refugio/adoptar/' },
-          { icon: '💉', label: 'Esterilización', sub: 'Jornadas subsidiadas', color: 'text-utopia-500', href: '/veterinaria/jornada-esterilizacion/' },
+          { icon: '💉', label: 'Esterilización', sub: 'Jornadas subsidiadas', color: 'text-utopia-500', href: '/blog/jornada-esterilizacion-bajo-costo/' },
           { icon: '📚', label: 'Educación', sub: 'Blog de bienestar animal', color: 'text-elim-500', href: '/blog' },
         ].map(({ icon, label, sub, color, href }) => (
           <a href={href}
