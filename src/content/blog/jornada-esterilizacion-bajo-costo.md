@@ -8,7 +8,7 @@ tags: ["esterilización bajo costo", "jornada veterinaria Medellín", "castraci�
 
 Utopía Animal Veterinaria organiza jornadas periódicas de esterilización a bajo costo para perros y gatos en Medellín. Si llevas tiempo pensando en esterilizar a tu compañero pero el costo te ha detenido, esta es tu oportunidad.
 
-👉 **Síguenos en Instagram y Facebook ([@utopianimalvet](https://www.instagram.com/utopianimalvet/)) para conocer la fecha de la próxima jornada** — las anunciamos ahí con cupos limitados.
+👉 **Síguenos en Instagram y Facebook ([@utopianimalvet](https://www.instagram.com/utopianimalvet/)) para conocer la fecha de la próxima jornada**: las anunciamos ahí con cupos limitados.
 
 ¿No quieres esperar a la próxima jornada? También puedes agendar esterilización a precio regular cualquier día de la semana, escribiéndonos por WhatsApp.
 
@@ -37,7 +37,7 @@ No incluye: exámenes prequirúrgicos ni medicamentos postoperatorios adicionale
 
 No aplica para animales gestantes o con patologías previas.
 
-*Precios de jornada — pueden variar entre jornadas. Confirma el valor vigente por WhatsApp antes de agendar.*
+*Precios de jornada: pueden variar entre jornadas. Confirma el valor vigente por WhatsApp antes de agendar.*
 
 ---
 
@@ -57,7 +57,7 @@ Cra 52 #2 sur-60, Guayabal, Cristo Rey, Medellín
 
 ## ¿Por qué esterilizar?
 
-La esterilización no es solo una decisión personal, es un acto de responsabilidad con tu animal y con la comunidad. En Medellín, miles de perros y gatos viven en situación de calle como consecuencia directa de la reproducción descontrolada.
+La esterilización es una decisión personal, pero también un acto de responsabilidad con tu animal y con la comunidad. En Medellín, miles de perros y gatos viven en situación de calle como consecuencia directa de la reproducción descontrolada.
 
 Esterilizar a tu compañero:
 
