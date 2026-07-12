@@ -52,10 +52,10 @@ Son las dos enfermedades más letales en cachorros. El parvovirus ataca el siste
 
 > **Importante:** La vacuna antirrábica es un requisito legal en Colombia. Si tu perro muerde a una persona sin estar vacunado, puede ser sometido a cuarentena y el tutor puede enfrentar sanciones.
 
-### Refuerzo al año de vida
+### Refuerzo a las 26 semanas (~6 meses)
 
-- Vacuna múltiple (refuerzo anual)
-- Antirrábica (refuerzo anual o cada 3 años según el producto)
+- Vacuna múltiple: refuerzo recomendado a las 26 semanas de edad, según las guías WSAVA 2024, para asegurar la cobertura en cachorros donde aún interfirieron los anticuerpos maternos
+- Antirrábica: según el producto y la normativa vigente (anual o cada 3 años)
 
 ---
 
@@ -65,10 +65,12 @@ Una vez completado el esquema de cachorros, la vacunación continúa durante tod
 
 | Vacuna | Frecuencia recomendada |
 |--------|------------------------|
-| Múltiple (DHPP) | Anual o cada 3 años (según el fabricante) |
-| Antirrábica | Anual (obligatoria en Colombia) |
+| Múltiple (DHPP) | Cada 3 años en perros de bajo riesgo, según las guías WSAVA 2024 |
+| Antirrábica | Según el producto y la normativa vigente (anual o cada 3 años); obligatoria en Colombia |
 | Leptospirosis | Anual (especialmente en zonas húmedas o perros con acceso a zonas verdes) |
 | Bordetella (tos de las perreras) | Anual (recomendada si tu perro va a guarderías, parques o concursos) |
+
+Tu veterinario evaluará el estilo de vida, la exposición y la salud particular de tu perro para definir la frecuencia exacta que mejor prevenga enfermedad en su caso.
 
 ---
 
@@ -137,3 +139,5 @@ Sí. Algunos patógenos como el parvovirus pueden llegar al hogar en la ropa o l
 En nuestra clínica veterinaria en **Av Guayabal, Medellín**, te ayudamos a construir el esquema de vacunación ideal para tu compañero, con seguimiento por WhatsApp y recordatorios de próximas dosis.
 
 Lunes a Sábado · 9:30 am – 6:00 pm · Sin cita previa o por WhatsApp.
+
+*Calendario ajustado a las guías internacionales de vacunación WSAVA 2024 (World Small Animal Veterinary Association). Cada caso se evalúa individualmente con tu veterinario.*
